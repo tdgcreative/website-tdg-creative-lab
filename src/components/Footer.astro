@@ -15,17 +15,17 @@ const footerLinks = [
 ---
 
 <footer class="bg-brand-dark text-brand-bg/90 mt-auto border-t border-brand-bg/10">
-  <div class="max-w-7xl mx-auto px-6 py-12 md:py-20 grid grid-cols-1 md:grid-cols-3 gap-12">
+  <div class="max-w-7xl mx-auto px-6 py-12 sm:py-16 md:py-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 sm:gap-10 md:gap-12">
     <!-- Brand Info -->
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-4 sm:col-span-2 md:col-span-1">
       <div class="flex items-center">
         <img 
           src="/TDG LOGO TRANSPARENT.png" 
           alt="The Digital Grounds Logo" 
-          class="h-10 md:h-12 w-auto invert brightness-0 object-contain" 
+          class="h-9 sm:h-10 md:h-12 w-auto invert brightness-0 object-contain" 
         />
       </div>
-      <p class="text-sm text-brand-bg/60 max-w-sm leading-relaxed mt-2">
+      <p class="text-xs sm:text-sm text-brand-bg/60 max-w-sm leading-relaxed mt-2">
         Building the Digital & Brand Ecosystem. We are a digital marketing & creative agency based in Surabaya, Indonesia.
       </p>
       <div class="flex gap-4 mt-2">
@@ -33,7 +33,7 @@ const footerLinks = [
           href="https://instagram.com/tdg.creative.lab" 
           target="_blank" 
           rel="noopener noreferrer" 
-          class="text-brand-bg/60 hover:text-brand-orange transition-colors"
+          class="text-brand-bg/60 hover:text-brand-orange transition-colors p-1"
           aria-label="Instagram"
         >
           <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
@@ -45,12 +45,12 @@ const footerLinks = [
 
     <!-- Quick Links -->
     <div class="flex flex-col gap-4">
-      <h3 class="font-bold text-sm text-white tracking-wider uppercase">Navigation</h3>
-      <nav class="flex flex-col gap-3 text-sm">
+      <h3 class="font-bold text-xs sm:text-sm text-white tracking-wider uppercase">Navigation</h3>
+      <nav class="flex flex-col gap-2.5 text-xs sm:text-sm">
         {footerLinks.map((item) => (
           <a 
             href={translatePath(item.href)} 
-            class="text-brand-bg/60 hover:text-brand-orange transition-colors w-fit"
+            class="text-brand-bg/60 hover:text-brand-orange transition-colors w-fit py-0.5"
           >
             {item.label}
           </a>
@@ -60,8 +60,8 @@ const footerLinks = [
 
     <!-- Contact & Official Channels -->
     <div class="flex flex-col gap-4">
-      <h3 class="font-bold text-sm text-white tracking-wider uppercase">{t('nav.contact')}</h3>
-      <div class="flex flex-col gap-3 text-sm text-brand-bg/60">
+      <h3 class="font-bold text-xs sm:text-sm text-white tracking-wider uppercase">{t('nav.contact')}</h3>
+      <div class="flex flex-col gap-3 text-xs sm:text-sm text-brand-bg/60">
         <div>
           <span class="block font-semibold text-white">Instagram</span>
           <a 
@@ -99,7 +99,7 @@ const footerLinks = [
 
   <!-- Bottom Copyright -->
   <div class="bg-black/30 border-t border-brand-bg/5 py-6">
-    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-brand-bg/40 font-medium">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-bg/40 font-medium text-center sm:text-left">
       <span>&copy; {currentYear} The Digital Grounds. All rights reserved.</span>
       <div class="flex gap-6">
         <a href={translatePath('/privacy')} class="hover:text-brand-bg/60 transition-colors">Privacy Policy</a>

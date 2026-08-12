@@ -153,3 +153,5 @@ export const ui = {
     'cta.banner.wa_msg': 'Hello The Digital Grounds, I would like to consult about brand and business growth.',
   },
 } as const;
+
+export type TranslationKey = keyof (typeof ui)[typeof defaultLang];

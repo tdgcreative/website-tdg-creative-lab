@@ -9,11 +9,11 @@ const whatsappMsg = encodeURIComponent(t("cta.banner.wa_msg"));
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
 ---
 
-<section class="py-14 md:py-20 px-6 relative overflow-hidden">
+<section class="py-12 sm:py-16 md:py-20 px-4 sm:px-6 relative overflow-hidden">
   <div class="max-w-5xl mx-auto">
     <!-- Simplified 2-Tier Stacked Card -->
     <div
-      class="relative bg-brand-dark text-white rounded-3xl md:rounded-[2rem] px-6 py-10 sm:px-12 sm:py-14 md:px-16 md:py-16 overflow-hidden shadow-2xl border border-white/10 text-center flex flex-col items-center gap-8 md:gap-10"
+      class="relative bg-brand-dark text-white rounded-3xl md:rounded-[2.5rem] px-5 py-8 sm:px-10 sm:py-12 md:px-16 md:py-16 overflow-hidden shadow-2xl border border-white/10 text-center flex flex-col items-center gap-6 sm:gap-8 md:gap-10"
     >
       <!-- Minimalist Architectural Grid Pattern Background -->
       <div
@@ -23,12 +23,12 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
 
       <!-- Center Ambient Brand Glow -->
       <div
-        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] rounded-full bg-brand-orange/15 blur-[120px] pointer-events-none"
+        class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[320px] sm:w-[450px] h-[320px] sm:h-[450px] rounded-full bg-brand-orange/15 blur-[100px] sm:blur-[120px] pointer-events-none"
       >
       </div>
 
       <!-- TOP LAYOUT: Title & Subtitle (Max 2 Lines for Headline) -->
-      <div class="relative z-10 flex flex-col items-center gap-4 max-w-4xl">
+      <div class="relative z-10 flex flex-col items-center gap-3 sm:gap-4 max-w-4xl">
         <h2
           class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-tight leading-tight text-white max-w-3xl"
         >
@@ -36,7 +36,7 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
         </h2>
 
         <p
-          class="text-white/70 text-sm sm:text-base md:text-lg font-medium leading-relaxed max-w-2xl"
+          class="text-white/70 text-xs sm:text-sm md:text-base lg:text-lg font-medium leading-relaxed max-w-2xl px-2"
         >
           {t("cta.banner.desc")}
         </p>
@@ -48,12 +48,12 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="group inline-flex items-center justify-center gap-3 bg-brand-orange hover:bg-brand-orange-light text-white font-bold text-base md:text-lg px-8 py-4 md:px-10 md:py-4.5 rounded-full transition-all duration-300 shadow-xl hover:shadow-brand-orange/30 hover:-translate-y-0.5 active:translate-y-0 text-center w-full sm:w-auto"
+          class="group inline-flex items-center justify-center gap-2.5 sm:gap-3 bg-brand-orange hover:bg-brand-orange-light text-white font-bold text-sm sm:text-base md:text-lg px-6 py-3.5 sm:px-8 sm:py-4 md:px-10 md:py-4.5 rounded-full transition-all duration-300 shadow-xl hover:shadow-brand-orange/30 hover:-translate-y-0.5 active:translate-y-0 text-center w-full sm:w-auto"
           aria-label="Konsultasi via WhatsApp"
         >
           <!-- WhatsApp SVG Icon -->
           <svg
-            class="w-5 h-5 md:w-6 md:h-6 fill-current transition-transform duration-300 group-hover:scale-110"
+            class="w-5 h-5 md:w-6 md:h-6 fill-current shrink-0 transition-transform duration-300 group-hover:scale-110"
             viewBox="0 0 24 24"
             aria-hidden="true"
           >
@@ -61,7 +61,7 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
               d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.77.814 2.797.815 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.766-5.769-5.766zm9.969 5.766c0 5.518-4.482 10-10 10-1.745 0-3.385-.45-4.821-1.238l-7.179 1.882 1.916-7.001c-.86-1.488-1.354-3.218-1.354-5.061 0-5.518 4.482-10 10-10s10 4.482 10 10z"
             ></path>
           </svg>
-          <span>{t("cta.banner.button")}</span>
+          <span class="truncate">{t("cta.banner.button")}</span>
         </a>
       </div>
     </div>

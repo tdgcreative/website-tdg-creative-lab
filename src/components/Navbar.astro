@@ -90,7 +90,7 @@ const navItems = [
 
     <!-- Mobile Navigation Toggle Button -->
     <button 
-      class="flex md:hidden flex-col gap-1.5 p-2 justify-center items-center z-50 relative focus:outline-none" 
+      class="flex md:hidden flex-col gap-1.5 p-3 min-w-[44px] min-h-[44px] justify-center items-center z-50 relative focus:outline-none rounded-lg hover:bg-brand-dark/5 transition-colors cursor-pointer" 
       id="menu-toggle"
       aria-label="Toggle Menu"
       aria-expanded="false"
@@ -103,10 +103,10 @@ const navItems = [
 
   <!-- Mobile Menu Navigation Drawer -->
   <div 
-    class="fixed inset-0 w-full h-screen bg-brand-bg flex flex-col justify-center px-10 transition-all duration-500 transform translate-x-full md:hidden" 
+    class="fixed inset-0 w-full h-[100dvh] bg-brand-bg flex flex-col justify-between px-6 sm:px-10 py-24 sm:py-28 overflow-y-auto transition-all duration-500 transform translate-x-full md:hidden" 
     id="mobile-drawer"
   >
-    <nav class="flex flex-col gap-8 text-2xl font-bold mb-12">
+    <nav class="flex flex-col gap-6 sm:gap-8 text-2xl sm:text-3xl font-black mb-8">
       {navItems.map((item) => (
         <a 
           href={translatePath(item.href)} 
@@ -118,20 +118,20 @@ const navItems = [
     </nav>
 
     <!-- Mobile Language Selector & CTA -->
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-6 pt-6 border-t border-brand-dark/10">
       <div class="flex items-center self-start bg-brand-dark/5 p-1 rounded-full border border-brand-dark/10">
         <a 
           href={idPath} 
-          class={`px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-300 ${
-            lang === 'id' ? 'bg-brand-dark text-brand-bg' : 'text-brand-dark/60'
+          class={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${
+            lang === 'id' ? 'bg-brand-dark text-brand-bg shadow-sm' : 'text-brand-dark/60'
           }`}
         >
           Bahasa Indonesia
         </a>
         <a 
           href={enPath} 
-          class={`px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-300 ${
-            lang === 'en' ? 'bg-brand-dark text-brand-bg' : 'text-brand-dark/60'
+          class={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 ${
+            lang === 'en' ? 'bg-brand-dark text-brand-bg shadow-sm' : 'text-brand-dark/60'
           }`}
         >
           English
@@ -140,7 +140,7 @@ const navItems = [
 
       <a 
         href={translatePath('/contact')} 
-        class="bg-brand-orange text-center text-white font-bold px-8 py-3.5 rounded-full transition-colors hover:bg-brand-orange-light text-base"
+        class="bg-brand-orange text-center text-white font-bold px-8 py-3.5 sm:py-4 rounded-full transition-colors hover:bg-brand-orange-light text-base shadow-md"
       >
         {t('nav.contact')}
       </a>

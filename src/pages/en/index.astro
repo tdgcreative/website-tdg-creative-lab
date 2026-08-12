@@ -128,32 +128,32 @@ const industries = [
 
 <BaseLayout title={title} description={description} canonicalPath="/">
   <!-- Hero Section -->
-  <section class="relative min-h-[70vh] flex items-center justify-center pt-12 pb-20 md:pt-16 md:pb-24 overflow-hidden border-b border-brand-dark/10">
+  <section class="relative min-h-[65vh] sm:min-h-[70vh] flex items-center justify-center pt-8 pb-16 sm:pt-12 sm:pb-20 md:pt-16 md:pb-24 overflow-hidden border-b border-brand-dark/10">
     <!-- Strong Architectural Grid Background -->
-    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.08)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_85%_75%_at_50%_50%,#000_80%,transparent_100%)] pointer-events-none" />
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.08)_1px,transparent_1px)] bg-[size:2.5rem_2.5rem] sm:bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_85%_75%_at_50%_50%,#000_80%,transparent_100%)] pointer-events-none" />
     
     <!-- Atmospheric Brand Orange Glow -->
-    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-brand-orange/15 blur-[140px] pointer-events-none" />
+    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] rounded-full bg-brand-orange/15 blur-[100px] sm:blur-[140px] pointer-events-none" />
 
-    <div class="max-w-7xl mx-auto px-6 w-full text-center relative z-10 flex flex-col items-center gap-6 md:gap-8">
-      <h1 class="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-none max-w-5xl uppercase text-brand-dark">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 w-full text-center relative z-10 flex flex-col items-center gap-5 sm:gap-6 md:gap-8">
+      <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter leading-[1.05] sm:leading-none max-w-5xl uppercase text-brand-dark">
         {t('hero.headline')}
       </h1>
       
-      <p class="text-lg md:text-2xl font-medium text-brand-dark/75 max-w-3xl leading-relaxed">
+      <p class="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-brand-dark/75 max-w-3xl leading-relaxed px-2">
         {t('hero.subheadline')}
       </p>
 
-      <div class="flex flex-col sm:flex-row gap-4 mt-4 w-full sm:w-auto">
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-2 sm:mt-4 w-full sm:w-auto px-2 sm:px-0">
         <a 
           href={translatePath('/contact')} 
-          class="bg-brand-orange hover:bg-brand-orange-light text-white font-bold px-8 py-4 rounded-full transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 text-center text-base"
+          class="bg-brand-orange hover:bg-brand-orange-light text-white font-bold px-7 sm:px-8 py-3.5 sm:py-4 rounded-full transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 text-center text-sm sm:text-base w-full sm:w-auto"
         >
           {t('nav.contact')}
         </a>
         <a 
           href="#works" 
-          class="border border-brand-dark/20 hover:border-brand-dark bg-transparent text-brand-dark font-bold px-8 py-4 rounded-full transition-all duration-300 text-center text-base"
+          class="border border-brand-dark/20 hover:border-brand-dark bg-transparent text-brand-dark font-bold px-7 sm:px-8 py-3.5 sm:py-4 rounded-full transition-all duration-300 text-center text-sm sm:text-base w-full sm:w-auto"
         >
           Explore Works
         </a>
@@ -162,15 +162,15 @@ const industries = [
   </section>
 
   <!-- Client Logo Marquee Section -->
-  <section class="py-10 bg-brand-dark/5 border-y border-brand-dark/10 overflow-hidden relative w-full">
-    <div class="max-w-7xl mx-auto px-6 mb-6 text-center">
-      <span class="text-[10px] md:text-xs font-bold text-brand-dark/50 uppercase tracking-widest block">Trusted by Premium Brands</span>
+  <section class="py-8 sm:py-10 bg-brand-dark/5 border-y border-brand-dark/10 overflow-hidden relative w-full">
+    <div class="max-w-7xl mx-auto px-6 mb-4 sm:mb-6 text-center">
+      <span class="text-[10px] sm:text-xs font-bold text-brand-dark/50 uppercase tracking-widest block">Trusted by Premium Brands</span>
     </div>
     <div class="flex overflow-hidden relative w-full select-none">
       <!-- Marquee Track 1 -->
-      <div class="flex animate-marquee gap-16 min-w-full items-center justify-around">
+      <div class="flex animate-marquee gap-8 sm:gap-12 md:gap-16 min-w-full items-center justify-around">
         {clientLogos.map((logo) => (
-          <div class="flex items-center justify-center h-12 w-28 shrink-0">
+          <div class="flex items-center justify-center h-10 sm:h-12 w-24 sm:w-28 shrink-0">
             <Image 
               src={logo.src} 
               alt={logo.alt} 
@@ -181,9 +181,9 @@ const industries = [
         ))}
       </div>
       <!-- Marquee Track 2 (Duplicate for loop) -->
-      <div class="flex animate-marquee gap-16 min-w-full items-center justify-around" aria-hidden="true">
+      <div class="flex animate-marquee gap-8 sm:gap-12 md:gap-16 min-w-full items-center justify-around" aria-hidden="true">
         {clientLogos.map((logo) => (
-          <div class="flex items-center justify-center h-12 w-28 shrink-0">
+          <div class="flex items-center justify-center h-10 sm:h-12 w-24 sm:w-28 shrink-0">
             <Image 
               src={logo.src} 
               alt={logo.alt} 
@@ -197,35 +197,35 @@ const industries = [
   </section>
 
   <!-- Core Pitch Section -->
-  <section class="py-20 md:py-32 bg-brand-dark text-white relative overflow-hidden">
+  <section class="py-16 sm:py-20 md:py-32 bg-brand-dark text-white relative overflow-hidden">
     <div class="absolute top-0 right-0 w-[400px] h-[400px] bg-brand-orange/5 blur-[100px] rounded-full pointer-events-none" />
     
-    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-      <div class="lg:col-span-7 flex flex-col gap-6">
-        <span class="text-brand-orange font-bold tracking-widest text-xs uppercase">Core Proposition</span>
-        <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight leading-tight">
+    <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+      <div class="lg:col-span-7 flex flex-col gap-4 sm:gap-6">
+        <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">Core Proposition</span>
+        <h2 class="text-2xl sm:text-3xl md:text-5xl font-black uppercase tracking-tight leading-tight">
           {t('pitch.title')}
         </h2>
-        <p class="text-base md:text-lg text-white/70 leading-relaxed max-w-2xl">
+        <p class="text-sm sm:text-base md:text-lg text-white/70 leading-relaxed max-w-2xl">
           {t('pitch.desc')}
         </p>
       </div>
 
       <!-- Stats Grid -->
-      <div class="lg:col-span-5 grid grid-cols-2 gap-6 border-l border-white/10 pl-0 lg:pl-12">
-        <div class="flex flex-col gap-2">
-          <span class="text-5xl md:text-6xl font-black tracking-tight text-brand-orange">50+</span>
-          <span class="text-sm font-semibold text-white/60 uppercase tracking-wider">Brands Trusted</span>
+      <div class="lg:col-span-5 grid grid-cols-2 gap-6 border-t pt-8 lg:border-t-0 lg:pt-0 lg:border-l border-white/10 pl-0 lg:pl-12">
+        <div class="flex flex-col gap-1 sm:gap-2">
+          <span class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-brand-orange">50+</span>
+          <span class="text-xs sm:text-sm font-semibold text-white/60 uppercase tracking-wider">Brands Trusted</span>
         </div>
-        <div class="flex flex-col gap-2">
-          <span class="text-5xl md:text-6xl font-black tracking-tight text-brand-orange">1</span>
-          <span class="text-sm font-semibold text-white/60 uppercase tracking-wider">Integrated Partner</span>
+        <div class="flex flex-col gap-1 sm:gap-2">
+          <span class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-brand-orange">1</span>
+          <span class="text-xs sm:text-sm font-semibold text-white/60 uppercase tracking-wider">Integrated Partner</span>
         </div>
         <div class="flex flex-col gap-2 col-span-2 pt-4 border-t border-white/5">
-          <span class="text-xs font-bold text-white/50 uppercase tracking-widest block mb-2">Specializations</span>
-          <div class="flex flex-wrap gap-2">
+          <span class="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest block mb-2">Specializations</span>
+          <div class="flex flex-wrap gap-1.5 sm:gap-2">
             {industries.map((ind) => (
-              <span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold text-white/80">{ind}</span>
+              <span class="bg-white/10 px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold text-white/80">{ind}</span>
             ))}
           </div>
         </div>
@@ -234,18 +234,18 @@ const industries = [
   </section>
 
   <!-- Portfolio Section -->
-  <section class="py-20 md:py-32" id="works">
+  <section class="py-16 sm:py-20 md:py-32" id="works">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 md:mb-16">
-        <div class="flex flex-col gap-4">
-          <span class="text-brand-orange font-bold tracking-widest text-xs uppercase">Showcase</span>
-          <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tight text-brand-dark">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12 md:mb-16">
+        <div class="flex flex-col gap-2 sm:gap-4">
+          <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">Showcase</span>
+          <h2 class="text-3xl sm:text-4xl md:text-6xl font-black uppercase tracking-tight text-brand-dark">
             {t('portfolio.title')}
           </h2>
         </div>
         <a 
           href={translatePath('/works-and-services')} 
-          class="inline-flex items-center gap-2 font-bold text-sm text-brand-dark group hover:text-brand-orange transition-colors"
+          class="inline-flex items-center gap-2 font-bold text-xs sm:text-sm text-brand-dark group hover:text-brand-orange transition-colors w-fit"
         >
           {t('portfolio.cta')}
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 transform transition-transform duration-300 group-hover:translate-x-1">
@@ -255,7 +255,7 @@ const industries = [
       </div>
 
       <!-- Portfolio Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
         {portfolios.map((portfolio) => (
           <PortfolioCard 
             title={portfolio.title}
@@ -271,54 +271,54 @@ const industries = [
   </section>
 
   <!-- Service Scopes Section -->
-  <section class="py-20 md:py-32 bg-white border-t border-brand-dark/5" id="services">
+  <section class="py-16 sm:py-20 md:py-32 bg-white border-t border-brand-dark/5" id="services">
     <div class="max-w-7xl mx-auto px-6">
-      <div class="flex flex-col gap-4 mb-16 text-center md:text-left">
-        <span class="text-brand-orange font-bold tracking-widest text-xs uppercase">Capabilities</span>
-        <h2 class="text-4xl md:text-6xl font-black uppercase tracking-tight text-brand-dark">
+      <div class="flex flex-col gap-2 sm:gap-4 mb-10 sm:mb-16 text-center md:text-left">
+        <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">Capabilities</span>
+        <h2 class="text-3xl sm:text-4xl md:text-6xl font-black uppercase tracking-tight text-brand-dark">
           {t('home.scopes.title')}
         </h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
         {serviceScopes.map((scope) => (
-          <div class={`p-8 rounded-3xl border flex flex-col justify-between min-h-[300px] transition-all duration-300 ${
+          <div class={`p-6 sm:p-8 rounded-2xl sm:rounded-3xl border flex flex-col justify-between min-h-[260px] sm:min-h-[300px] transition-all duration-300 ${
             scope.isExclusive 
               ? 'bg-brand-dark text-white border-brand-dark' 
               : 'bg-brand-bg text-brand-dark border-brand-dark/5 shadow-sm'
           }`}>
             <div>
-              <div class="flex items-center justify-between mb-6">
+              <div class="flex items-center justify-between mb-5 sm:mb-6">
                 <span class={`text-[10px] font-bold tracking-widest uppercase ${scope.isExclusive ? 'text-brand-orange' : 'text-brand-dark/40'}`}>
                   Scope {scope.number}
                 </span>
-                <span class={`text-3xl font-black leading-none ${scope.isExclusive ? 'text-brand-orange/40' : 'text-brand-orange/20'}`}>
+                <span class={`text-2xl sm:text-3xl font-black leading-none ${scope.isExclusive ? 'text-brand-orange/40' : 'text-brand-orange/20'}`}>
                   {scope.number}
                 </span>
               </div>
               
-              <h3 class="text-xl font-black uppercase tracking-tight mb-4 leading-snug">
+              <h3 class="text-lg sm:text-xl font-black uppercase tracking-tight mb-3 sm:mb-4 leading-snug">
                 {scope.name}
               </h3>
               
               <ul class="flex flex-col gap-2">
                 {scope.services.map((service) => (
                   <li class="flex items-center gap-2 text-xs font-semibold">
-                    <span class={`w-1.5 h-1.5 rounded-full ${scope.isExclusive ? 'bg-brand-orange' : 'bg-brand-dark/35'}`}></span>
-                    {service}
+                    <span class={`w-1.5 h-1.5 rounded-full shrink-0 ${scope.isExclusive ? 'bg-brand-orange' : 'bg-brand-dark/35'}`}></span>
+                    <span>{service}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
             {scope.isExclusive && (
-              <div class="mt-6 pt-6 border-t border-white/10 flex flex-col gap-4">
+              <div class="mt-6 pt-5 sm:pt-6 border-t border-white/10 flex flex-col gap-3 sm:gap-4">
                 <p class="text-[10px] text-white/50 leading-relaxed italic">
                   {t('works.note')}
                 </p>
                 <a 
                   href={translatePath('/contact')} 
-                  class="bg-brand-orange hover:bg-brand-orange-light text-white font-bold text-center px-6 py-2.5 rounded-full transition-all duration-300 text-xs shadow-md"
+                  class="bg-brand-orange hover:bg-brand-orange-light text-white font-bold text-center px-5 sm:px-6 py-2.5 rounded-full transition-all duration-300 text-xs shadow-md"
                 >
                   {t('works.cta')}
                 </a>
@@ -331,15 +331,15 @@ const industries = [
   </section>
 
   <!-- Industry Expertise Section -->
-  <section class="py-20 bg-brand-dark/5 border-t border-brand-dark/5 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-6 text-center flex flex-col items-center gap-8">
-      <span class="text-brand-orange font-bold tracking-widest text-xs uppercase">{t('expertise.title')}</span>
-      <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight text-brand-dark max-w-3xl leading-tight">
+  <section class="py-14 sm:py-20 bg-brand-dark/5 border-t border-brand-dark/5 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-6 text-center flex flex-col items-center gap-6 sm:gap-8">
+      <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">{t('expertise.title')}</span>
+      <h2 class="text-2xl sm:text-3xl md:text-5xl font-black uppercase tracking-tight text-brand-dark max-w-3xl leading-tight">
         Supporting Diverse Industries in the Creative Sphere
       </h2>
-      <div class="flex flex-wrap justify-center gap-3 md:gap-4 max-w-4xl mt-4">
+      <div class="flex flex-wrap justify-center gap-2.5 sm:gap-4 max-w-4xl mt-2 sm:mt-4">
         {industries.map((ind) => (
-          <div class="bg-white border border-brand-dark/10 px-6 py-3.5 rounded-2xl text-sm md:text-base font-extrabold text-brand-dark tracking-tight shadow-sm hover:border-brand-orange hover:text-brand-orange transition-colors cursor-default">
+          <div class="bg-white border border-brand-dark/10 px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-extrabold text-brand-dark tracking-tight shadow-sm hover:border-brand-orange hover:text-brand-orange transition-colors cursor-default">
             {ind}
           </div>
         ))}
