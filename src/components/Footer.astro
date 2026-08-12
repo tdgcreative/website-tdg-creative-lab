@@ -1,0 +1,110 @@
+---
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const currentYear = new Date().getFullYear();
+
+const footerLinks = [
+  { href: '/', label: t('nav.home') },
+  { href: '/works-and-services', label: t('nav.works') },
+  { href: '/contact', label: t('nav.contact') },
+];
+---
+
+<footer class="bg-brand-dark text-brand-bg/90 mt-auto border-t border-brand-bg/10">
+  <div class="max-w-7xl mx-auto px-6 py-12 md:py-20 grid grid-cols-1 md:grid-cols-3 gap-12">
+    <!-- Brand Info -->
+    <div class="flex flex-col gap-4">
+      <div class="flex items-center">
+        <img 
+          src="/TDG LOGO TRANSPARENT.png" 
+          alt="The Digital Grounds Logo" 
+          class="h-10 md:h-12 w-auto invert brightness-0 object-contain" 
+        />
+      </div>
+      <p class="text-sm text-brand-bg/60 max-w-sm leading-relaxed mt-2">
+        Building the Digital & Brand Ecosystem. We are a digital marketing & creative agency based in Surabaya, Indonesia.
+      </p>
+      <div class="flex gap-4 mt-2">
+        <a 
+          href="https://instagram.com/tdg.creative.lab" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="text-brand-bg/60 hover:text-brand-orange transition-colors"
+          aria-label="Instagram"
+        >
+          <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="flex flex-col gap-4">
+      <h3 class="font-bold text-sm text-white tracking-wider uppercase">Navigation</h3>
+      <nav class="flex flex-col gap-3 text-sm">
+        {footerLinks.map((item) => (
+          <a 
+            href={translatePath(item.href)} 
+            class="text-brand-bg/60 hover:text-brand-orange transition-colors w-fit"
+          >
+            {item.label}
+          </a>
+        ))}
+      </nav>
+    </div>
+
+    <!-- Contact & Official Channels -->
+    <div class="flex flex-col gap-4">
+      <h3 class="font-bold text-sm text-white tracking-wider uppercase">{t('nav.contact')}</h3>
+      <div class="flex flex-col gap-3 text-sm text-brand-bg/60">
+        <div>
+          <span class="block font-semibold text-white">Instagram</span>
+          <a 
+            href="https://instagram.com/tdg.creative.lab" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="hover:text-brand-orange transition-colors block mt-0.5"
+          >
+            @tdg.creative.lab
+          </a>
+        </div>
+        <div>
+          <span class="block font-semibold text-white">Email</span>
+          <a 
+            href="mailto:tdg.creative.lab@gmail.com" 
+            class="hover:text-brand-orange transition-colors block mt-0.5"
+          >
+            tdg.creative.lab@gmail.com
+          </a>
+        </div>
+        <div>
+          <span class="block font-semibold text-white">WhatsApp</span>
+          <a 
+            href="https://wa.me/628138238837" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="hover:text-brand-orange transition-colors block mt-0.5"
+          >
+            +62 813-8238-837
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Copyright -->
+  <div class="bg-black/30 border-t border-brand-bg/5 py-6">
+    <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-brand-bg/40 font-medium">
+      <span>&copy; {currentYear} The Digital Grounds. All rights reserved.</span>
+      <div class="flex gap-6">
+        <a href={translatePath('/privacy')} class="hover:text-brand-bg/60 transition-colors">Privacy Policy</a>
+        <a href={translatePath('/terms')} class="hover:text-brand-bg/60 transition-colors">Terms of Service</a>
+      </div>
+    </div>
+  </div>
+</footer>

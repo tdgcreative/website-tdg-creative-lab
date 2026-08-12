@@ -1,0 +1,210 @@
+---
+import { getLangFromUrl, useTranslations, useTranslatedPath, getRouteFromUrl } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+// Get current route to toggle locale easily
+const currentRoute = getRouteFromUrl(Astro.url);
+
+// Paths for the switcher
+const idPath = currentRoute === '/' ? '/' : currentRoute;
+const enPath = currentRoute === '/' ? '/en' : `/en${currentRoute}`;
+
+const navItems = [
+  { href: '/', label: t('nav.home') },
+  { href: '/works-and-services', label: t('nav.works') },
+  { href: '/contact', label: t('nav.contact') },
+];
+---
+
+<header class="fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-brand-dark/10 backdrop-blur-md bg-brand-bg/85" id="main-header">
+  <div class="max-w-7xl mx-auto px-6 h-20 md:h-24 flex items-center justify-between">
+    <!-- Brand Logo -->
+    <a href={translatePath('/')} class="flex items-center group focus:outline-none" aria-label="The Digital Grounds Home">
+      <img 
+        src="/TDG LOGO TRANSPARENT.png" 
+        alt="The Digital Grounds Logo" 
+        class="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105" 
+      />
+    </a>
+
+    <!-- Desktop Navigation Links -->
+    <nav class="hidden md:flex items-center gap-8 font-semibold text-sm">
+      {navItems.map((item) => {
+        const isCurrent = Astro.url.pathname === translatePath(item.href) || 
+                          (item.href === '/' && Astro.url.pathname === '/en');
+        return (
+          <a 
+            href={translatePath(item.href)} 
+            class={`relative py-2 transition-all duration-300 hover:text-brand-orange ${
+              isCurrent ? 'text-brand-orange' : 'text-brand-dark'
+            }`}
+          >
+            {item.label}
+            {isCurrent && (
+              <span class="absolute bottom-0 left-0 w-full h-[2px] bg-brand-orange rounded-full" />
+            )}
+          </a>
+        );
+      })}
+    </nav>
+
+    <!-- Right Controls: Language & CTA -->
+    <div class="hidden md:flex items-center gap-6">
+      <!-- Language Switcher Button -->
+      <div class="flex items-center bg-brand-dark/5 p-1 rounded-full border border-brand-dark/10" role="group" aria-label="Language selection">
+        <a 
+          href={idPath} 
+          class={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 ${
+            lang === 'id' 
+              ? 'bg-brand-dark text-brand-bg shadow-sm' 
+              : 'text-brand-dark/60 hover:text-brand-dark'
+          }`}
+          aria-label="Ubah ke Bahasa Indonesia"
+        >
+          ID
+        </a>
+        <a 
+          href={enPath} 
+          class={`px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 ${
+            lang === 'en' 
+              ? 'bg-brand-dark text-brand-bg shadow-sm' 
+              : 'text-brand-dark/60 hover:text-brand-dark'
+          }`}
+          aria-label="Switch to English"
+        >
+          EN
+        </a>
+      </div>
+
+      <!-- CTA Contact button -->
+      <a 
+        href={translatePath('/contact')} 
+        class="bg-brand-orange hover:bg-brand-orange-light text-white font-bold text-sm px-6 py-2.5 rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0"
+      >
+        {t('nav.contact')}
+      </a>
+    </div>
+
+    <!-- Mobile Navigation Toggle Button -->
+    <button 
+      class="flex md:hidden flex-col gap-1.5 p-2 justify-center items-center z-50 relative focus:outline-none" 
+      id="menu-toggle"
+      aria-label="Toggle Menu"
+      aria-expanded="false"
+    >
+      <span class="w-6 h-0.5 bg-brand-dark transition-all duration-300" id="bar1"></span>
+      <span class="w-6 h-0.5 bg-brand-dark transition-all duration-300" id="bar2"></span>
+      <span class="w-6 h-0.5 bg-brand-dark transition-all duration-300" id="bar3"></span>
+    </button>
+  </div>
+
+  <!-- Mobile Menu Navigation Drawer -->
+  <div 
+    class="fixed inset-0 w-full h-screen bg-brand-bg flex flex-col justify-center px-10 transition-all duration-500 transform translate-x-full md:hidden" 
+    id="mobile-drawer"
+  >
+    <nav class="flex flex-col gap-8 text-2xl font-bold mb-12">
+      {navItems.map((item) => (
+        <a 
+          href={translatePath(item.href)} 
+          class="mobile-nav-link text-brand-dark hover:text-brand-orange transition-colors py-2"
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Mobile Language Selector & CTA -->
+    <div class="flex flex-col gap-6">
+      <div class="flex items-center self-start bg-brand-dark/5 p-1 rounded-full border border-brand-dark/10">
+        <a 
+          href={idPath} 
+          class={`px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-300 ${
+            lang === 'id' ? 'bg-brand-dark text-brand-bg' : 'text-brand-dark/60'
+          }`}
+        >
+          Bahasa Indonesia
+        </a>
+        <a 
+          href={enPath} 
+          class={`px-4 py-1.5 rounded-full text-sm font-bold transition-all duration-300 ${
+            lang === 'en' ? 'bg-brand-dark text-brand-bg' : 'text-brand-dark/60'
+          }`}
+        >
+          English
+        </a>
+      </div>
+
+      <a 
+        href={translatePath('/contact')} 
+        class="bg-brand-orange text-center text-white font-bold px-8 py-3.5 rounded-full transition-colors hover:bg-brand-orange-light text-base"
+      >
+        {t('nav.contact')}
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileDrawer = document.getElementById('mobile-drawer');
+  const mainHeader = document.getElementById('main-header');
+  const bar1 = document.getElementById('bar1');
+  const bar2 = document.getElementById('bar2');
+  const bar3 = document.getElementById('bar3');
+  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+
+  let isMenuOpen = false;
+
+  function toggleMenu() {
+    isMenuOpen = !isMenuOpen;
+    menuToggle?.setAttribute('aria-expanded', isMenuOpen.toString());
+
+    if (isMenuOpen) {
+      // Open drawer
+      mobileDrawer?.classList.remove('translate-x-full');
+      // Lock scroll
+      document.body.style.overflow = 'hidden';
+      
+      // Transform hamburger to X
+      bar1?.classList.add('rotate-45', 'translate-y-[8px]');
+      bar2?.classList.add('opacity-0');
+      bar3?.classList.add('-rotate-45', '-translate-y-[8px]');
+    } else {
+      // Close drawer
+      mobileDrawer?.classList.add('translate-x-full');
+      // Unlock scroll
+      document.body.style.overflow = '';
+      
+      // Reset hamburger
+      bar1?.classList.remove('rotate-45', 'translate-y-[8px]');
+      bar2?.classList.remove('opacity-0');
+      bar3?.classList.remove('-rotate-45', '-translate-y-[8px]');
+    }
+  }
+
+  menuToggle?.addEventListener('click', toggleMenu);
+  
+  // Close menu when clicking mobile links
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      if (isMenuOpen) toggleMenu();
+    });
+  });
+
+  // Shrink header on scroll
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      mainHeader?.classList.add('shadow-sm', 'h-16', 'md:h-20');
+      mainHeader?.querySelector('.max-w-7xl')?.classList.replace('h-20', 'h-16');
+      mainHeader?.querySelector('.max-w-7xl')?.classList.replace('md:h-24', 'md:h-20');
+    } else {
+      mainHeader?.classList.remove('shadow-sm', 'h-16', 'md:h-20');
+      mainHeader?.querySelector('.max-w-7xl')?.classList.replace('h-16', 'h-20');
+      mainHeader?.querySelector('.max-w-7xl')?.classList.replace('md:h-20', 'md:h-24');
+    }
+  });
+</script>

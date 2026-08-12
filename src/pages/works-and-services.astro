@@ -1,0 +1,544 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PortfolioCard from '../components/PortfolioCard.astro';
+import SimpleCTA from '../components/SimpleCTA.astro';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+
+// Import Portfolio Images
+import fameImg from '../assets/portfolio/fame.jpg';
+import aioImg from '../assets/portfolio/aio.png';
+import tispunImg from '../assets/portfolio/tispun.jpg';
+import naraImg from '../assets/portfolio/nara.jpg';
+import setaseImg from '../assets/portfolio/setase.jpg';
+import regentistImg from '../assets/portfolio/regentist.jpg';
+import panenImg from '../assets/portfolio/panen.png';
+import apexPadelImg from '../assets/portfolio/apex-padel.jpg';
+import casbarImg from '../assets/portfolio/casbar.jpg';
+import soDoneImg from '../assets/portfolio/so-done.jpg';
+import btcBoardImg from '../assets/portfolio/btc-board.jpg';
+import cravincImg from '../assets/portfolio/cravinc.jpg';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const title = "Layanan & Portofolio — The Digital Grounds";
+const description = "Lihat portofolio lengkap kami di The Digital Grounds: Social Media Management, Visual Production, Brand & Web Development.";
+
+const portfolios = [
+  {
+    title: "FAME",
+    category: "Social Media",
+    tags: ["Lookbook Photoshoot", "Social Media Management"],
+    imageSrc: fameImg,
+    svgIcon: "fashion",
+    filterClass: "smm",
+    scopes: "Lookbook Photoshoot, Social Media Management",
+    year: "2024",
+    description: "Kampanye kreatif dan visual lookbook fashion eksklusif. Kami merancang moodboard, mengarahkan sesi pemotretan model, serta mengelola kanal media sosial harian untuk memperkuat identitas brand di pasar retail fashion."
+  },
+  {
+    title: "AIO Aesthetic Clinic",
+    category: "Social Media",
+    tags: ["Social Media", "KOL Management", "Event Documentation"],
+    imageSrc: aioImg,
+    svgIcon: "healthcare",
+    filterClass: "smm",
+    scopes: "Social Media Management, KOL Campaign, Event Documentation",
+    year: "2024",
+    pdfUrl: "/docs/aio-clinic-menubook.pdf",
+    pdfLabel: "portfolio.modal.viewMenubook",
+    description: "Pengembangan konten visual terintegrasi untuk klinik estetika premium. Layanan kami mencakup manajemen media sosial harian, program kampanye influencer (KOL), dokumentasi event peluncuran klinik, serta perancangan buku panduan menu klinis (PDF) yang mewah."
+  },
+  {
+    title: "Tispun Bakeshop",
+    category: "Social Media",
+    tags: ["Product Photoshoot", "Social Media Management"],
+    imageSrc: tispunImg,
+    svgIcon: "fnb",
+    filterClass: "smm",
+    scopes: "Product Photoshoot, Social Media Management",
+    year: "2023",
+    description: "Pemotretan produk bakeshop yang estetik dan menggugah selera untuk produk roti premium. Dipadukan dengan strategi manajemen media sosial harian guna mendongkrak interaksi audiens dan konversi penjualan secara online."
+  },
+  {
+    title: "Nara Dental",
+    category: "Social Media",
+    tags: ["Social Media", "Profile Photoshoot", "Event Documentation"],
+    imageSrc: naraImg,
+    svgIcon: "dental",
+    filterClass: "smm",
+    scopes: "Social Media Management, Profile Photoshoot, Event Documentation",
+    year: "2023",
+    description: "Penyusunan fondasi digital dan kampanye edukasi kesehatan gigi modern. Kami mengarahkan sesi foto profil dokter gigi yang ramah, mendokumentasikan kegiatan klinik, serta mengelola konten informasi medis harian di media sosial."
+  },
+  {
+    title: "SETASE",
+    category: "Visual Production",
+    tags: ["Lookbook Photoshoot", "Studio Styling"],
+    imageSrc: setaseImg,
+    svgIcon: "fashion",
+    filterClass: "visual",
+    scopes: "Lookbook Photoshoot, Studio Styling, Art Direction",
+    year: "2024",
+    description: "Produksi visual lookbook pakaian fashion pria/wanita dengan pengarahan gaya studio yang bersih, minimalis, dan elegan untuk menonjolkan detail serta kualitas bahan produk premium."
+  },
+  {
+    title: "D'Regentist",
+    category: "Visual Production",
+    tags: ["Profile Photoshoot", "Architectural Documentation"],
+    imageSrc: regentistImg,
+    svgIcon: "dental",
+    filterClass: "visual",
+    scopes: "Profile Photoshoot, Architectural Photoshoot",
+    year: "2023",
+    description: "Sesi foto profil tim arsitektur dan dokumentasi visual tata ruang yang menangkap detail estetika ruangan, kenyamanan tata cahaya, serta kemewahan rancangan modern yang khas."
+  },
+  {
+    title: "PT Panen",
+    category: "Website & Brand",
+    tags: ["Website Development", "Profile Photoshoot"],
+    imageSrc: panenImg,
+    svgIcon: "healthcare",
+    filterClass: "brandWeb",
+    scopes: "Website Development, Corporate Profile Photoshoot",
+    year: "2024",
+    description: "Transformasi identitas digital korporasi melalui pembuatan website profil perusahaan yang responsif, berkecepatan tinggi, dan berorientasi pada konversi, didukung oleh dokumentasi foto profil jajaran direksi yang profesional."
+  },
+  {
+    title: "Apex Padel League",
+    category: "Visual Production",
+    tags: ["Sport Event Documentation", "High-Energy Video"],
+    imageSrc: apexPadelImg,
+    svgIcon: "sport",
+    filterClass: "visual",
+    scopes: "Videography, Sports Event Documentation, Social Reels",
+    year: "2024",
+    videoUrl: "/videos/apex-padel.mp4",
+    description: "Dokumentasi event turnamen olahraga padel tenis kelas atas. Kami memproduksi rangkaian konten video (reels) berenergi tinggi yang menangkap ketegangan pertandingan, antusiasme para pemain, dan kemeriahan suasana kompetisi."
+  },
+  {
+    title: "Casbar Combat",
+    category: "Visual Production",
+    tags: ["Martial Arts Documentation", "Cinematic Video"],
+    imageSrc: casbarImg,
+    svgIcon: "sport",
+    filterClass: "visual",
+    scopes: "Cinematic Videography, Event Documentation",
+    year: "2023",
+    videoUrl: "/videos/casbar.mp4",
+    description: "Produksi video dokumentasi pertandingan seni bela diri (MMA) yang menangkap detail pertarungan dengan pencahayaan neon yang dramatis dan sudut kamera sinematik untuk menonjolkan aksi pertarungan yang dinamis dan intens."
+  },
+  {
+    title: "So Done",
+    category: "Visual Production",
+    tags: ["Music Festival Video", "Event Aftermovie"],
+    imageSrc: soDoneImg,
+    svgIcon: "sport",
+    filterClass: "visual",
+    scopes: "Event Videography, Event Aftermovie Production",
+    year: "2024",
+    videoUrl: "/videos/so-done.mp4",
+    description: "Dokumentasi konser/festival musik So Done di Mandiri Fest. Kami mengabadikan antusiasme penonton, gemerlap lampu panggung, pertunjukan laser, serta memproduksi video aftermovie yang imersif dan membangkitkan euforia konser."
+  },
+  {
+    title: "BTC Board",
+    category: "Visual Production",
+    tags: ["Product Video Shoot", "Social Media Content"],
+    imageSrc: btcBoardImg,
+    svgIcon: "healthcare",
+    filterClass: "visual",
+    scopes: "Product Showcase Video, Motion Graphic Ads",
+    year: "2024",
+    videoUrl: "/videos/btc-board.mp4",
+    description: "Kampanye video produk material PVC board premium. Kami memvisualisasikan daya tahan produk, kemudahan pemasangan, serta contoh pengaplikasian panel kayu modern ini dalam tata ruang interior minimalis yang estetik."
+  },
+  {
+    title: "Cravinc",
+    category: "Website & Brand",
+    tags: ["Brand Identity", "Brandbook PDF Design"],
+    imageSrc: cravincImg,
+    svgIcon: "fashion",
+    filterClass: "brandWeb",
+    scopes: "Brand Identity Design, Brand Guideline, Graphic Standards",
+    year: "2024",
+    pdfUrl: "/docs/cravinc-brand-guideline.pdf",
+    pdfLabel: "portfolio.modal.downloadPdf",
+    description: "Penyusunan panduan identitas brand (Brandbook Guideline) lengkap untuk Cravinc. Menetapkan pedoman tata letak logo, palet warna primer dan sekunder, tipografi, serta contoh penerapan visual pada produk guna menjaga konsistensi brand di setiap media."
+  }
+];
+
+const industries = [
+  "Healthcare",
+  "Fashion",
+  "F&B",
+  "Sport",
+  "Architecture & Lifestyle"
+];
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/works-and-services">
+  <!-- Page Header -->
+  <section class="py-16 md:py-24 border-b border-brand-dark/5 relative bg-white">
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.015)_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none" />
+    <div class="max-w-7xl mx-auto px-6 relative z-10 flex flex-col gap-4">
+      <span class="text-brand-orange font-bold tracking-widest text-xs uppercase">Portfolio</span>
+      <h1 class="text-4xl md:text-7xl font-black uppercase tracking-tight text-brand-dark leading-tight">
+        {t('works.title')}
+      </h1>
+    </div>
+  </section>
+
+  <!-- Interactive Portfolio Grid Section -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      
+      <!-- Interactive Filter Tabs -->
+      <div class="flex flex-wrap gap-3 mb-12 justify-center md:justify-start" role="group" aria-label="Project filter">
+        <button 
+          class="filter-btn px-6 py-3 rounded-full text-xs font-bold border border-brand-dark/10 bg-brand-dark text-white transition-all duration-300 cursor-pointer shadow-sm"
+          data-filter="all"
+        >
+          {t('portfolio.filter.all')}
+        </button>
+        <button 
+          class="filter-btn px-6 py-3 rounded-full text-xs font-bold border border-brand-dark/10 bg-white text-brand-dark hover:border-brand-orange hover:text-brand-orange transition-all duration-300 cursor-pointer shadow-sm"
+          data-filter="smm"
+        >
+          {t('portfolio.filter.smm')}
+        </button>
+        <button 
+          class="filter-btn px-6 py-3 rounded-full text-xs font-bold border border-brand-dark/10 bg-white text-brand-dark hover:border-brand-orange hover:text-brand-orange transition-all duration-300 cursor-pointer shadow-sm"
+          data-filter="visual"
+        >
+          {t('portfolio.filter.visual')}
+        </button>
+        <button 
+          class="filter-btn px-6 py-3 rounded-full text-xs font-bold border border-brand-dark/10 bg-white text-brand-dark hover:border-brand-orange hover:text-brand-orange transition-all duration-300 cursor-pointer shadow-sm"
+          data-filter="brandWeb"
+        >
+          {t('portfolio.filter.brandWeb')}
+        </button>
+      </div>
+
+      <!-- Portfolio Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 animate-fade-in" id="portfolio-grid">
+        {portfolios.map((portfolio) => (
+          <div 
+            class="portfolio-item-wrap cursor-pointer" 
+            data-category={portfolio.filterClass}
+            data-category-name={portfolio.category}
+            data-title={portfolio.title}
+            data-year={portfolio.year}
+            data-scopes={portfolio.scopes}
+            data-desc={portfolio.description}
+            data-video={portfolio.videoUrl || ""}
+            data-pdf={portfolio.pdfUrl || ""}
+            data-pdf-label={portfolio.pdfUrl ? t(portfolio.pdfLabel) : ""}
+          >
+            <PortfolioCard 
+              title={portfolio.title}
+              category={portfolio.category}
+              tags={portfolio.tags}
+              imageSrc={portfolio.imageSrc}
+              svgIcon={portfolio.svgIcon}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Interactive Case Study Modal -->
+  <div 
+    id="portfolio-modal" 
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/85 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="bg-brand-bg text-brand-dark rounded-[2.5rem] shadow-2xl border border-brand-dark/5 max-w-5xl w-full max-h-[90vh] overflow-hidden flex flex-col md:flex-row relative transform scale-95 transition-all duration-300" id="modal-container">
+      
+      <!-- Close Button Top Right -->
+      <button 
+        id="modal-close-btn" 
+        class="absolute top-6 right-6 z-10 w-10 h-10 rounded-full bg-brand-dark/10 text-brand-dark hover:bg-brand-dark hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+        aria-label="Close Case Study"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+
+      <!-- Left Panel: Media Showcase -->
+      <div class="md:w-[55%] bg-black flex items-center justify-center relative overflow-hidden aspect-video md:aspect-auto min-h-[250px] md:min-h-full">
+        <!-- Image display -->
+        <img 
+          id="modal-image" 
+          src="" 
+          alt="Case Study Showcase" 
+          class="absolute inset-0 w-full h-full object-cover hidden"
+        />
+        
+        <!-- Video player -->
+        <video 
+          id="modal-video" 
+          class="absolute inset-0 w-full h-full object-cover hidden bg-black" 
+          controls 
+          loop 
+          muted 
+          playsinline
+        >
+          Your browser does not support the video tag.
+        </video>
+        
+        <!-- PDF Document Placeholder -->
+        <div 
+          id="modal-pdf-container" 
+          class="absolute inset-0 flex flex-col items-center justify-center p-8 bg-brand-dark/5 text-brand-dark hidden text-center gap-6"
+        >
+          <div class="w-20 h-20 rounded-2xl bg-brand-orange/10 flex items-center justify-center text-brand-orange">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-10 h-10">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m.75 12l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+          </div>
+          <div>
+            <h4 class="text-lg font-black uppercase tracking-tight text-brand-dark" id="modal-pdf-title">Branding Guidelines</h4>
+            <p class="text-xs text-brand-dark/60 font-semibold mt-1">Dokumen Presentasi Desain Eksklusif (PDF)</p>
+          </div>
+          <a 
+            id="modal-pdf-btn" 
+            href="" 
+            target="_blank" 
+            class="bg-brand-orange hover:bg-brand-orange-light text-white font-extrabold px-6 py-3 rounded-full text-xs transition-colors shadow-md inline-flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            <span id="modal-pdf-label">Unduh PDF</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Panel: Information Details -->
+      <div class="md:w-[45%] p-8 md:p-12 overflow-y-auto flex flex-col justify-between max-h-[50vh] md:max-h-full">
+        <div class="flex flex-col gap-6">
+          <div>
+            <span id="modal-info-category" class="text-brand-orange text-xs font-bold tracking-widest uppercase block mb-1">Social Media</span>
+            <h2 id="modal-title" class="text-3xl md:text-4xl font-black uppercase tracking-tight text-brand-dark leading-none">
+              Client Name
+            </h2>
+          </div>
+
+          <!-- Metadata table -->
+          <div class="grid grid-cols-2 gap-4 border-y border-brand-dark/10 py-4">
+            <div class="flex flex-col">
+              <span class="text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider">{t('portfolio.modal.client')}</span>
+              <span id="modal-client" class="text-sm font-extrabold text-brand-dark">The Client</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider">{t('portfolio.modal.year')}</span>
+              <span id="modal-year" class="text-sm font-extrabold text-brand-dark">2024</span>
+            </div>
+            <div class="col-span-2 flex flex-col gap-1.5">
+              <span class="text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider">{t('portfolio.modal.scopes')}</span>
+              <div id="modal-scopes" class="flex flex-wrap gap-1.5">
+                <!-- Chips injected here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="flex flex-col gap-4 text-sm font-medium text-brand-dark/75 leading-relaxed">
+            <p id="modal-desc">
+              Project case study details paragraph here.
+            </p>
+          </div>
+        </div>
+
+        <button 
+          id="modal-close-btn-bottom" 
+          class="mt-8 border border-brand-dark/20 hover:border-brand-dark text-brand-dark font-bold px-6 py-3 rounded-full text-xs transition-colors self-start cursor-pointer"
+        >
+          {t('portfolio.modal.close')}
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Repeated Industry Expertise -->
+  <section class="py-20 bg-brand-dark text-white relative overflow-hidden">
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(255,80,0,0.05),transparent_70%)] pointer-events-none" />
+    <div class="max-w-7xl mx-auto px-6 text-center flex flex-col items-center gap-8">
+      <span class="text-brand-orange font-bold tracking-widest text-xs uppercase">{t('expertise.title')}</span>
+      <h2 class="text-3xl md:text-5xl font-black uppercase tracking-tight max-w-3xl leading-tight">
+        Proven Across Premium Business Segments
+      </h2>
+      <div class="flex flex-wrap justify-center gap-3 md:gap-4 max-w-4xl mt-4">
+        {industries.map((ind) => (
+          <div class="bg-white/5 border border-white/15 px-6 py-3.5 rounded-2xl text-sm md:text-base font-extrabold text-white tracking-tight hover:border-brand-orange hover:text-brand-orange transition-colors cursor-default">
+            {ind}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Simple Consultation WhatsApp CTA Section -->
+  <SimpleCTA />
+</BaseLayout>
+
+<script>
+  // Filter functionality
+  const buttons = document.querySelectorAll('.filter-btn');
+  const items = document.querySelectorAll('.portfolio-item-wrap');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const filter = btn.getAttribute('data-filter');
+
+      // Update active button state
+      buttons.forEach((b) => {
+        b.classList.remove('bg-brand-dark', 'text-white');
+        b.classList.add('bg-white', 'text-brand-dark');
+      });
+      btn.classList.remove('bg-white', 'text-brand-dark');
+      btn.classList.add('bg-brand-dark', 'text-white');
+
+      // Filter portfolio items with smooth fade effect
+      items.forEach((item) => {
+        const category = item.getAttribute('data-category');
+        const element = item as HTMLElement;
+
+        if (filter === 'all' || category === filter) {
+          element.classList.remove('hidden');
+          setTimeout(() => {
+            element.style.opacity = '1';
+            element.style.transform = 'scale(1)';
+            element.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+          }, 50);
+        } else {
+          element.style.opacity = '0';
+          element.style.transform = 'scale(0.97)';
+          element.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+          
+          setTimeout(() => {
+            element.classList.add('hidden');
+          }, 400);
+        }
+      });
+    });
+  });
+
+  // Modal Functionality
+  const modal = document.getElementById('portfolio-modal') as HTMLElement;
+  const modalContainer = document.getElementById('modal-container') as HTMLElement;
+  const modalImage = document.getElementById('modal-image') as HTMLImageElement;
+  const modalVideo = document.getElementById('modal-video') as HTMLVideoElement;
+  const modalPdfContainer = document.getElementById('modal-pdf-container') as HTMLElement;
+  const modalPdfBtn = document.getElementById('modal-pdf-btn') as HTMLAnchorElement;
+  const modalPdfLabel = document.getElementById('modal-pdf-label') as HTMLElement;
+  const modalPdfTitle = document.getElementById('modal-pdf-title') as HTMLElement;
+
+  const modalTitle = document.getElementById('modal-title') as HTMLElement;
+  const modalInfoCategory = document.getElementById('modal-info-category') as HTMLElement;
+  const modalClient = document.getElementById('modal-client') as HTMLElement;
+  const modalYear = document.getElementById('modal-year') as HTMLElement;
+  const modalScopes = document.getElementById('modal-scopes') as HTMLElement;
+  const modalDesc = document.getElementById('modal-desc') as HTMLElement;
+
+  items.forEach((card) => {
+    card.addEventListener('click', () => {
+      const title = card.getAttribute('data-title') || '';
+      const categoryName = card.getAttribute('data-category-name') || '';
+      const year = card.getAttribute('data-year') || '';
+      const scopes = card.getAttribute('data-scopes') || '';
+      const desc = card.getAttribute('data-desc') || '';
+      const video = card.getAttribute('data-video') || '';
+      const pdf = card.getAttribute('data-pdf') || '';
+      const pdfLabel = card.getAttribute('data-pdf-label') || '';
+
+      // Get optimized image source from compiled Astro img
+      const img = card.querySelector('img');
+      const imgSrc = img ? img.getAttribute('src') || '' : '';
+
+      // Populate text
+      modalTitle.textContent = title;
+      modalClient.textContent = title;
+      modalInfoCategory.textContent = categoryName;
+      modalYear.textContent = year;
+      modalDesc.textContent = desc;
+
+      // Render scopes as chips
+      modalScopes.innerHTML = '';
+      scopes.split(',').forEach((s) => {
+        const span = document.createElement('span');
+        span.className = 'bg-brand-dark/5 px-3 py-1 rounded-full text-[10px] font-bold text-brand-dark/75';
+        span.textContent = s.trim();
+        modalScopes.appendChild(span);
+      });
+
+      // Clear video
+      modalVideo.classList.add('hidden');
+      modalVideo.pause();
+      modalVideo.removeAttribute('src');
+      modalVideo.load();
+
+      // Clear PDF and Image
+      modalPdfContainer.classList.add('hidden');
+      modalImage.classList.add('hidden');
+
+      // Populate media panels
+      if (video) {
+        modalVideo.src = video;
+        modalVideo.load();
+        modalVideo.classList.remove('hidden');
+        modalVideo.play().catch(() => {});
+      } else if (pdf) {
+        modalPdfBtn.href = pdf;
+        modalPdfLabel.textContent = pdfLabel;
+        modalPdfTitle.textContent = title + " PDF";
+        modalPdfContainer.classList.remove('hidden');
+      } else {
+        modalImage.src = imgSrc;
+        modalImage.classList.remove('hidden');
+      }
+
+      // Open Modal
+      modal.classList.remove('pointer-events-none', 'opacity-0');
+      modal.classList.add('opacity-100');
+      modalContainer.classList.remove('scale-95');
+      modalContainer.classList.add('scale-100');
+    });
+  });
+
+  const closeModal = () => {
+    modal.classList.remove('opacity-100');
+    modal.classList.add('opacity-0', 'pointer-events-none');
+    modalContainer.classList.remove('scale-100');
+    modalContainer.classList.add('scale-95');
+
+    // Clean up video play to avoid overlay sound bug
+    setTimeout(() => {
+      modalVideo.pause();
+      modalVideo.removeAttribute('src');
+      modalVideo.load();
+    }, 300);
+  };
+
+  document.getElementById('modal-close-btn')?.addEventListener('click', closeModal);
+  document.getElementById('modal-close-btn-bottom')?.addEventListener('click', closeModal);
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('opacity-100')) {
+      closeModal();
+    }
+  });
+</script>

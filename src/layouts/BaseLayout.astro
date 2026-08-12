@@ -1,0 +1,38 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import { getLangFromUrl } from '../i18n/utils';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  noindex?: boolean;
+}
+
+const { title, description, canonicalPath, noindex } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <BaseHead 
+      title={title} 
+      description={description} 
+      canonicalPath={canonicalPath} 
+      noindex={noindex}
+    />
+  </head>
+  <body class="flex flex-col min-h-screen bg-brand-bg text-brand-dark selection:bg-brand-orange selection:text-white font-sans antialiased overflow-x-hidden">
+    <Navbar />
+    
+    <main class="flex-grow pt-20 md:pt-24">
+      <slot />
+    </main>
+
+    <Footer />
+  </body>
+</html>

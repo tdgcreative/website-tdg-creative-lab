@@ -1,0 +1,72 @@
+---
+import { Image } from 'astro:assets';
+
+interface Props {
+  title: string;
+  category: string;
+  tags: string[];
+  imageSrc: ImageMetadata;
+  svgIcon?: string;
+  loading?: "lazy" | "eager";
+}
+
+const { title, category, tags, imageSrc, svgIcon, loading = "lazy" } = Astro.props;
+---
+
+<div class="relative group overflow-hidden rounded-3xl p-8 aspect-square md:aspect-[4/3] flex flex-col justify-end text-white border border-brand-dark/10 shadow-sm transition-all duration-500 hover:shadow-2xl hover:-translate-y-1.5 bg-brand-dark">
+  <!-- Background Client Image -->
+  <Image 
+    src={imageSrc} 
+    alt={`Project showcase for ${title}`}
+    width={800}
+    height={600}
+    loading={loading}
+    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 scale-100 group-hover:scale-105"
+  />
+  
+  <!-- Linear Bottom shadow gradient overlay -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent transition-all duration-300 group-hover:from-black" />
+
+  <!-- Radial Gradient Overlay on Hover -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,80,0,0.15),transparent_60%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+  
+  <!-- Abstract Decorative SVG Pattern Behind -->
+  <div class="absolute top-6 right-6 w-24 h-24 opacity-20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-12 group-hover:opacity-30 text-white/40 z-10">
+    {svgIcon === 'fashion' && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-full h-full">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+      </svg>
+    )}
+    {svgIcon === 'healthcare' && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-full h-full">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 01-1.043 3.296 3.745 3.745 0 01-3.296 1.043A3.745 3.745 0 0112 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 01-3.296-1.043 3.745 3.745 0 01-1.043-3.296A3.745 3.745 0 013 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 011.043-3.296 3.746 3.746 0 013.296-1.043A3.746 3.746 0 0112 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 013.296 1.043 3.746 3.746 0 011.043 3.296A3.745 3.745 0 0121 12z" />
+      </svg>
+    )}
+    {svgIcon === 'fnb' && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-full h-full">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697-.056-4.024-.166C6.845 7.91 6 6.94 6 5.824V3.75h12v2.074c0 1.117-.846 2.087-1.976 2.16-1.327.11-2.669.166-4.024.166zm-7.5 12h15m-15 0a.75.75 0 01-.75-.75 2.25 2.25 0 012.25-2.25h12a2.25 2.25 0 012.25 2.25.75 0 01-.75.75m-15 0v-1.5m15 0v1.5M9 9.75v1.5a3 3 0 006 0v-1.5" />
+      </svg>
+    )}
+    {svgIcon === 'dental' && (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-full h-full">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499c.174-.174.453-.174.627 0l8.25 8.25a.44.44 0 01-.313.75h-2.148v6.75a1.5 1.5 0 01-1.5 1.5h-10.5a1.5 1.5 0 01-1.5-1.5v-6.75H2.576a.44.44 0 01-.313-.75l8.25-8.25z" />
+      </svg>
+    )}
+  </div>
+
+  <!-- Card Content -->
+  <div class="relative z-10 flex flex-col gap-4 transform transition-all duration-500 group-hover:translate-y-0 translate-y-2">
+    <div>
+      <span class="text-brand-orange text-xs font-bold uppercase tracking-widest">{category}</span>
+      <h3 class="text-2xl md:text-3xl font-extrabold tracking-tight mt-1 leading-tight group-hover:text-brand-orange transition-colors duration-300">{title}</h3>
+    </div>
+    
+    <div class="flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <span class="bg-white/10 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-medium text-white/90 border border-white/5">
+          {tag}
+        </span>
+      ))}
+    </div>
+  </div>
+</div>

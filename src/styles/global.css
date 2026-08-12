@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-bg: #E6E4E4;
+  --color-brand-dark: #000000;
+  --color-brand-orange: #FF5000;
+  --color-brand-orange-light: #FF7D00;
+  
+  --font-sans: "Helvetica", "Arial", sans-serif;
+
+  --animate-marquee: marquee 35s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+/* Custom Base Styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--color-brand-bg);
+    color: var(--color-brand-dark);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-brand-bg);
+    color: var(--color-brand-dark);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Custom Selection styling matching brand orange */
+  ::selection {
+    background-color: var(--color-brand-orange);
+    color: #ffffff;
+  }
+
+  /* Accessible focus states */
+  *:focus-visible {
+    outline: 2px solid var(--color-brand-orange);
+    outline-offset: 4px;
+  }
+
+  /* Custom scrollbar for modern premium look */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-brand-bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-brand-dark);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-brand-orange);
+  }
+}
+
+/* Micro-animations and utility effects */
+@utility hover-gradient {
+  background: linear-gradient(135deg, var(--color-brand-orange) 0%, var(--color-brand-orange-light) 100%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@utility text-stroke {
+  -webkit-text-stroke: 1px var(--color-brand-dark);
+  color: transparent;
+}
