@@ -27,4 +27,9 @@ pnpm-debug.log*
 02 CLIENT ASSETS/
 *.docx
 TDG Website Guideline.pdf
+src/assets/00 LOGO ALL CLIENTS/
+src/assets/01 CONTENT & MEDIA MANAGEMENT/
+src/assets/01 CONTENT & MEDIA MANAGEMENT 2/
+src/assets/02 BRAND & DIGITAL FOUNDATION/
+src/assets/03 VISUAL PRODUCTION & DOCUMENTATION/
 

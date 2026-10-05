@@ -2,9 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PortfolioCard from '../../components/PortfolioCard.astro';
 import SimpleCTA from '../../components/SimpleCTA.astro';
-import { getLangFromUrl, useTranslations, useTranslatedPath, type TranslationKey } from '../../i18n/utils';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
 
-// Import Portfolio Images
+// Import Base Portfolio Card Images
 import fameImg from '../../assets/portfolio/fame.jpg';
 import aioImg from '../../assets/portfolio/aio.png';
 import tispunImg from '../../assets/portfolio/tispun.jpg';
@@ -22,149 +22,469 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
-const title = "Works & Services — The Digital Grounds";
-const description = "Explore our complete digital marketing and brand portfolio at The Digital Grounds: Social Media Management, Visual Production, Website & Brand Development.";
+const title = "Services & Portfolio — TDG Creative Lab";
+const description = "Explore our complete creative portfolio at TDG Creative Lab: Content & Media Management, Brand & Digital Foundation, Visual Production & Documentation.";
 
-const portfolios = [
+export interface DeliverableOutput {
+  id: string;
+  title: string;
+  type: 'image' | 'video' | 'pdf';
+  src: string;
+  caption?: string;
+}
+
+export interface PortfolioItem {
+  title: string;
+  category: string;
+  tags: string[];
+  imageSrc: ImageMetadata | string;
+  svgIcon: string;
+  filterClass: string;
+  scopes: string;
+  year: string;
+  description: string;
+  outputs: DeliverableOutput[];
+  imagePosition?: string;
+  imageFit?: "cover" | "contain";
+}
+
+const portfolios: PortfolioItem[] = [
+  // ==========================================
+  // 1. CONTENT & MEDIA MANAGEMENT (content-media)
+  // ==========================================
   {
     title: "FAME",
-    category: "Social Media",
+    category: "Content & Media Management",
     tags: ["Lookbook Photoshoot", "Social Media Management"],
     imageSrc: fameImg,
     svgIcon: "fashion",
-    filterClass: "smm",
-    scopes: "Lookbook Photoshoot, Social Media Management",
+    filterClass: "content-media",
+    scopes: "Social Media Management, Campaign Direction, Lookbook Photoshoot",
     year: "2024",
-    description: "Exclusive fashion lookbook campaign and creative visuals. We designed the moodboard, directed model photoshoot sessions, and handled daily social media channels to strengthen brand positioning."
+    description: "Exclusive fashion brand campaign and visual lookbook. Concept moodboarding, model shoot direction, and consistent daily social curation.",
+    outputs: [
+      { id: "fm1", title: "Fall / Spring Campaign Video", type: "video", src: "/videos/fame-fall-spring.mp4" },
+      { id: "fm2", title: "Fashion Lookbook Showcase", type: "image", src: fameImg.src },
+    ]
   },
   {
     title: "AIO Aesthetic Clinic",
-    category: "Social Media",
-    tags: ["Social Media", "KOL Management", "Event Documentation"],
+    category: "Content & Media Management",
+    tags: ["Social Media", "KOL Campaign", "Clinic Menubook"],
     imageSrc: aioImg,
     svgIcon: "healthcare",
-    filterClass: "smm",
-    scopes: "Social Media Management, KOL Campaign, Event Documentation",
+    filterClass: "content-media",
+    scopes: "Social Media Management, KOL Campaign, Event Documentation, Menubook Design",
     year: "2024",
-    pdfUrl: "/docs/aio-clinic-menubook.pdf",
-    pdfLabel: "portfolio.modal.viewMenubook",
-    description: "Integrated visual content foundation for a premium aesthetic clinic. Services include daily social media management, influencer (KOL) campaign management, launch event documentation, and catalog menu guideline (PDF) design."
+    description: "Integrated visual content for premium aesthetics clinic. Our services encompass daily social media management, medical expert video reels, luxury clinical service book design (PDF), and event coverage.",
+    outputs: [
+      { id: "aio1", title: "HIFU Treatment Video", type: "video", src: "/videos/aio-edukasi-hifu.mp4" },
+      { id: "aio2", title: "Clinic Menubook (PDF)", type: "pdf", src: "/docs/aio-clinic-menubook.pdf" },
+      { id: "aio3", title: "Branding Showcase", type: "image", src: aioImg.src },
+    ]
+  },
+  {
+    title: "El Grande Padel",
+    category: "Content & Media Management",
+    tags: ["Social Media", "Reels Video", "Feed Design"],
+    imageSrc: "/images/portfolio/el-grande/post-1.png",
+    svgIcon: "sport",
+    filterClass: "content-media",
+    scopes: "Social Media Management, High-Energy Reels, Instagram Feed Design",
+    year: "2024",
+    description: "Digital ecosystem development for modern paddle sports facility El Grande Padel. We directed cinematic reels production, managed tournament schedules, and designed energetic Instagram feeds.",
+    outputs: [
+      { id: "eg1", title: "Cinematic Reel", type: "video", src: "/videos/el-grande-cinematic.mp4" },
+      { id: "eg2", title: "Ladies Day Highlight", type: "video", src: "/videos/el-grande-ladies-day.mp4" },
+      { id: "eg3", title: "Feed - Tournament Event", type: "image", src: "/images/portfolio/el-grande/post-1.png" },
+      { id: "eg4", title: "Feed - Court Showcase", type: "image", src: "/images/portfolio/el-grande/post-2.png" },
+      { id: "eg5", title: "Feed - Rules & Tips", type: "image", src: "/images/portfolio/el-grande/post-3.png" },
+      { id: "eg6", title: "Feed - Match Schedule", type: "image", src: "/images/portfolio/el-grande/post-5.png" },
+    ]
+  },
+  {
+    title: "The K Style Salon",
+    category: "Content & Media Management",
+    tags: ["Social Media", "Influencer Video", "Promo Feed"],
+    imageSrc: "/images/portfolio/the-k-style/f1.jpg",
+    imagePosition: "object-top",
+    svgIcon: "fashion",
+    filterClass: "content-media",
+    scopes: "Social Media Management, Influencer Video, Promo Campaign Design",
+    year: "2024",
+    description: "Social media strategy and promotional campaigns for premium Korean-style salon. Includes influencer video collaborations, hair health educational reels, and attractive promotional feed visuals.",
+    outputs: [
+      { id: "ks1", title: "Influencer Review Video", type: "video", src: "/videos/the-k-style-influencer.mp4" },
+      { id: "ks2", title: "Feed - 50% Off Campaign", type: "image", src: "/images/portfolio/the-k-style/f1.jpg" },
+      { id: "ks3", title: "Feed - Keratin Treatment", type: "image", src: "/images/portfolio/the-k-style/f2.jpg" },
+      { id: "ks4", title: "Feed - Korean Styling", type: "image", src: "/images/portfolio/the-k-style/f3.jpg" },
+      { id: "ks5", title: "Feed - Balayage Glow", type: "image", src: "/images/portfolio/the-k-style/f4.jpg" },
+      { id: "ks6", title: "Feed - Haircare Tips", type: "image", src: "/images/portfolio/the-k-style/f6.jpg" },
+    ]
+  },
+  {
+    title: "Razo Tooth Atelier",
+    category: "Content & Media Management",
+    tags: ["Social Media", "Clinic Walkthrough", "Dental Feed"],
+    imageSrc: "/images/portfolio/razo/razo-design-1.jpg",
+    svgIcon: "dental",
+    filterClass: "content-media",
+    scopes: "Social Media Management, Video Reels, Educational Feed Design",
+    year: "2024",
+    description: "Social media management and oral health education for Razo Tooth Atelier. We produce sterile clinic walkthroughs, dental aesthetic videos, and informative carousel posts.",
+    outputs: [
+      { id: "rz1", title: "A Regular Day at RAZO (Video)", type: "video", src: "/videos/razo-regular-day.mp4" },
+      { id: "rz2", title: "Dental Education Reel", type: "video", src: "/videos/razo-education.mp4" },
+      { id: "rz3", title: "Feed - Cavity Treatment Guide", type: "image", src: "/images/portfolio/razo/razo-design-1.jpg" },
+      { id: "rz4", title: "Feed - Jaw & Chewing Load", type: "image", src: "/images/portfolio/razo/razo-design-2.jpg" },
+      { id: "rz5", title: "Feed - Wisdom Teeth Care", type: "image", src: "/images/portfolio/razo/razo-design-3.jpg" },
+      { id: "rz6", title: "Feed - Lifestyle & Coffee", type: "image", src: "/images/portfolio/razo/razo-design-4.jpg" },
+    ]
+  },
+  {
+    title: "Dr's Elior",
+    category: "Content & Media Management",
+    tags: ["Social Media", "Motion Campaign"],
+    imageSrc: aioImg,
+    svgIcon: "healthcare",
+    filterClass: "content-media",
+    scopes: "Social Media Management, Motion Graphic Video, Healthcare Branding",
+    year: "2024",
+    description: "Dynamic visual motion campaigns for Dr's Elior to establish an elevated digital presence across healthcare and medical aesthetics.",
+    outputs: [
+      { id: "el1", title: "Motion Graphic Campaign", type: "video", src: "/videos/elior-motion.mp4" },
+      { id: "el2", title: "Brand Identity Overview", type: "image", src: aioImg.src },
+    ]
+  },
+  {
+    title: "Gachi Korean Cuisine",
+    category: "Content & Media Management",
+    tags: ["Social Media", "Culinary Reels", "Restaurant Ambience"],
+    imageSrc: tispunImg,
+    svgIcon: "fnb",
+    filterClass: "content-media",
+    scopes: "Social Media Management, Culinary Video Production, Promo Campaign",
+    year: "2024",
+    description: "Social media management and culinary reels for authentic Korean eatery Gachi. Showcasing premium BBQ, viral Mala series, and vibrant dining atmosphere.",
+    outputs: [
+      { id: "gc1", title: "All You Can Eat Korean BBQ", type: "video", src: "/videos/gachi-bbq.mp4" },
+      { id: "gc2", title: "Must-Visit Korean Food Surabaya", type: "video", src: "/videos/gachi-must-visit.mp4" },
+      { id: "gc3", title: "Culinary Photography", type: "image", src: tispunImg.src },
+    ]
+  },
+  {
+    title: "Mirev's Dessert Cafe",
+    category: "Content & Media Management",
+    tags: ["Social Media", "Dessert Reels", "Aesthetic Feed"],
+    imageSrc: "/images/portfolio/mirevs/feed-1.jpg",
+    svgIcon: "fnb",
+    filterClass: "content-media",
+    scopes: "Social Media Management, Artisan Food Reels, Feed Curation",
+    year: "2024",
+    description: "Artisan dessert visual curation and viral reels for Mirev's Cafe. Capturing premium cheesecakes, festive hampers, and cosy cafe ambiance.",
+    outputs: [
+      { id: "mv1", title: "Ambience & Tasting Reel", type: "video", src: "/videos/mirevs-ambience.mp4" },
+      { id: "mv2", title: "Feed - Brownie Cheesecake Bites", type: "image", src: "/images/portfolio/mirevs/feed-1.jpg" },
+      { id: "mv3", title: "Feed - Matcha Coconut Specialty", type: "image", src: "/images/portfolio/mirevs/feed-2.jpg" },
+      { id: "mv4", title: "Feed - Festive Classic Cake", type: "image", src: "/images/portfolio/mirevs/feed-3.jpg" },
+      { id: "mv5", title: "Feed - Roses & Red Velvet", type: "image", src: "/images/portfolio/mirevs/feed-4.jpg" },
+    ]
+  },
+  {
+    title: "Fit N Shape Workout Center",
+    category: "Content & Media Management",
+    tags: ["Social Media", "Fitness Reels", "Member Community"],
+    imageSrc: apexPadelImg,
+    svgIcon: "sport",
+    filterClass: "content-media",
+    scopes: "Social Media Management, Fitness Video Reels, Community Engagement",
+    year: "2024",
+    description: "Social media management and gym member activity reels for Fit N Shape. Highlighting workout guides, transformation stories, and group fitness classes.",
+    outputs: [
+      { id: "fns1", title: "Member Transformation & Training Reel", type: "video", src: "/videos/fit-n-shape.mp4" },
+      { id: "fns2", title: "Gym Facility Overview", type: "image", src: apexPadelImg.src },
+    ]
+  },
+  {
+    title: "Inva Dental Studio",
+    category: "Content & Media Management",
+    tags: ["Social Media", "Clinic Video", "Patient Edu"],
+    imageSrc: naraImg,
+    svgIcon: "dental",
+    filterClass: "content-media",
+    scopes: "Social Media Management, Clinic Grand Opening Video, Dental Education",
+    year: "2024",
+    description: "Digital social media foundation and aesthetic facility profile video for modern dental clinic Inva Dental Studio. We crafted engaging clinic walkthroughs and patient confidence content.",
+    outputs: [
+      { id: "inv1", title: "Grand Opening & Walkthrough", type: "video", src: "/videos/inva-dental-opening.mp4" },
+      { id: "inv2", title: "Clinic Facility Photography", type: "image", src: naraImg.src },
+    ]
   },
   {
     title: "Tispun Bakeshop",
-    category: "Social Media",
+    category: "Content & Media Management",
     tags: ["Product Photoshoot", "Social Media Management"],
     imageSrc: tispunImg,
     svgIcon: "fnb",
-    filterClass: "smm",
-    scopes: "Product Photoshoot, Social Media Management",
+    filterClass: "content-media",
+    scopes: "Product Photoshoot, Social Media Reels, Visual Styling",
     year: "2023",
-    description: "Aesthetic and mouth-watering product photoshoots for a premium bakery. Combined with active social media management strategies to drive user engagement and online sales conversions."
+    description: "Artisanal bakery photography paired with engaging social media reels to drive audience appetite, online brand affinity, and store visits.",
+    outputs: [
+      { id: "tsp1", title: "Behind The Bake Reels", type: "video", src: "/videos/tispun-reels.mp4" },
+      { id: "tsp2", title: "Product Photography", type: "image", src: tispunImg.src },
+    ]
   },
   {
-    title: "Nara Dental",
-    category: "Social Media",
-    tags: ["Social Media", "Profile Photoshoot", "Event Documentation"],
-    imageSrc: naraImg,
-    svgIcon: "dental",
-    filterClass: "smm",
-    scopes: "Social Media Management, Profile Photoshoot, Event Documentation",
-    year: "2023",
-    description: "Digital foundation and educational campaign for a modern dental clinic. Directed doctor profiles, event documentation, and daily health tips content on social media."
-  },
-  {
-    title: "SETASE",
-    category: "Visual Production",
-    tags: ["Lookbook Photoshoot", "Studio Styling"],
-    imageSrc: setaseImg,
-    svgIcon: "fashion",
-    filterClass: "visual",
-    scopes: "Lookbook Photoshoot, Studio Styling, Art Direction",
-    year: "2024",
-    description: "Clean, minimal, and high-contrast studio style lookbook photoshoot to emphasize material texture, design cuts, and premium clothing brand identity."
-  },
-  {
-    title: "D'Regentist",
-    category: "Visual Production",
-    tags: ["Profile Photoshoot", "Architectural Documentation"],
+    title: "Asmaraloka Villa & Resto",
+    category: "Content & Media Management",
+    tags: ["Ambience Video", "Hospitality Reels"],
     imageSrc: regentistImg,
     svgIcon: "dental",
-    filterClass: "visual",
-    scopes: "Profile Photoshoot, Architectural Photoshoot",
-    year: "2023",
-    description: "Architectural photoshoot and doctor/partner profile documentation, capturing the interior details, lifestyle vibes, and high-end structural design aesthetics."
+    filterClass: "content-media",
+    scopes: "Social Media Management, Ambience Video, Visual Production",
+    year: "2024",
+    description: "Cinematic footage production capturing the serene, luxurious architectural ambience and resort hospitality of Asmaraloka Villa & Resto.",
+    outputs: [
+      { id: "asm1", title: "The Ambience Video", type: "video", src: "/videos/asmaraloka-ambience.mp4" },
+      { id: "asm2", title: "Architectural Showcase", type: "image", src: regentistImg.src },
+    ]
   },
+  {
+    title: "Nosh Menubook",
+    category: "Content & Media Management",
+    tags: ["Printed Design", "Luxury Menubook", "Editorial Layout"],
+    imageSrc: tispunImg,
+    svgIcon: "fnb",
+    filterClass: "content-media",
+    scopes: "Printed Design, F&B Menubook Typography, Print Production File",
+    year: "2024",
+    description: "Luxury restaurant menubook design for Nosh Restaurant featuring balanced typographic hierarchies and refined print production files.",
+    outputs: [
+      { id: "nsh1", title: "Nosh Menubook (PDF)", type: "pdf", src: "/docs/nosh-menubook.pdf" },
+      { id: "nsh2", title: "F&B Layout Showcase", type: "image", src: tispunImg.src },
+    ]
+  },
+  {
+    title: "Sunbrew Menubook",
+    category: "Content & Media Management",
+    tags: ["Printed Design", "Beverage Menubook", "Graphic Standard"],
+    imageSrc: tispunImg,
+    svgIcon: "fnb",
+    filterClass: "content-media",
+    scopes: "Printed Design, Beverage Menu Layout, Graphic Collateral",
+    year: "2024",
+    description: "Artisan cafe and coffee beverage menubook layout with clean navigation and modern typographic aesthetic for Sunbrew.",
+    outputs: [
+      { id: "snb1", title: "Sunbrew Menubook (PDF)", type: "pdf", src: "/docs/sunbrew-menubook.pdf" },
+      { id: "snb2", title: "Coffee & Beverage Showcase", type: "image", src: tispunImg.src },
+    ]
+  },
+  {
+    title: "Delapanmeter Menubook",
+    category: "Content & Media Management",
+    tags: ["Printed Design", "Hospitality Menubook Design"],
+    imageSrc: regentistImg,
+    svgIcon: "dental",
+    filterClass: "content-media",
+    scopes: "Printed Design, Cafe Menubook, Visual Styling",
+    year: "2024",
+    description: "Printed cafe menubook design featuring understated minimalism and clear readability for hospitality concept Delapanmeter.",
+    outputs: [
+      { id: "dlp1", title: "Delapanmeter Menubook (PDF)", type: "pdf", src: "/docs/delapanmeter-menubook.pdf" },
+      { id: "dlp2", title: "Menubook Layout Overview", type: "image", src: regentistImg.src },
+    ]
+  },
+
+  // ==========================================
+  // 2. BRAND & DIGITAL FOUNDATION (brand-digital)
+  // ==========================================
   {
     title: "PT Panen",
-    category: "Website & Brand",
-    tags: ["Website Development", "Profile Photoshoot"],
+    category: "Brand & Digital Foundation",
+    tags: ["Website Development", "Corporate Photoshoot"],
     imageSrc: panenImg,
     svgIcon: "healthcare",
-    filterClass: "brandWeb",
-    scopes: "Website Development, Corporate Profile Photoshoot",
+    filterClass: "brand-digital",
+    scopes: "Website Development, Corporate Profile Photoshoot, Art Direction",
     year: "2024",
-    description: "Corporate digital transformation through high-speed, conversion-optimized responsive corporate website development, combined with professional corporate headshots."
-  },
-  {
-    title: "Apex Padel League",
-    category: "Visual Production",
-    tags: ["Sport Event Documentation", "High-Energy Video"],
-    imageSrc: apexPadelImg,
-    svgIcon: "sport",
-    filterClass: "visual",
-    scopes: "Videography, Sports Event Documentation, Social Reels",
-    year: "2024",
-    videoUrl: "/videos/apex-padel.mp4",
-    description: "Premium sports event documentation. Produced high-energy video content capturing match intensity, player passion, and the tournament's overall buzz."
-  },
-  {
-    title: "Casbar Combat",
-    category: "Visual Production",
-    tags: ["Martial Arts Documentation", "Cinematic Video"],
-    imageSrc: casbarImg,
-    svgIcon: "sport",
-    filterClass: "visual",
-    scopes: "Cinematic Videography, Event Documentation",
-    year: "2023",
-    videoUrl: "/videos/casbar.mp4",
-    description: "Cinematic combat sports documentation (MMA match) with neon color grading, capturing dynamic fight action and dramatic arena lights."
-  },
-  {
-    title: "So Done",
-    category: "Visual Production",
-    tags: ["Music Festival Video", "Event Aftermovie"],
-    imageSrc: soDoneImg,
-    svgIcon: "sport",
-    filterClass: "visual",
-    scopes: "Event Videography, Event Aftermovie Production",
-    year: "2024",
-    videoUrl: "/videos/so-done.mp4",
-    description: "Live concert/festival documentation at Mandiri Fest. Captured live performances, lasers, and stage lights, and produced an immersive post-event aftermovie."
-  },
-  {
-    title: "BTC Board",
-    category: "Visual Production",
-    tags: ["Product Video Shoot", "Social Media Content"],
-    imageSrc: btcBoardImg,
-    svgIcon: "healthcare",
-    filterClass: "visual",
-    scopes: "Product Showcase Video, Motion Graphic Ads",
-    year: "2024",
-    videoUrl: "/videos/btc-board.mp4",
-    description: "Product showcase video campaign for premium PVC panel boards. Highlighted durability, water resistance, ease of installation, and structural applications in modern minimal interiors."
+    imagePosition: "object-top",
+    description: "Corporate digital identity transformation through a high-performance, conversion-oriented multi-page company website, complemented by professional executive board portrait photography.",
+    outputs: [
+      { id: "p1", title: "Homepage Layout", type: "image", src: "/images/portfolio/panen/page-beranda.png" },
+      { id: "p2", title: "Production Philosophy", type: "image", src: "/images/portfolio/panen/page-filosofi.png" },
+      { id: "p3", title: "Products & Services", type: "image", src: "/images/portfolio/panen/page-produk.png" },
+      { id: "p4", title: "Research & Innovation", type: "image", src: "/images/portfolio/panen/page-riset.png" },
+      { id: "p5", title: "Contact Page", type: "image", src: "/images/portfolio/panen/page-hubungi.png" },
+      { id: "p6", title: "Executive Board Photoshoot", type: "image", src: "/images/portfolio/panen/direksi-photoshoot.png" },
+    ]
   },
   {
     title: "Cravinc",
-    category: "Website & Brand",
-    tags: ["Brand Identity", "Brandbook PDF Design"],
+    category: "Brand & Digital Foundation",
+    tags: ["Brand Identity", "Brandbook PDF"],
     imageSrc: cravincImg,
     svgIcon: "fashion",
-    filterClass: "brandWeb",
-    scopes: "Brand Identity Design, Brand Guideline, Graphic Standards",
+    filterClass: "brand-digital",
+    scopes: "Brand Identity Design, Brand Guideline PDF, Graphic Standards",
     year: "2024",
-    pdfUrl: "/docs/cravinc-brand-guideline.pdf",
-    pdfLabel: "portfolio.modal.downloadPdf",
-    description: "Complete brand guidelines definition (Brandbook Guideline) for Cravinc. Outlined typography hierarchies, color schemes, logo margins, and corporate identity guidelines to guarantee brand consistency across all platforms."
+    description: "Complete Brandbook Guideline development for Cravinc. Establishing logo lockups, primary and secondary color palettes, and typographic hierarchies.",
+    outputs: [
+      { id: "cr1", title: "Complete Brand Guideline (PDF)", type: "pdf", src: "/docs/cravinc-brand-guideline.pdf" },
+      { id: "cr2", title: "Visual Identity Showcase", type: "image", src: cravincImg.src },
+    ]
+  },
+  {
+    title: "Primadona Skincare",
+    category: "Brand & Digital Foundation",
+    tags: ["Brand Guideline", "Identity Standards"],
+    imageSrc: fameImg,
+    svgIcon: "healthcare",
+    filterClass: "brand-digital",
+    scopes: "Brand Identity Development, Graphic Standards, Guideline Manual",
+    year: "2024",
+    description: "Foundational visual identity and comprehensive branding manual for beauty and skincare brand, encompassing packaging and corporate guidelines.",
+    outputs: [
+      { id: "pm1", title: "Primadona Brand Guideline (PDF)", type: "pdf", src: "/docs/primadona-brand-guideline.pdf" },
+      { id: "pm2", title: "Brand Identity Overview", type: "image", src: fameImg.src },
+    ]
+  },
+  {
+    title: "Rajawali Translog",
+    category: "Brand & Digital Foundation",
+    tags: ["Company Profile PDF", "Corporate Foundation"],
+    imageSrc: regentistImg,
+    svgIcon: "dental",
+    filterClass: "brand-digital",
+    scopes: "Brand Identity Foundation, Corporate Company Profile Design",
+    year: "2024",
+    description: "Corporate company profile editorial design for national logistics enterprise Rajawali Translog meeting modern corporate publishing standards.",
+    outputs: [
+      { id: "rj1", title: "Rajawali Translog Compro (PDF)", type: "pdf", src: "/docs/rajawali-translog-compro.pdf" },
+      { id: "rj2", title: "Corporate Branding Overview", type: "image", src: regentistImg.src },
+    ]
+  },
+
+  // ==========================================
+  // 3. VISUAL PRODUCTION & DOCUMENTATION (visual-doc)
+  // ==========================================
+  {
+    title: "Nara Dental",
+    category: "Visual Production & Documentation",
+    tags: ["Event Documentation", "Profile Photoshoot"],
+    imageSrc: naraImg,
+    svgIcon: "dental",
+    filterClass: "visual-doc",
+    scopes: "Event Documentation, Grand Opening Video, Profile Photoshoot",
+    year: "2023",
+    description: "Cinematic opening celebration video documentation and welcoming medical staff portrait photography for modern healthcare practice.",
+    outputs: [
+      { id: "nr1", title: "Grand Opening Aftermovie", type: "video", src: "/videos/nara-grand-opening.mp4" },
+      { id: "nr2", title: "Staff & Clinic Photography", type: "image", src: naraImg.src },
+    ]
+  },
+  {
+    title: "PBPI Jatim",
+    category: "Visual Production & Documentation",
+    tags: ["Event Documentation", "Tournament Interview"],
+    imageSrc: apexPadelImg,
+    svgIcon: "sport",
+    filterClass: "visual-doc",
+    scopes: "Sports Event Coverage, Championship Interview Videography",
+    year: "2024",
+    description: "Official event coverage and medalist interview video documentation for National Badminton Circuit (Sirnas) championship PBPI Jatim.",
+    outputs: [
+      { id: "pb1", title: "Championship Interview Video", type: "video", src: "/videos/pbpi-jatim.mp4" },
+      { id: "pb2", title: "Tournament Coverage Overview", type: "image", src: apexPadelImg.src },
+    ]
+  },
+  {
+    title: "Apex Padel League",
+    category: "Visual Production & Documentation",
+    tags: ["Sports Video", "High-Energy Reels"],
+    imageSrc: apexPadelImg,
+    svgIcon: "sport",
+    filterClass: "visual-doc",
+    scopes: "Videography, Sports Event Documentation, Social Reels",
+    year: "2024",
+    description: "High-octane sports videography covering premier paddle tennis tournament excitement, community player energy, and finals competition.",
+    outputs: [
+      { id: "apl1", title: "High-Energy Tournament Video", type: "video", src: "/videos/apex-padel.mp4" },
+      { id: "apl2", title: "Tournament Action Photo", type: "image", src: apexPadelImg.src },
+    ]
+  },
+  {
+    title: "Casbar Combat",
+    category: "Visual Production & Documentation",
+    tags: ["Martial Arts Video", "Cinematic Event"],
+    imageSrc: casbarImg,
+    svgIcon: "sport",
+    filterClass: "visual-doc",
+    scopes: "Cinematic Videography, MMA Event Documentation",
+    year: "2023",
+    description: "Cinematic fight night event documentation capturing intense MMA cage competition with dramatic lighting and fluid motion cameras.",
+    outputs: [
+      { id: "cb1", title: "MMA Combat Highlights", type: "video", src: "/videos/casbar.mp4" },
+      { id: "cb2", title: "Cage Action Photography", type: "image", src: casbarImg.src },
+    ]
+  },
+  {
+    title: "So Done Music Fest",
+    category: "Visual Production & Documentation",
+    tags: ["Music Festival Video", "Event Aftermovie"],
+    imageSrc: soDoneImg,
+    svgIcon: "sport",
+    filterClass: "visual-doc",
+    scopes: "Event Videography, Event Aftermovie Production",
+    year: "2024",
+    description: "Concert and festival aftermovie capturing stage lasers, live performance adrenaline, and audience euphoria at Mandiri Fest.",
+    outputs: [
+      { id: "sd1", title: "Music Fest Aftermovie", type: "video", src: "/videos/so-done.mp4" },
+      { id: "sd2", title: "Stage Lighting Shoot", type: "image", src: soDoneImg.src },
+    ]
+  },
+  {
+    title: "BTC Board",
+    category: "Visual Production & Documentation",
+    tags: ["Product Video Shoot", "Motion Graphic Ads"],
+    imageSrc: btcBoardImg,
+    svgIcon: "healthcare",
+    filterClass: "visual-doc",
+    scopes: "Product Showcase Video, Motion Graphic Ads",
+    year: "2024",
+    description: "Architectural product commercial showcasing durability, effortless installation, and aesthetics of modern PVC fluted wall panels.",
+    outputs: [
+      { id: "btc1", title: "Product Showcase Video", type: "video", src: "/videos/btc-board.mp4" },
+      { id: "btc2", title: "Material Application Shoot", type: "image", src: btcBoardImg.src },
+    ]
+  },
+  {
+    title: "SETASE",
+    category: "Visual Production & Documentation",
+    tags: ["Lookbook Photoshoot", "Studio Styling"],
+    imageSrc: setaseImg,
+    svgIcon: "fashion",
+    filterClass: "visual-doc",
+    scopes: "Lookbook Photoshoot, Studio Styling, Art Direction",
+    year: "2024",
+    description: "Minimalist fashion studio photoshoot accentuating textile drape, garment construction, and contemporary styling.",
+    outputs: [
+      { id: "st1", title: "Studio Lookbook Shoot", type: "image", src: setaseImg.src },
+    ]
+  },
+  {
+    title: "D'Regentist",
+    category: "Visual Production & Documentation",
+    tags: ["Profile Photoshoot", "Architectural Doc"],
+    imageSrc: regentistImg,
+    svgIcon: "dental",
+    filterClass: "visual-doc",
+    scopes: "Profile Photoshoot, Architectural Photoshoot",
+    year: "2023",
+    description: "Architectural spatial documentation capturing lighting interplay, materiality, and designer team portraits.",
+    outputs: [
+      { id: "dr1", title: "Architectural & Interior Showcase", type: "image", src: regentistImg.src },
+    ]
   }
 ];
 
@@ -182,7 +502,7 @@ const industries = [
   <section class="py-12 sm:py-16 md:py-24 border-b border-brand-dark/5 relative bg-white">
     <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.015)_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none" />
     <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col gap-2 sm:gap-4">
-      <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">Portfolio</span>
+      <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">Portfolio & Capabilities</span>
       <h1 class="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight text-brand-dark leading-tight">
         {t('works.title')}
       </h1>
@@ -190,10 +510,10 @@ const industries = [
   </section>
 
   <!-- Interactive Portfolio Grid Section -->
-  <section class="py-12 sm:py-16 md:py-24">
+  <section class="py-12 sm:py-16 md:py-24" id="portfolio-section">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
       
-      <!-- Interactive Filter Tabs -->
+      <!-- Interactive Filter Tabs (3 Scopes Ecosystem) -->
       <div class="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-12 justify-center md:justify-start" role="group" aria-label="Project filter">
         <button 
           class="filter-btn px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-[11px] sm:text-xs font-bold border border-brand-dark/10 bg-brand-dark text-white transition-all duration-300 cursor-pointer shadow-sm"
@@ -203,21 +523,21 @@ const industries = [
         </button>
         <button 
           class="filter-btn px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-[11px] sm:text-xs font-bold border border-brand-dark/10 bg-white text-brand-dark hover:border-brand-orange hover:text-brand-orange transition-all duration-300 cursor-pointer shadow-sm"
-          data-filter="smm"
+          data-filter="content-media"
         >
-          {t('portfolio.filter.smm')}
+          {t('portfolio.filter.contentMedia')}
         </button>
         <button 
           class="filter-btn px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-[11px] sm:text-xs font-bold border border-brand-dark/10 bg-white text-brand-dark hover:border-brand-orange hover:text-brand-orange transition-all duration-300 cursor-pointer shadow-sm"
-          data-filter="visual"
+          data-filter="brand-digital"
         >
-          {t('portfolio.filter.visual')}
+          {t('portfolio.filter.brandDigital')}
         </button>
         <button 
           class="filter-btn px-4 sm:px-6 py-2.5 sm:py-3 rounded-full text-[11px] sm:text-xs font-bold border border-brand-dark/10 bg-white text-brand-dark hover:border-brand-orange hover:text-brand-orange transition-all duration-300 cursor-pointer shadow-sm"
-          data-filter="brandWeb"
+          data-filter="visual-doc"
         >
-          {t('portfolio.filter.brandWeb')}
+          {t('portfolio.filter.visualDoc')}
         </button>
       </div>
 
@@ -232,9 +552,7 @@ const industries = [
             data-year={portfolio.year}
             data-scopes={portfolio.scopes}
             data-desc={portfolio.description}
-            data-video={portfolio.videoUrl || ""}
-            data-pdf={portfolio.pdfUrl || ""}
-            data-pdf-label={portfolio.pdfUrl && portfolio.pdfLabel ? t(portfolio.pdfLabel as TranslationKey) : ""}
+            data-outputs={JSON.stringify(portfolio.outputs)}
           >
             <PortfolioCard 
               title={portfolio.title}
@@ -242,6 +560,8 @@ const industries = [
               tags={portfolio.tags}
               imageSrc={portfolio.imageSrc}
               svgIcon={portfolio.svgIcon}
+              imagePosition={portfolio.imagePosition}
+              imageFit={portfolio.imageFit}
             />
           </div>
         ))}
@@ -249,19 +569,19 @@ const industries = [
     </div>
   </section>
 
-  <!-- Interactive Case Study Modal -->
+  <!-- Interactive Case Study Modal (Multi-Deliverables & Anti-Cropping) -->
   <div 
     id="portfolio-modal" 
-    class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-brand-dark/85 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300"
+    class="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 md:p-6 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-300"
     role="dialog"
     aria-modal="true"
   >
-    <div class="bg-brand-bg text-brand-dark rounded-3xl sm:rounded-[2.5rem] shadow-2xl border border-brand-dark/5 max-w-5xl w-full max-h-[92vh] overflow-y-auto md:overflow-hidden flex flex-col md:flex-row relative transform scale-95 transition-all duration-300" id="modal-container">
+    <div class="bg-brand-bg text-brand-dark rounded-3xl sm:rounded-[2rem] shadow-2xl border border-brand-dark/10 max-w-6xl w-full max-h-[92vh] overflow-y-auto md:overflow-hidden flex flex-col md:flex-row relative transform scale-95 transition-all duration-300" id="modal-container">
       
       <!-- Close Button Top Right -->
       <button 
         id="modal-close-btn" 
-        class="absolute top-3 right-3 sm:top-5 sm:right-5 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-brand-dark/20 md:bg-brand-dark/10 backdrop-blur-md text-brand-dark md:text-brand-dark hover:bg-brand-dark hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+        class="absolute top-3 right-3 sm:top-5 sm:right-5 z-30 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-brand-dark/15 hover:bg-brand-dark text-brand-dark hover:text-white flex items-center justify-center transition-all cursor-pointer shadow-md"
         aria-label="Close Case Study"
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
@@ -269,61 +589,78 @@ const industries = [
         </svg>
       </button>
 
-      <!-- Left Panel: Media Showcase -->
-      <div class="md:w-[55%] bg-black flex items-center justify-center relative overflow-hidden aspect-video md:aspect-auto min-h-[220px] sm:min-h-[280px] md:min-h-full shrink-0">
-        <!-- Image display -->
-        <img 
-          id="modal-image" 
-          src="" 
-          alt="Case Study Showcase" 
-          class="absolute inset-0 w-full h-full object-cover hidden"
-        />
+      <!-- Left Panel: Media Showcase Viewport (Aspect-Preserving & Uncropped) -->
+      <div class="md:w-[58%] lg:w-[62%] bg-[#0e0e0e] flex flex-col justify-between relative overflow-hidden min-h-[320px] sm:min-h-[440px] md:min-h-[580px] shrink-0 border-b md:border-b-0 md:border-r border-white/10">
         
-        <!-- Video player -->
-        <video 
-          id="modal-video" 
-          class="absolute inset-0 w-full h-full object-cover hidden bg-black" 
-          controls 
-          loop 
-          muted 
-          playsinline
-        >
-          Your browser does not support the video tag.
-        </video>
-        
-        <!-- PDF Document Placeholder -->
-        <div 
-          id="modal-pdf-container" 
-          class="absolute inset-0 flex flex-col items-center justify-center p-6 sm:p-8 bg-brand-dark/5 text-brand-dark hidden text-center gap-4 sm:gap-6"
-        >
-          <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-brand-orange/10 flex items-center justify-center text-brand-orange">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m.75 12l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-            </svg>
-          </div>
-          <div>
-            <h4 class="text-base sm:text-lg font-black uppercase tracking-tight text-brand-dark" id="modal-pdf-title">Branding Guidelines</h4>
-            <p class="text-xs text-brand-dark/60 font-semibold mt-1">Exclusive Design Presentation (PDF)</p>
-          </div>
-          <a 
-            id="modal-pdf-btn" 
-            href="" 
-            target="_blank" 
-            class="bg-brand-orange hover:bg-brand-orange-light text-white font-extrabold px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs transition-colors shadow-md inline-flex items-center gap-2"
+        <!-- Main Media Display (Centered, object-contain, never cut off!) -->
+        <div class="flex-1 flex items-center justify-center p-4 sm:p-6 relative w-full overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.04),transparent_70%)]">
+          <!-- Image display -->
+          <img 
+            id="modal-image" 
+            src="" 
+            alt="Case Study Deliverable" 
+            class="max-h-[42vh] sm:max-h-[52vh] md:max-h-[58vh] w-auto h-auto max-w-full object-contain rounded-xl shadow-2xl transition-all duration-300 hidden"
+          />
+          
+          <!-- Video player -->
+          <video 
+            id="modal-video" 
+            class="max-h-[42vh] sm:max-h-[52vh] md:max-h-[58vh] w-auto h-auto max-w-full rounded-xl shadow-2xl hidden bg-black" 
+            controls 
+            playsinline
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-            </svg>
-            <span id="modal-pdf-label">Download PDF</span>
-          </a>
+            Your browser does not support the video tag.
+          </video>
+          
+          <!-- PDF Document Card -->
+          <div 
+            id="modal-pdf-container" 
+            class="flex flex-col items-center justify-center p-6 sm:p-8 bg-white/5 border border-white/10 rounded-2xl text-white hidden text-center gap-4 max-w-md w-full my-auto"
+          >
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-brand-orange/20 flex items-center justify-center text-brand-orange">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 sm:w-10 sm:h-10">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m.75 12l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+              </svg>
+            </div>
+            <div>
+              <h4 class="text-base sm:text-lg font-black uppercase tracking-tight text-white" id="modal-pdf-title">Design Document</h4>
+              <p class="text-xs text-white/60 font-semibold mt-1">Exclusive Presentation / Brandbook Document (PDF)</p>
+            </div>
+            <a 
+              id="modal-pdf-btn" 
+              href="" 
+              target="_blank" 
+              class="bg-brand-orange hover:bg-brand-orange-light text-white font-extrabold px-6 py-3 rounded-full text-xs transition-colors shadow-lg inline-flex items-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              <span id="modal-pdf-label">Open / Download PDF</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Deliverables Outputs Navigation Bar -->
+        <div class="bg-black/75 backdrop-blur-md border-t border-white/10 p-3 sm:p-4 z-10">
+          <div class="flex items-center justify-between gap-3 mb-2 px-1">
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/50 flex items-center gap-1.5">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-orange"></span>
+              <span>Deliverable Outputs (<span id="modal-outputs-count">1</span>)</span>
+            </span>
+            <span class="text-[10px] sm:text-xs text-brand-orange font-bold truncate max-w-[240px]" id="modal-active-output-title">Output 1</span>
+          </div>
+          <!-- Output Selector Buttons -->
+          <div id="modal-outputs-bar" class="flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
+            <!-- Injected dynamically via JavaScript -->
+          </div>
         </div>
       </div>
 
       <!-- Right Panel: Information Details -->
-      <div class="md:w-[45%] p-6 sm:p-8 md:p-12 overflow-y-auto flex flex-col justify-between">
-        <div class="flex flex-col gap-4 sm:gap-6">
+      <div class="md:w-[42%] lg:w-[38%] p-6 sm:p-8 md:p-10 overflow-y-auto flex flex-col justify-between bg-brand-bg">
+        <div class="flex flex-col gap-5 sm:gap-6">
           <div>
-            <span id="modal-info-category" class="text-brand-orange text-[10px] sm:text-xs font-bold tracking-widest uppercase block mb-1">Social Media</span>
+            <span id="modal-info-category" class="text-brand-orange text-[10px] sm:text-xs font-bold tracking-widest uppercase block mb-1">Content & Media</span>
             <h2 id="modal-title" class="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-brand-dark leading-tight">
               Client Name
             </h2>
@@ -348,19 +685,32 @@ const industries = [
           </div>
 
           <!-- Description -->
-          <div class="flex flex-col gap-4 text-xs sm:text-sm font-medium text-brand-dark/75 leading-relaxed">
+          <div class="flex flex-col gap-3 text-xs sm:text-sm font-medium text-brand-dark/75 leading-relaxed">
             <p id="modal-desc">
               Project case study details paragraph here.
             </p>
           </div>
         </div>
 
-        <button 
-          id="modal-close-btn-bottom" 
-          class="mt-6 sm:mt-8 border border-brand-dark/20 hover:border-brand-dark text-brand-dark font-bold px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs transition-colors self-start cursor-pointer"
-        >
-          {t('portfolio.modal.close')}
-        </button>
+        <div class="mt-8 pt-5 border-t border-brand-dark/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          <a 
+            id="modal-wa-btn"
+            href="https://wa.me/628138238837"
+            target="_blank"
+            class="bg-brand-orange hover:bg-brand-orange-light text-white font-bold px-5 py-2.5 rounded-full text-xs transition-all text-center shadow-md flex items-center justify-center gap-2"
+          >
+            <span>Consult Similar Project</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
+          <button 
+            id="modal-close-btn-bottom" 
+            class="border border-brand-dark/20 hover:border-brand-dark text-brand-dark font-bold px-5 py-2.5 rounded-full text-xs transition-colors cursor-pointer text-center"
+          >
+            {t('portfolio.modal.close')}
+          </button>
+        </div>
       </div>
 
     </div>
@@ -393,43 +743,63 @@ const industries = [
   const buttons = document.querySelectorAll('.filter-btn');
   const items = document.querySelectorAll('.portfolio-item-wrap');
 
+  const setFilter = (filter: string, shouldScroll = false) => {
+    // Update active button state
+    buttons.forEach((b) => {
+      if (b.getAttribute('data-filter') === filter) {
+        b.classList.remove('bg-white', 'text-brand-dark');
+        b.classList.add('bg-brand-dark', 'text-white');
+      } else {
+        b.classList.remove('bg-brand-dark', 'text-white');
+        b.classList.add('bg-white', 'text-brand-dark');
+      }
+    });
+
+    // Filter portfolio items with smooth fade effect
+    items.forEach((item) => {
+      const category = item.getAttribute('data-category');
+      const element = item as HTMLElement;
+
+      if (filter === 'all' || category === filter) {
+        element.classList.remove('hidden');
+        setTimeout(() => {
+          element.style.opacity = '1';
+          element.style.transform = 'scale(1)';
+          element.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+        }, 50);
+      } else {
+        element.style.opacity = '0';
+        element.style.transform = 'scale(0.97)';
+        element.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
+        
+        setTimeout(() => {
+          element.classList.add('hidden');
+        }, 400);
+      }
+    });
+
+    if (shouldScroll) {
+      const section = document.getElementById('portfolio-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   buttons.forEach((btn) => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
-      const filter = btn.getAttribute('data-filter');
-
-      // Update active button state
-      buttons.forEach((b) => {
-        b.classList.remove('bg-brand-dark', 'text-white');
-        b.classList.add('bg-white', 'text-brand-dark');
-      });
-      btn.classList.remove('bg-white', 'text-brand-dark');
-      btn.classList.add('bg-brand-dark', 'text-white');
-
-      // Filter portfolio items with smooth fade effect
-      items.forEach((item) => {
-        const category = item.getAttribute('data-category');
-        const element = item as HTMLElement;
-
-        if (filter === 'all' || category === filter) {
-          element.classList.remove('hidden');
-          setTimeout(() => {
-            element.style.opacity = '1';
-            element.style.transform = 'scale(1)';
-            element.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
-          }, 50);
-        } else {
-          element.style.opacity = '0';
-          element.style.transform = 'scale(0.97)';
-          element.style.transition = 'opacity 0.4s ease-out, transform 0.4s ease-out';
-          
-          setTimeout(() => {
-            element.classList.add('hidden');
-          }, 400);
-        }
-      });
+      const filter = btn.getAttribute('data-filter') || 'all';
+      setFilter(filter, false);
     });
   });
+
+  // Check URL search parameters (e.g. ?filter=content-media)
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialFilter = urlParams.get('filter');
+  if (initialFilter) {
+    setFilter(initialFilter, true);
+  }
 
   // Modal Functionality
   const modal = document.getElementById('portfolio-modal') as HTMLElement;
@@ -448,6 +818,58 @@ const industries = [
   const modalScopes = document.getElementById('modal-scopes') as HTMLElement;
   const modalDesc = document.getElementById('modal-desc') as HTMLElement;
 
+  const modalOutputsCount = document.getElementById('modal-outputs-count') as HTMLElement;
+  const modalActiveOutputTitle = document.getElementById('modal-active-output-title') as HTMLElement;
+  const modalOutputsBar = document.getElementById('modal-outputs-bar') as HTMLElement;
+
+  interface OutputData {
+    id: string;
+    title: string;
+    type: 'image' | 'video' | 'pdf';
+    src: string;
+    caption?: string;
+  }
+
+  const switchOutput = (output: OutputData, activeBtn: HTMLElement | null) => {
+    modalActiveOutputTitle.textContent = output.title;
+
+    // Highlight active button in bar
+    const allTabBtns = modalOutputsBar.querySelectorAll('.output-tab-btn');
+    allTabBtns.forEach((b) => {
+      b.classList.remove('bg-brand-orange', 'text-white');
+      b.classList.add('bg-white/10', 'text-white/80');
+    });
+    if (activeBtn) {
+      activeBtn.classList.remove('bg-white/10', 'text-white/80');
+      activeBtn.classList.add('bg-brand-orange', 'text-white');
+    }
+
+    // Reset video playback
+    modalVideo.pause();
+    modalVideo.classList.add('hidden');
+    modalVideo.removeAttribute('src');
+
+    // Reset image and PDF
+    modalImage.classList.add('hidden');
+    modalPdfContainer.classList.add('hidden');
+
+    if (output.type === 'video') {
+      modalVideo.src = output.src;
+      modalVideo.load();
+      modalVideo.classList.remove('hidden');
+      modalVideo.play().catch(() => {});
+    } else if (output.type === 'pdf') {
+      modalPdfBtn.href = output.src;
+      modalPdfTitle.textContent = output.title;
+      modalPdfLabel.textContent = "Open PDF Document";
+      modalPdfContainer.classList.remove('hidden');
+    } else {
+      modalImage.src = output.src;
+      modalImage.alt = output.title;
+      modalImage.classList.remove('hidden');
+    }
+  };
+
   items.forEach((card) => {
     card.addEventListener('click', () => {
       const title = card.getAttribute('data-title') || '';
@@ -455,13 +877,14 @@ const industries = [
       const year = card.getAttribute('data-year') || '';
       const scopes = card.getAttribute('data-scopes') || '';
       const desc = card.getAttribute('data-desc') || '';
-      const video = card.getAttribute('data-video') || '';
-      const pdf = card.getAttribute('data-pdf') || '';
-      const pdfLabel = card.getAttribute('data-pdf-label') || '';
+      const rawOutputs = card.getAttribute('data-outputs') || '[]';
 
-      // Get optimized image source from compiled Astro img
-      const img = card.querySelector('img');
-      const imgSrc = img ? img.getAttribute('src') || '' : '';
+      let outputs: OutputData[] = [];
+      try {
+        outputs = JSON.parse(rawOutputs);
+      } catch (e) {
+        outputs = [];
+      }
 
       // Populate text
       modalTitle.textContent = title;
@@ -479,31 +902,44 @@ const industries = [
         modalScopes.appendChild(span);
       });
 
-      // Clear video
-      modalVideo.classList.add('hidden');
-      modalVideo.pause();
-      modalVideo.removeAttribute('src');
-      modalVideo.load();
+      // Build outputs bar
+      modalOutputsCount.textContent = outputs.length.toString();
+      modalOutputsBar.innerHTML = '';
 
-      // Clear PDF and Image
-      modalPdfContainer.classList.add('hidden');
-      modalImage.classList.add('hidden');
-
-      // Populate media panels
-      if (video) {
-        modalVideo.src = video;
-        modalVideo.load();
-        modalVideo.classList.remove('hidden');
-        modalVideo.play().catch(() => {});
-      } else if (pdf) {
-        modalPdfBtn.href = pdf;
-        modalPdfLabel.textContent = pdfLabel;
-        modalPdfTitle.textContent = title + " PDF";
-        modalPdfContainer.classList.remove('hidden');
-      } else {
-        modalImage.src = imgSrc;
-        modalImage.classList.remove('hidden');
+      if (outputs.length === 0) {
+        // Fallback to card image
+        const img = card.querySelector('img');
+        const fallbackSrc = img ? img.getAttribute('src') || '' : '';
+        outputs = [{ id: 'f1', title: 'Main Showcase', type: 'image', src: fallbackSrc }];
       }
+
+      outputs.forEach((out, idx) => {
+        const btn = document.createElement('button');
+        btn.className = `output-tab-btn px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 shrink-0 ${
+          idx === 0 
+            ? 'bg-brand-orange text-white shadow-sm' 
+            : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'
+        }`;
+
+        let iconSvg = '';
+        if (out.type === 'video') {
+          iconSvg = `<svg class="w-3 h-3 text-brand-orange-light shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
+        } else if (out.type === 'pdf') {
+          iconSvg = `<svg class="w-3 h-3 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`;
+        } else {
+          iconSvg = `<svg class="w-3 h-3 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`;
+        }
+
+        btn.innerHTML = `${iconSvg}<span>${out.title}</span>`;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          switchOutput(out, btn);
+        });
+        modalOutputsBar.appendChild(btn);
+      });
+
+      // Switch to first output
+      switchOutput(outputs[0], modalOutputsBar.children[0] as HTMLElement);
 
       // Open Modal
       modal.classList.remove('pointer-events-none', 'opacity-0');
@@ -519,7 +955,7 @@ const industries = [
     modalContainer.classList.remove('scale-100');
     modalContainer.classList.add('scale-95');
 
-    // Clean up video play to avoid overlay sound bug
+    // Clean up video play to avoid background audio
     setTimeout(() => {
       modalVideo.pause();
       modalVideo.removeAttribute('src');

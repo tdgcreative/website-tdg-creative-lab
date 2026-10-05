@@ -34,7 +34,8 @@ const serviceScopes = [
     services: [
       "Social Media Management",
       "Printed Design"
-    ]
+    ],
+    filter: "content-media"
   },
   {
     number: "02",
@@ -42,7 +43,8 @@ const serviceScopes = [
     services: [
       "Website Development",
       "Brand Development"
-    ]
+    ],
+    filter: "brand-digital"
   },
   {
     number: "03",
@@ -51,7 +53,8 @@ const serviceScopes = [
       "Lookbook Photoshoot",
       "Profile Photoshoot",
       "Event Documentation"
-    ]
+    ],
+    filter: "visual-doc"
   },
   {
     number: "04",
@@ -70,17 +73,19 @@ const title = "The Digital Grounds — Digital Marketing & Creative Agency Surab
 const description = "Ekosistem digital & brand lengkap: social media management, brand development, hingga produksi visual. Dipercaya 50+ brand di Surabaya & Indonesia.";
 
 const clientLogos = [
-  { src: asmaralokaLogo, alt: "Asmaraloka" },
-  { src: drsEliorLogo, alt: "Drs Elior" },
-  { src: invaLogo, alt: "Inva Dental" },
-  { src: mirevsLogo, alt: "Mirevs Cafe" },
-  { src: naraLogo, alt: "Nara Dental" },
-  { src: pbpiLogo, alt: "PBPI Jatim" },
-  { src: panenLogo, alt: "PT Panen" },
-  { src: razoLogo, alt: "Razo Tooth" },
-  { src: sodoneLogo, alt: "So Done" },
-  { src: tispunLogo, alt: "Tispun Bakeshop" },
+  { src: asmaralokaLogo, alt: "Asmaraloka", heightClass: "h-5 sm:h-6" },
+  { src: drsEliorLogo, alt: "Drs Elior", heightClass: "h-7 sm:h-8" },
+  { src: invaLogo, alt: "Inva Dental", heightClass: "h-8 sm:h-9" },
+  { src: mirevsLogo, alt: "Mirevs Cafe", heightClass: "h-5 sm:h-6" },
+  { src: naraLogo, alt: "Nara Dental", heightClass: "h-8 sm:h-9" },
+  { src: pbpiLogo, alt: "PBPI Jatim", heightClass: "h-7 sm:h-8" },
+  { src: panenLogo, alt: "PT Panen", heightClass: "h-6 sm:h-7" },
+  { src: razoLogo, alt: "Razo Tooth", heightClass: "h-6 sm:h-7" },
+  { src: sodoneLogo, alt: "So Done", heightClass: "h-8 sm:h-9" },
+  { src: tispunLogo, alt: "Tispun Bakeshop", heightClass: "h-6 sm:h-7" },
 ];
+
+const marqueeList = [...clientLogos, ...clientLogos];
 
 const portfolios = [
   {
@@ -136,8 +141,14 @@ const industries = [
     <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] rounded-full bg-brand-orange/15 blur-[100px] sm:blur-[140px] pointer-events-none" />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 w-full text-center relative z-10 flex flex-col items-center gap-5 sm:gap-6 md:gap-8">
-      <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black tracking-tighter leading-[1.05] sm:leading-none max-w-5xl uppercase text-brand-dark">
-        {t('hero.headline')}
+      <!-- Two-tier Hierarchical Hero Headline: Massive "TDG" + Refined Wide "CREATIVE LAB" -->
+      <h1 class="flex flex-col items-center justify-center uppercase text-brand-dark select-none text-center max-w-5xl">
+        <span class="text-6xl sm:text-8xl md:text-9xl lg:text-[10.5rem] xl:text-[12.5rem] font-black leading-none tracking-tighter">
+          {t('hero.headline.main')}
+        </span>
+        <span class="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-[0.25em] sm:tracking-[0.3em] md:tracking-[0.35em] text-brand-dark/90 mt-1 sm:mt-2 md:mt-3 pl-[0.25em] sm:pl-[0.3em] md:pl-[0.35em]">
+          {t('hero.headline.sub')}
+        </span>
       </h1>
       
       <p class="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-brand-dark/75 max-w-3xl leading-relaxed px-2">
@@ -162,33 +173,33 @@ const industries = [
   </section>
 
   <!-- Client Logo Marquee Section -->
-  <section class="py-8 sm:py-10 bg-brand-dark/5 border-y border-brand-dark/10 overflow-hidden relative w-full">
-    <div class="max-w-7xl mx-auto px-6 mb-4 sm:mb-6 text-center">
+  <section class="py-10 sm:py-14 bg-brand-dark/5 border-y border-brand-dark/10 overflow-hidden relative w-full">
+    <div class="max-w-7xl mx-auto px-6 mb-6 sm:mb-8 text-center">
       <span class="text-[10px] sm:text-xs font-bold text-brand-dark/50 uppercase tracking-widest block">Trusted by Premium Brands</span>
     </div>
-    <div class="flex overflow-hidden relative w-full select-none">
+    
+    <!-- Seamless Infinite Marquee with Soft Edge Vignette -->
+    <div class="flex overflow-hidden relative w-full select-none [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
       <!-- Marquee Track 1 -->
-      <div class="flex animate-marquee gap-8 sm:gap-12 md:gap-16 min-w-full items-center justify-around">
-        {clientLogos.map((logo) => (
-          <div class="flex items-center justify-center h-10 sm:h-12 w-24 sm:w-28 shrink-0">
+      <div class="flex shrink-0 items-center gap-12 sm:gap-16 md:gap-20 animate-marquee pr-12 sm:pr-16 md:pr-20">
+        {marqueeList.map((logo) => (
+          <div class="flex items-center justify-center shrink-0">
             <Image 
               src={logo.src} 
               alt={logo.alt} 
-              height={36} 
-              class="max-h-full max-w-full object-contain opacity-60 hover:opacity-100 hover:scale-105 transition-all duration-300 grayscale brightness-0" 
+              class={`w-auto object-contain opacity-65 hover:opacity-100 transition-opacity duration-300 ${logo.heightClass}`} 
             />
           </div>
         ))}
       </div>
-      <!-- Marquee Track 2 (Duplicate for loop) -->
-      <div class="flex animate-marquee gap-8 sm:gap-12 md:gap-16 min-w-full items-center justify-around" aria-hidden="true">
-        {clientLogos.map((logo) => (
-          <div class="flex items-center justify-center h-10 sm:h-12 w-24 sm:w-28 shrink-0">
+      <!-- Marquee Track 2 (Duplicate for infinite seamless loop) -->
+      <div class="flex shrink-0 items-center gap-12 sm:gap-16 md:gap-20 animate-marquee pr-12 sm:pr-16 md:pr-20" aria-hidden="true">
+        {marqueeList.map((logo) => (
+          <div class="flex items-center justify-center shrink-0">
             <Image 
               src={logo.src} 
               alt={logo.alt} 
-              height={36} 
-              class="max-h-full max-w-full object-contain opacity-60 hover:opacity-100 hover:scale-105 transition-all duration-300 grayscale brightness-0" 
+              class={`w-auto object-contain opacity-65 hover:opacity-100 transition-opacity duration-300 ${logo.heightClass}`} 
             />
           </div>
         ))}
@@ -218,8 +229,8 @@ const industries = [
           <span class="text-xs sm:text-sm font-semibold text-white/60 uppercase tracking-wider">Brands Trusted</span>
         </div>
         <div class="flex flex-col gap-1 sm:gap-2">
-          <span class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-brand-orange">1</span>
-          <span class="text-xs sm:text-sm font-semibold text-white/60 uppercase tracking-wider">Integrated Partner</span>
+          <span class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-brand-orange">3</span>
+          <span class="text-xs sm:text-sm font-semibold text-white/60 uppercase tracking-wider">Core Scopes</span>
         </div>
         <div class="flex flex-col gap-2 col-span-2 pt-4 border-t border-white/5">
           <span class="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest block mb-2">Specializations</span>
@@ -245,9 +256,9 @@ const industries = [
         </div>
         <a 
           href={translatePath('/works-and-services')} 
-          class="inline-flex items-center gap-2 font-bold text-xs sm:text-sm text-brand-dark group hover:text-brand-orange transition-colors w-fit"
+          class="inline-flex items-center gap-2.5 bg-brand-dark hover:bg-brand-orange text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 group w-fit self-start sm:self-auto shrink-0"
         >
-          {t('portfolio.cta')}
+          <span>{t('portfolio.cta')}</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 transform transition-transform duration-300 group-hover:translate-x-1">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
@@ -310,6 +321,20 @@ const industries = [
                 ))}
               </ul>
             </div>
+
+            {!scope.isExclusive && (
+              <div class="mt-6 pt-5 sm:pt-6 border-t border-brand-dark/10 flex flex-col">
+                <a 
+                  href={`${translatePath('/works-and-services')}?filter=${scope.filter}`} 
+                  class="inline-flex items-center justify-between w-full border border-brand-dark/20 hover:border-brand-dark hover:bg-brand-dark hover:text-white text-brand-dark font-bold px-4 py-2.5 rounded-full transition-all duration-300 text-xs group"
+                >
+                  <span>{t('scope.cta.explore')}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 transform transition-transform duration-300 group-hover:translate-x-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </a>
+              </div>
+            )}
 
             {scope.isExclusive && (
               <div class="mt-6 pt-5 sm:pt-6 border-t border-white/10 flex flex-col gap-3 sm:gap-4">

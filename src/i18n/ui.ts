@@ -13,7 +13,9 @@ export const ui = {
     'nav.contact': 'Hubungi Kami',
 
     // Home - Hero
-    'hero.headline': 'The Digital Grounds',
+    'hero.headline.main': 'TDG',
+    'hero.headline.sub': 'Creative Lab',
+    'hero.headline': 'TDG Creative Lab',
     'hero.subheadline': 'Digital Marketing & Creative Agency. Based in Indonesia.',
 
     // Home - Core Pitch
@@ -32,13 +34,15 @@ export const ui = {
     'works.note': '*Catatan: Eksekusi area taktis ini bersifat eksklusif dan tidak dipublikasikan di portofolio umum. Mari jadwalkan diskusi untuk melihat detail case study.',
     'works.cta': 'Jadwalkan Diskusi',
     'home.scopes.title': 'Ruang Lingkup Layanan Kami',
+    'scope.cta.explore': 'Lihat Portofolio',
     'portfolio.filter.all': 'Semua',
-    'portfolio.filter.smm': 'Social Media',
-    'portfolio.filter.visual': 'Visual Production',
-    'portfolio.filter.brandWeb': 'Brand & Web',
+    'portfolio.filter.contentMedia': 'Content & Media Management',
+    'portfolio.filter.brandDigital': 'Brand & Digital Foundation',
+    'portfolio.filter.visualDoc': 'Visual Production & Documentation',
     'portfolio.modal.client': 'Klien',
     'portfolio.modal.year': 'Tahun',
     'portfolio.modal.scopes': 'Ruang Lingkup',
+    'portfolio.modal.outputs': 'Output Pengerjaan',
     'portfolio.modal.downloadPdf': 'Unduh Brandbook PDF',
     'portfolio.modal.viewMenubook': 'Lihat Buku Menu PDF',
     'portfolio.modal.close': 'Tutup',
@@ -86,7 +90,9 @@ export const ui = {
     'nav.contact': 'Contact Us',
 
     // Home - Hero
-    'hero.headline': 'The Digital Grounds',
+    'hero.headline.main': 'TDG',
+    'hero.headline.sub': 'Creative Lab',
+    'hero.headline': 'TDG Creative Lab',
     'hero.subheadline': 'Digital Marketing & Creative Agency. Based in Indonesia.',
 
     // Home - Core Pitch
@@ -105,13 +111,15 @@ export const ui = {
     'works.note': '*Note: Tactical execution areas are exclusive and not published in the general portfolio. Let\'s schedule a discussion to view detailed case studies.',
     'works.cta': 'Schedule a Discussion',
     'home.scopes.title': 'Our Scopes of Services',
+    'scope.cta.explore': 'View Portfolio',
     'portfolio.filter.all': 'All',
-    'portfolio.filter.smm': 'Social Media',
-    'portfolio.filter.visual': 'Visual Production',
-    'portfolio.filter.brandWeb': 'Brand & Web',
+    'portfolio.filter.contentMedia': 'Content & Media Management',
+    'portfolio.filter.brandDigital': 'Brand & Digital Foundation',
+    'portfolio.filter.visualDoc': 'Visual Production & Documentation',
     'portfolio.modal.client': 'Client',
     'portfolio.modal.year': 'Year',
     'portfolio.modal.scopes': 'Scopes Handled',
+    'portfolio.modal.outputs': 'Deliverables & Outputs',
     'portfolio.modal.downloadPdf': 'Download Brandbook PDF',
     'portfolio.modal.viewMenubook': 'View Menu Book PDF',
     'portfolio.modal.close': 'Close',
