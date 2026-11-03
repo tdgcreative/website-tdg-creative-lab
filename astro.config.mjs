@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
+import { tdgAdminVitePlugin } from './src/utils/admin-vite-plugin.ts';
 
 // https://astro.build/config
 export default defineConfig({
@@ -15,7 +16,11 @@ export default defineConfig({
     },
   },
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss(), tdgAdminVitePlugin()]
   },
-  integrations: [sitemap()]
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/admin') && !page.includes('/thanks')
+    })
+  ]
 });

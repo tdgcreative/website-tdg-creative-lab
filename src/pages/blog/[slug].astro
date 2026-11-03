@@ -1,0 +1,256 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SimpleCTA from '../../components/SimpleCTA.astro';
+import { getLangFromUrl, useTranslations } from '../../i18n/utils';
+import blogData from '../../data/blog.json';
+import { renderMarkdownWithToc, estimateReadingTime } from '../../utils/blog-renderer';
+
+export function getStaticPaths() {
+  return blogData.articles
+    .filter((a) => a.status === 'published')
+    .map((article) => ({
+      params: { slug: article.id_lang.slug },
+      props: { article }
+    }));
+}
+
+const { article } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const post = article.id_lang;
+const enPost = article.en_lang;
+const { html, toc, readingTime } = renderMarkdownWithToc(post.content);
+
+const relatedArticles = blogData.articles
+  .filter((a) => a.status === 'published' && a.id !== article.id)
+  .slice(0, 2)
+  .map((a) => ({
+    ...a.id_lang,
+    category: a.category,
+    coverImage: a.coverImage,
+    publishedAt: a.publishedAt,
+    readingTime: estimateReadingTime(a.id_lang.content)
+  }));
+
+const formatDate = (dateStr: string) => {
+  try {
+    return new Date(dateStr).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  } catch {
+    return dateStr;
+  }
+};
+---
+
+<BaseLayout
+  title={post.seoTitle || post.title}
+  description={post.seoDescription || post.excerpt}
+  ogImage={article.coverImage}
+  canonicalPath={`/blog/${post.slug}`}
+  alternateIdPath={`/blog/${post.slug}`}
+  alternateEnPath={`/en/blog/${enPost.slug}`}
+  ogType="article"
+  articleMeta={{
+    publishedAt: article.publishedAt,
+    updatedAt: article.updatedAt,
+    author: article.author,
+    section: article.category,
+    tags: post.tags
+  }}
+>
+  <article class="py-10 sm:py-14 md:py-20">
+    <!-- Header & Breadcrumb -->
+    <header class="max-w-4xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12">
+      <nav aria-label="Breadcrumb" class="flex flex-wrap items-center gap-2 text-xs font-bold text-brand-dark/50 mb-6">
+        <a href="/" class="hover:text-brand-orange transition-colors">{t('nav.home')}</a>
+        <span>/</span>
+        <a href="/blog" class="hover:text-brand-orange transition-colors">{t('nav.blog')}</a>
+        <span>/</span>
+        <span class="text-brand-orange truncate max-w-[240px] sm:max-w-xs">{article.category}</span>
+      </nav>
+
+      <div class="flex flex-wrap items-center gap-2.5 mb-4">
+        <span class="bg-brand-orange text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full">
+          {article.category}
+        </span>
+        <span class="text-xs font-bold text-brand-dark/55">
+          {readingTime} {t('blog.readingTime')}
+        </span>
+      </div>
+
+      <h1 class="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-brand-dark leading-tight mb-5">
+        {post.title}
+      </h1>
+
+      <p class="text-sm sm:text-base md:text-lg text-brand-dark/70 leading-relaxed mb-6">
+        {post.excerpt}
+      </p>
+
+      <div class="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-brand-dark/10 text-xs text-brand-dark/65 font-semibold">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-full bg-brand-dark text-white font-black flex items-center justify-center text-xs">
+            TDG
+          </div>
+          <div>
+            <span class="block font-extrabold text-brand-dark">{article.author}</span>
+            <span>
+              {t('blog.published')}: <time datetime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
+              {article.updatedAt && article.updatedAt !== article.publishedAt && (
+                <span> • {t('blog.updated')}: <time datetime={article.updatedAt}>{formatDate(article.updatedAt)}</time></span>
+              )}
+            </span>
+          </div>
+        </div>
+
+        <a
+          href={`/en/blog/${enPost.slug}`}
+          class="inline-flex items-center gap-1.5 bg-brand-dark/5 hover:bg-brand-dark hover:text-white text-brand-dark px-3.5 py-1.5 rounded-full font-bold transition-colors text-xs"
+        >
+          <span>🌐 Read in English</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Featured Cover Image (LCP Element) -->
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 mb-10 sm:mb-14">
+      <div class="rounded-3xl overflow-hidden border border-brand-dark/10 shadow-xl bg-brand-dark aspect-[16/9]">
+        <img
+          src={article.coverImage}
+          alt={post.coverAlt}
+          width="1200"
+          height="675"
+          loading="eager"
+          fetchpriority="high"
+          class="w-full h-full object-cover"
+        />
+      </div>
+    </div>
+
+    <!-- Main Content + Sticky Table of Contents -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+      <!-- Sidebar TOC -->
+      {toc.length > 0 && (
+        <aside class="lg:col-span-4 order-1 lg:order-2">
+          <div class="lg:sticky lg:top-28 bg-white rounded-3xl p-6 border border-brand-dark/10 shadow-sm">
+            <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange block mb-2">
+               Navigation
+            </span>
+            <h2 class="text-sm font-black uppercase tracking-tight text-brand-dark mb-4 pb-3 border-b border-brand-dark/10">
+              {t('blog.toc')}
+            </h2>
+            <nav aria-label="Table of contents">
+              <ul class="space-y-2.5 text-xs">
+                {toc.map((item) => (
+                  <li class={item.level === 3 ? 'pl-4' : ''}>
+                    <a
+                      href={`#${item.id}`}
+                      class="text-brand-dark/70 hover:text-brand-orange font-bold transition-colors block leading-snug"
+                    >
+                      {item.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            <!-- Mini Consultation Box -->
+            <div class="mt-6 pt-5 border-t border-brand-dark/10">
+              <p class="text-xs font-bold text-brand-dark mb-3">
+                Ingin menerapkan strategi ini pada brand Anda?
+              </p>
+              <a
+                href="/contact"
+                class="block w-full text-center bg-brand-orange hover:bg-brand-orange-light text-white font-extrabold text-xs py-3 px-4 rounded-full transition-colors shadow-sm"
+              >
+                Jadwalkan Diskusi Bersama TDG
+              </a>
+            </div>
+          </div>
+        </aside>
+      )}
+
+      <!-- Article Body -->
+      <div class={`${toc.length > 0 ? 'lg:col-span-8' : 'lg:col-span-10 lg:col-start-2'} order-2 lg:order-1`}>
+        <div class="bg-white rounded-3xl p-6 sm:p-8 md:p-12 border border-brand-dark/10 shadow-sm">
+          <div class="prose-tdg" set:html={html} />
+
+          <!-- Tags Footer -->
+          <div class="mt-10 pt-6 border-t border-brand-dark/10 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-xs font-bold text-brand-dark/50 mr-1">Topik:</span>
+              {post.tags.map((tag: string) => (
+                <span class="bg-brand-bg text-brand-dark text-xs font-bold px-3 py-1 rounded-full border border-brand-dark/10">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+
+            <a
+              href="/blog"
+              class="inline-flex items-center gap-1.5 text-xs font-extrabold text-brand-dark hover:text-brand-orange transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+              </svg>
+              <span>{t('blog.backToBlog')}</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Related Articles -->
+  {relatedArticles.length > 0 && (
+    <section class="py-12 sm:py-16 bg-white border-t border-brand-dark/10">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-2xl sm:text-3xl font-black uppercase tracking-tight text-brand-dark">
+            {t('blog.related')}
+          </h2>
+          <a href="/blog" class="text-xs font-extrabold text-brand-orange hover:underline">
+            Lihat Semua →
+          </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          {relatedArticles.map((rel) => (
+            <a
+              href={`/blog/${rel.slug}`}
+              class="group bg-brand-bg rounded-3xl overflow-hidden border border-brand-dark/10 flex flex-col sm:flex-row hover:shadow-lg transition-all"
+            >
+              <div class="sm:w-48 aspect-[16/10] sm:aspect-auto bg-brand-dark shrink-0 overflow-hidden">
+                <img
+                  src={rel.coverImage}
+                  alt={rel.coverAlt}
+                  loading="lazy"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
+              <div class="p-5 flex flex-col justify-between gap-3">
+                <div>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-brand-orange">
+                    {rel.category}
+                  </span>
+                  <h3 class="text-base sm:text-lg font-black uppercase tracking-tight text-brand-dark group-hover:text-brand-orange transition-colors mt-1 leading-snug">
+                    {rel.title}
+                  </h3>
+                </div>
+                <span class="text-[11px] font-semibold text-brand-dark/55">
+                  {rel.readingTime} {t('blog.readingTime')}
+                </span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <SimpleCTA />
+</BaseLayout>
+

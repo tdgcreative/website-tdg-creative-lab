@@ -1,500 +1,23 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PortfolioCard from '../components/PortfolioCard.astro';
-import SimpleCTA from '../components/SimpleCTA.astro';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
-
-// Import Base Portfolio Card Images
-import fameImg from '../assets/portfolio/fame.jpg';
-import aioImg from '../assets/portfolio/aio.png';
-import tispunImg from '../assets/portfolio/tispun.jpg';
-import naraImg from '../assets/portfolio/nara.jpg';
-import setaseImg from '../assets/portfolio/setase.jpg';
-import regentistImg from '../assets/portfolio/regentist.jpg';
-import panenImg from '../assets/portfolio/panen.png';
-import apexPadelImg from '../assets/portfolio/apex-padel.jpg';
-import casbarImg from '../assets/portfolio/casbar.jpg';
-import soDoneImg from '../assets/portfolio/so-done.jpg';
-import btcBoardImg from '../assets/portfolio/btc-board.jpg';
-import cravincImg from '../assets/portfolio/cravinc.jpg';
+import portfoliosData from '../data/portfolios.json';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
-const title = "Layanan & Portofolio — TDG Creative Lab";
-const description = "Lihat portofolio lengkap kami di TDG Creative Lab: Content & Media Management, Brand & Digital Foundation, Visual Production & Documentation.";
+const title = portfoliosData.seo.id.title;
+const description = portfoliosData.seo.id.description;
 
-export interface DeliverableOutput {
-  id: string;
-  title: string;
-  type: 'image' | 'video' | 'pdf';
-  src: string;
-  caption?: string;
-}
-
-export interface PortfolioItem {
-  title: string;
-  category: string;
-  tags: string[];
-  imageSrc: ImageMetadata | string;
-  svgIcon: string;
-  filterClass: string;
-  scopes: string;
-  year: string;
-  description: string;
-  outputs: DeliverableOutput[];
-  imagePosition?: string;
-  imageFit?: "cover" | "contain";
-}
-
-const portfolios: PortfolioItem[] = [
-  // ==========================================
-  // 1. CONTENT & MEDIA MANAGEMENT (content-media)
-  // ==========================================
-  {
-    title: "FAME",
-    category: "Content & Media Management",
-    tags: ["Lookbook Photoshoot", "Social Media Management"],
-    imageSrc: fameImg,
-    svgIcon: "fashion",
-    filterClass: "content-media",
-    scopes: "Social Media Management, Campaign Direction, Lookbook Photoshoot",
-    year: "2024",
-    description: "Kampanye kreatif dan visual lookbook fashion eksklusif. Kami merancang moodboard, mengarahkan sesi pemotretan model, serta mengelola kanal media sosial harian untuk memperkuat identitas brand di pasar retail fashion.",
-    outputs: [
-      { id: "fm1", title: "Fall / Spring Campaign Video", type: "video", src: "/videos/fame-fall-spring.mp4" },
-      { id: "fm2", title: "Fashion Lookbook Showcase", type: "image", src: fameImg.src },
-    ]
-  },
-  {
-    title: "AIO Aesthetic Clinic",
-    category: "Content & Media Management",
-    tags: ["Social Media", "KOL Campaign", "Clinic Menubook"],
-    imageSrc: aioImg,
-    svgIcon: "healthcare",
-    filterClass: "content-media",
-    scopes: "Social Media Management, KOL Campaign, Event Documentation, Menubook Design",
-    year: "2024",
-    description: "Pengembangan konten visual terintegrasi untuk klinik estetika premium. Layanan kami mencakup manajemen media sosial harian, video edukasi dokter ahli, perancangan buku panduan menu klinis (PDF) yang mewah, serta dokumentasi klinik.",
-    outputs: [
-      { id: "aio1", title: "Video Edukasi HIFU", type: "video", src: "/videos/aio-edukasi-hifu.mp4" },
-      { id: "aio2", title: "Buku Menu Perawatan (PDF)", type: "pdf", src: "/docs/aio-clinic-menubook.pdf" },
-      { id: "aio3", title: "Clinic Branding Showcase", type: "image", src: aioImg.src },
-    ]
-  },
-  {
-    title: "El Grande Padel",
-    category: "Content & Media Management",
-    tags: ["Social Media", "Reels Video", "Feed Design"],
-    imageSrc: "/images/portfolio/el-grande/post-1.png",
-    svgIcon: "sport",
-    filterClass: "content-media",
-    scopes: "Social Media Management, High-Energy Reels, Instagram Feed Design",
-    year: "2024",
-    description: "Pengembangan ekosistem digital olahraga modern untuk El Grande Padel. Kami mengarahkan pembuatan konten video reels sinematik, mengelola jadwal turnamen, dan mendesain identitas visual feed Instagram yang dinamis dan berenergi tinggi.",
-    outputs: [
-      { id: "eg1", title: "Reels Sinematik", type: "video", src: "/videos/el-grande-cinematic.mp4" },
-      { id: "eg2", title: "Ladies Day Highlight", type: "video", src: "/videos/el-grande-ladies-day.mp4" },
-      { id: "eg3", title: "Feed - Event Turnamen", type: "image", src: "/images/portfolio/el-grande/post-1.png" },
-      { id: "eg4", title: "Feed - Court Showcase", type: "image", src: "/images/portfolio/el-grande/post-2.png" },
-      { id: "eg5", title: "Feed - Rules & Tips", type: "image", src: "/images/portfolio/el-grande/post-3.png" },
-      { id: "eg6", title: "Feed - Match Schedule", type: "image", src: "/images/portfolio/el-grande/post-5.png" },
-    ]
-  },
-  {
-    title: "The K Style Salon",
-    category: "Content & Media Management",
-    tags: ["Social Media", "Influencer Video", "Promo Feed"],
-    imageSrc: "/images/portfolio/the-k-style/f1.jpg",
-    imagePosition: "object-top",
-    svgIcon: "fashion",
-    filterClass: "content-media",
-    scopes: "Social Media Management, Influencer Video, Promo Campaign Design",
-    year: "2024",
-    description: "Strategi media sosial dan promosi salon gaya Korea premium. Mencakup kolaborasi video influencer, arahan konten edukasi perawatan rambut, serta desain visual promo feed yang memikat.",
-    outputs: [
-      { id: "ks1", title: "Video Influencer Review", type: "video", src: "/videos/the-k-style-influencer.mp4" },
-      { id: "ks2", title: "Feed - Campaign 50% Off", type: "image", src: "/images/portfolio/the-k-style/f1.jpg" },
-      { id: "ks3", title: "Feed - Treatment Keratin", type: "image", src: "/images/portfolio/the-k-style/f2.jpg" },
-      { id: "ks4", title: "Feed - Korean Styling", type: "image", src: "/images/portfolio/the-k-style/f3.jpg" },
-      { id: "ks5", title: "Feed - Balayage Glow", type: "image", src: "/images/portfolio/the-k-style/f4.jpg" },
-      { id: "ks6", title: "Feed - Haircare Tips", type: "image", src: "/images/portfolio/the-k-style/f6.jpg" },
-    ]
-  },
-  {
-    title: "Razo Tooth Atelier",
-    category: "Content & Media Management",
-    tags: ["Social Media", "Clinic Walkthrough", "Dental Feed"],
-    imageSrc: "/images/portfolio/razo/razo-design-1.jpg",
-    svgIcon: "dental",
-    filterClass: "content-media",
-    scopes: "Social Media Management, Video Reels, Educational Feed Design",
-    year: "2024",
-    description: "Manajemen media sosial dan edukasi kesehatan gigi premium untuk Razo Tooth Atelier. Kami memproduksi konten video klinik steril, estetika dental modern, dan desain carousel interaktif yang informatif.",
-    outputs: [
-      { id: "rz1", title: "A Regular Day at RAZO (Video)", type: "video", src: "/videos/razo-regular-day.mp4" },
-      { id: "rz2", title: "Dental Education Reel", type: "video", src: "/videos/razo-education.mp4" },
-      { id: "rz3", title: "Feed - Gigi Berlubang Parah", type: "image", src: "/images/portfolio/razo/razo-design-1.jpg" },
-      { id: "rz4", title: "Feed - Rahang & Beban Kunyah", type: "image", src: "/images/portfolio/razo/razo-design-2.jpg" },
-      { id: "rz5", title: "Feed - Gigi Bungsu Miring", type: "image", src: "/images/portfolio/razo/razo-design-3.jpg" },
-      { id: "rz6", title: "Feed - Gaya Hidup & Kopi", type: "image", src: "/images/portfolio/razo/razo-design-4.jpg" },
-    ]
-  },
-  {
-    title: "Dr's Elior",
-    category: "Content & Media Management",
-    tags: ["Social Media", "Motion Campaign"],
-    imageSrc: aioImg,
-    svgIcon: "healthcare",
-    filterClass: "content-media",
-    scopes: "Social Media Management, Motion Graphic Video, Healthcare Branding",
-    year: "2024",
-    description: "Pengembangan kampanye visual dinamis dan motion graphic untuk Dr's Elior guna memperkuat kehadiran digital di industri kecantikan dan perawatan medis profesional.",
-    outputs: [
-      { id: "el1", title: "Motion Graphic Campaign", type: "video", src: "/videos/elior-motion.mp4" },
-      { id: "el2", title: "Brand Identity Overview", type: "image", src: aioImg.src },
-    ]
-  },
-  {
-    title: "Gachi Korean Cuisine",
-    category: "Content & Media Management",
-    tags: ["Social Media", "Culinary Reels", "Restaurant Ambience"],
-    imageSrc: tispunImg,
-    svgIcon: "fnb",
-    filterClass: "content-media",
-    scopes: "Social Media Management, Culinary Video Production, Promo Campaign",
-    year: "2024",
-    description: "Strategi media sosial dan produksi video kuliner berenergi tinggi untuk restoran autentik Korea Gachi. Menyajikan kelezatan BBQ, hidangan Mala Series, serta suasana tempat makan yang asik dan estetik.",
-    outputs: [
-      { id: "gc1", title: "All You Can Eat Korean BBQ", type: "video", src: "/videos/gachi-bbq.mp4" },
-      { id: "gc2", title: "Must-Visit Korean Food Surabaya", type: "video", src: "/videos/gachi-must-visit.mp4" },
-      { id: "gc3", title: "Culinary Photography", type: "image", src: tispunImg.src },
-    ]
-  },
-  {
-    title: "Mirev's Dessert Cafe",
-    category: "Content & Media Management",
-    tags: ["Social Media", "Dessert Reels", "Aesthetic Feed"],
-    imageSrc: "/images/portfolio/mirevs/feed-1.jpg",
-    svgIcon: "fnb",
-    filterClass: "content-media",
-    scopes: "Social Media Management, Artisan Food Reels, Feed Curation",
-    year: "2024",
-    description: "Kurasi visual elegan dan konten video reels artisan dessert untuk Mirev's Cafe. Menghadirkan foto produk kue premium, seasonal gift hampers, dan suasana cafe yang hangat dan instagramable.",
-    outputs: [
-      { id: "mv1", title: "Ambience & Tasting Reel", type: "video", src: "/videos/mirevs-ambience.mp4" },
-      { id: "mv2", title: "Feed - Brownie Cheesecake Bites", type: "image", src: "/images/portfolio/mirevs/feed-1.jpg" },
-      { id: "mv3", title: "Feed - Matcha Coconut Specialty", type: "image", src: "/images/portfolio/mirevs/feed-2.jpg" },
-      { id: "mv4", title: "Feed - Festive Classic Cake", type: "image", src: "/images/portfolio/mirevs/feed-3.jpg" },
-      { id: "mv5", title: "Feed - Roses & Red Velvet", type: "image", src: "/images/portfolio/mirevs/feed-4.jpg" },
-    ]
-  },
-  {
-    title: "Fit N Shape Workout Center",
-    category: "Content & Media Management",
-    tags: ["Social Media", "Fitness Reels", "Member Community"],
-    imageSrc: apexPadelImg,
-    svgIcon: "sport",
-    filterClass: "content-media",
-    scopes: "Social Media Management, Fitness Video Reels, Community Engagement",
-    year: "2024",
-    description: "Pengelolaan media sosial dan dokumentasi aktivitas kebugaran di Fit N Shape. Memproduksi konten edukasi gerakan gym, testimoni hasil latihan member, serta keseruan kelas olahraga bersama.",
-    outputs: [
-      { id: "fns1", title: "Member Transformation & Training Reel", type: "video", src: "/videos/fit-n-shape.mp4" },
-      { id: "fns2", title: "Gym Facility Overview", type: "image", src: apexPadelImg.src },
-    ]
-  },
-  {
-    title: "Inva Dental Studio",
-    category: "Content & Media Management",
-    tags: ["Social Media", "Clinic Walkthrough", "Patient Edu"],
-    imageSrc: naraImg,
-    svgIcon: "dental",
-    filterClass: "content-media",
-    scopes: "Social Media Management, Clinic Grand Opening Video, Dental Education",
-    year: "2024",
-    description: "Penyusunan fondasi media sosial dan video profil klinik gigi modern Inva Dental Studio. Kami memproduksi konten video tur klinik berestetika tinggi, edukasi kesehatan gigi, serta konten media sosial yang hangat dan terpercaya.",
-    outputs: [
-      { id: "inv1", title: "Grand Opening & Walkthrough", type: "video", src: "/videos/inva-dental-opening.mp4" },
-      { id: "inv2", title: "Dokumentasi Klinik Gigi", type: "image", src: naraImg.src },
-    ]
-  },
-  {
-    title: "Tispun Bakeshop",
-    category: "Content & Media Management",
-    tags: ["Social Media", "Product Photography", "Behind The Bake"],
-    imageSrc: tispunImg,
-    svgIcon: "fnb",
-    filterClass: "content-media",
-    scopes: "Product Photoshoot, Social Media Reels, Visual Styling",
-    year: "2023",
-    description: "Pemotretan produk bakeshop yang estetik dan menggugah selera untuk produk roti artisan premium. Dipadukan dengan video reels interaktif guna mendongkrak interaksi audiens dan konversi penjualan secara online.",
-    outputs: [
-      { id: "tsp1", title: "Behind The Bake Reels", type: "video", src: "/videos/tispun-reels.mp4" },
-      { id: "tsp2", title: "Product Photography", type: "image", src: tispunImg.src },
-    ]
-  },
-  {
-    title: "Asmaraloka Villa & Resto",
-    category: "Content & Media Management",
-    tags: ["Social Media", "Ambience Video", "Hospitality Reels"],
-    imageSrc: regentistImg,
-    svgIcon: "dental",
-    filterClass: "content-media",
-    scopes: "Social Media Management, Ambience Video, Visual Production",
-    year: "2024",
-    description: "Pengambilan footage video sinematik dan pengelolaan media sosial untuk menangkap suasana asri, tenang, dan kemewahan arsitektur Asmaraloka Villa & Resto.",
-    outputs: [
-      { id: "asm1", title: "The Ambience Video", type: "video", src: "/videos/asmaraloka-ambience.mp4" },
-      { id: "asm2", title: "Architectural Showcase", type: "image", src: regentistImg.src },
-    ]
-  },
-  {
-    title: "Nosh Menubook",
-    category: "Content & Media Management",
-    tags: ["Printed Design", "Luxury Menubook", "Editorial Layout"],
-    imageSrc: tispunImg,
-    svgIcon: "fnb",
-    filterClass: "content-media",
-    scopes: "Printed Design, F&B Menubook Typography, Print Production File",
-    year: "2024",
-    description: "Perancangan buku menu eksklusif (Menubook PDF) untuk Nosh Restaurant dengan komposisi tipografi yang elegan, layout menu terstruktur, dan kualitas cetak premium.",
-    outputs: [
-      { id: "nsh1", title: "Nosh Menubook (PDF)", type: "pdf", src: "/docs/nosh-menubook.pdf" },
-      { id: "nsh2", title: "F&B Layout Showcase", type: "image", src: tispunImg.src },
-    ]
-  },
-  {
-    title: "Sunbrew Menubook",
-    category: "Content & Media Management",
-    tags: ["Printed Design", "Beverage Menubook", "Graphic Standard"],
-    imageSrc: tispunImg,
-    svgIcon: "fnb",
-    filterClass: "content-media",
-    scopes: "Printed Design, Beverage Menu Layout, Graphic Collateral",
-    year: "2024",
-    description: "Desain buku menu kopi dan minuman artisan untuk Sunbrew dengan identitas grafis yang modern, segar, dan mudah dibaca oleh pengunjung cafe.",
-    outputs: [
-      { id: "snb1", title: "Sunbrew Menubook (PDF)", type: "pdf", src: "/docs/sunbrew-menubook.pdf" },
-      { id: "snb2", title: "Coffee & Beverage Showcase", type: "image", src: tispunImg.src },
-    ]
-  },
-  {
-    title: "Delapanmeter Menubook",
-    category: "Content & Media Management",
-    tags: ["Printed Design", "Hospitality Menubook Design"],
-    imageSrc: regentistImg,
-    svgIcon: "dental",
-    filterClass: "content-media",
-    scopes: "Printed Design, Cafe Menubook, Visual Styling",
-    year: "2024",
-    description: "Desain cetak buku menu kafe Delapanmeter dengan gaya tata letak minimalis dan tipografi yang rapi guna menonjolkan kualitas menu andalan.",
-    outputs: [
-      { id: "dlp1", title: "Delapanmeter Menubook (PDF)", type: "pdf", src: "/docs/delapanmeter-menubook.pdf" },
-      { id: "dlp2", title: "Menubook Layout Overview", type: "image", src: regentistImg.src },
-    ]
-  },
-
-  // ==========================================
-  // 2. BRAND & DIGITAL FOUNDATION (brand-digital)
-  // ==========================================
-  {
-    title: "PT Panen",
-    category: "Brand & Digital Foundation",
-    tags: ["Website Development", "Corporate Photoshoot"],
-    imageSrc: panenImg,
-    svgIcon: "healthcare",
-    filterClass: "brand-digital",
-    scopes: "Website Development, Corporate Profile Photoshoot, Art Direction",
-    year: "2024",
-    imagePosition: "object-top",
-    description: "Transformasi identitas digital korporasi melalui pembuatan website profil perusahaan multi-halaman yang responsif, modern, dan berorientasi pada konversi, didukung oleh dokumentasi foto profil jajaran direksi yang profesional.",
-    outputs: [
-      { id: "p1", title: "Beranda Website", type: "image", src: "/images/portfolio/panen/page-beranda.png" },
-      { id: "p2", title: "Filosofi Produksi", type: "image", src: "/images/portfolio/panen/page-filosofi.png" },
-      { id: "p3", title: "Produk & Layanan", type: "image", src: "/images/portfolio/panen/page-produk.png" },
-      { id: "p4", title: "Riset Kami", type: "image", src: "/images/portfolio/panen/page-riset.png" },
-      { id: "p5", title: "Hubungi Kami", type: "image", src: "/images/portfolio/panen/page-hubungi.png" },
-      { id: "p6", title: "Foto Profil Direksi", type: "image", src: "/images/portfolio/panen/direksi-photoshoot.png" },
-    ]
-  },
-  {
-    title: "Cravinc",
-    category: "Brand & Digital Foundation",
-    tags: ["Brand Identity", "Brandbook PDF"],
-    imageSrc: cravincImg,
-    svgIcon: "fashion",
-    filterClass: "brand-digital",
-    scopes: "Brand Identity Design, Brand Guideline PDF, Graphic Standards",
-    year: "2024",
-    description: "Penyusunan panduan identitas brand (Brandbook Guideline) lengkap untuk Cravinc. Menetapkan pedoman tata letak logo, palet warna primer dan sekunder, tipografi, serta standar penerapan visual di setiap media.",
-    outputs: [
-      { id: "cr1", title: "Brand Guideline Lengkap (PDF)", type: "pdf", src: "/docs/cravinc-brand-guideline.pdf" },
-      { id: "cr2", title: "Visual Identity Showcase", type: "image", src: cravincImg.src },
-    ]
-  },
-  {
-    title: "Primadona Skincare",
-    category: "Brand & Digital Foundation",
-    tags: ["Brand Guideline", "Identity Standards"],
-    imageSrc: fameImg,
-    svgIcon: "healthcare",
-    filterClass: "brand-digital",
-    scopes: "Brand Identity Development, Graphic Standards, Guideline Manual",
-    year: "2024",
-    description: "Pengembangan fondasi visual dan identitas brand kosmetik/skincare. Mencakup eksplorasi palet warna elegan, aturan penggunaan logo, tipografi korporat, serta standardisasi grafis jangka panjang.",
-    outputs: [
-      { id: "pm1", title: "Primadona Brand Guideline (PDF)", type: "pdf", src: "/docs/primadona-brand-guideline.pdf" },
-      { id: "pm2", title: "Brand Identity Overview", type: "image", src: fameImg.src },
-    ]
-  },
-  {
-    title: "Rajawali Translog",
-    category: "Brand & Digital Foundation",
-    tags: ["Company Profile PDF", "Corporate Foundation"],
-    imageSrc: regentistImg,
-    svgIcon: "dental",
-    filterClass: "brand-digital",
-    scopes: "Brand Identity Foundation, Corporate Company Profile Design",
-    year: "2024",
-    description: "Perancangan dokumen identitas korporasi profesional Company Profile untuk perusahaan logistik nasional Rajawali Translog dengan standar estetika desain kelas korporasi.",
-    outputs: [
-      { id: "rj1", title: "Rajawali Translog Compro (PDF)", type: "pdf", src: "/docs/rajawali-translog-compro.pdf" },
-      { id: "rj2", title: "Corporate Branding Overview", type: "image", src: regentistImg.src },
-    ]
-  },
-
-  // ==========================================
-  // 3. VISUAL PRODUCTION & DOCUMENTATION (visual-doc)
-  // ==========================================
-  {
-    title: "Nara Dental",
-    category: "Visual Production & Documentation",
-    tags: ["Event Documentation", "Profile Photoshoot"],
-    imageSrc: naraImg,
-    svgIcon: "dental",
-    filterClass: "visual-doc",
-    scopes: "Event Documentation, Grand Opening Video, Profile Photoshoot",
-    year: "2023",
-    description: "Dokumentasi visual sinematik peresmian grand opening klinik Nara Dental dan sesi foto profil tenaga medis yang ramah serta higienis untuk membangun kepercayaan pasien baru.",
-    outputs: [
-      { id: "nr1", title: "Grand Opening Aftermovie", type: "video", src: "/videos/nara-grand-opening.mp4" },
-      { id: "nr2", title: "Foto Profil & Ruang Praktek", type: "image", src: naraImg.src },
-    ]
-  },
-  {
-    title: "PBPI Jatim",
-    category: "Visual Production & Documentation",
-    tags: ["Event Documentation", "Tournament Interview"],
-    imageSrc: apexPadelImg,
-    svgIcon: "sport",
-    filterClass: "visual-doc",
-    scopes: "Sports Event Coverage, Championship Interview Videography",
-    year: "2024",
-    description: "Dokumentasi kegiatan dan peliputan kejuaraan bulutangkis Sirkuit Nasional (Sirnas) PBPI Jatim, meliputi wawancara atlet peraih medali serta momen seru pertandingan.",
-    outputs: [
-      { id: "pb1", title: "Championship Interview Video", type: "video", src: "/videos/pbpi-jatim.mp4" },
-      { id: "pb2", title: "Tournament Coverage Overview", type: "image", src: apexPadelImg.src },
-    ]
-  },
-  {
-    title: "Apex Padel League",
-    category: "Visual Production & Documentation",
-    tags: ["Sports Video", "High-Energy Reels"],
-    imageSrc: apexPadelImg,
-    svgIcon: "sport",
-    filterClass: "visual-doc",
-    scopes: "Videography, Sports Event Documentation, Social Reels",
-    year: "2024",
-    description: "Dokumentasi event turnamen olahraga padel tenis kelas atas. Kami memproduksi rangkaian konten video reels berenergi tinggi yang menangkap ketegangan pertandingan, antusiasme para pemain, dan kemeriahan kompetisi.",
-    outputs: [
-      { id: "apl1", title: "High-Energy Tournament Video", type: "video", src: "/videos/apex-padel.mp4" },
-      { id: "apl2", title: "Tournament Action Photo", type: "image", src: apexPadelImg.src },
-    ]
-  },
-  {
-    title: "Casbar Combat",
-    category: "Visual Production & Documentation",
-    tags: ["Martial Arts Video", "Cinematic Event"],
-    imageSrc: casbarImg,
-    svgIcon: "sport",
-    filterClass: "visual-doc",
-    scopes: "Cinematic Videography, MMA Event Documentation",
-    year: "2023",
-    description: "Produksi video dokumentasi pertandingan seni bela diri (MMA) yang menangkap detail pertarungan dengan pencahayaan neon dramatis dan sudut kamera sinematik untuk menonjolkan aksi pertarungan yang dinamis dan intens.",
-    outputs: [
-      { id: "cb1", title: "MMA Combat Highlights", type: "video", src: "/videos/casbar.mp4" },
-      { id: "cb2", title: "Cage Action Photography", type: "image", src: casbarImg.src },
-    ]
-  },
-  {
-    title: "So Done Music Fest",
-    category: "Visual Production & Documentation",
-    tags: ["Music Festival Video", "Event Aftermovie"],
-    imageSrc: soDoneImg,
-    svgIcon: "sport",
-    filterClass: "visual-doc",
-    scopes: "Event Videography, Event Aftermovie Production",
-    year: "2024",
-    description: "Dokumentasi festival musik So Done di Mandiri Fest. Kami mengabadikan antusiasme penonton, tata lampu panggung, dan memproduksi video aftermovie yang imersif serta membangkitkan euforia konser.",
-    outputs: [
-      { id: "sd1", title: "Music Fest Aftermovie", type: "video", src: "/videos/so-done.mp4" },
-      { id: "sd2", title: "Stage Lighting Shoot", type: "image", src: soDoneImg.src },
-    ]
-  },
-  {
-    title: "BTC Board",
-    category: "Visual Production & Documentation",
-    tags: ["Product Video Shoot", "Motion Graphic Ads"],
-    imageSrc: btcBoardImg,
-    svgIcon: "healthcare",
-    filterClass: "visual-doc",
-    scopes: "Product Showcase Video, Motion Graphic Ads",
-    year: "2024",
-    description: "Kampanye video produk material PVC board premium. Kami memvisualisasikan daya tahan produk, kemudahan pemasangan, serta contoh pengaplikasian panel kayu modern dalam tata ruang interior minimalis yang estetik.",
-    outputs: [
-      { id: "btc1", title: "Product Showcase Video", type: "video", src: "/videos/btc-board.mp4" },
-      { id: "btc2", title: "Material Application Shoot", type: "image", src: btcBoardImg.src },
-    ]
-  },
-  {
-    title: "SETASE",
-    category: "Visual Production & Documentation",
-    tags: ["Lookbook Photoshoot", "Studio Styling"],
-    imageSrc: setaseImg,
-    svgIcon: "fashion",
-    filterClass: "visual-doc",
-    scopes: "Lookbook Photoshoot, Studio Styling, Art Direction",
-    year: "2024",
-    description: "Produksi visual lookbook pakaian fashion pria/wanita dengan pengarahan gaya studio yang bersih, minimalis, dan elegan untuk menonjolkan detail serta kualitas bahan produk premium.",
-    outputs: [
-      { id: "st1", title: "Studio Lookbook Shoot", type: "image", src: setaseImg.src },
-    ]
-  },
-  {
-    title: "D'Regentist",
-    category: "Visual Production & Documentation",
-    tags: ["Profile Photoshoot", "Architectural Doc"],
-    imageSrc: regentistImg,
-    svgIcon: "dental",
-    filterClass: "visual-doc",
-    scopes: "Profile Photoshoot, Architectural Photoshoot",
-    year: "2023",
-    description: "Sesi foto profil tim arsitektur dan dokumentasi visual tata ruang yang menangkap detail estetika ruangan, kenyamanan tata cahaya, serta kemewahan rancangan modern yang khas.",
-    outputs: [
-      { id: "dr1", title: "Architectural & Interior Shoot", type: "image", src: regentistImg.src },
-    ]
-  }
-];
-
-const industries = [
-  "Healthcare",
-  "Fashion",
-  "F&B",
-  "Sport",
-  "Architecture & Lifestyle"
-];
+const portfolios = portfoliosData.items.map((item) => ({
+  ...item,
+  scopes: typeof item.scopes === 'object' ? item.scopes.id : item.scopes,
+  description: typeof item.description === 'object' ? item.description.id : item.description,
+  imageFit: (item as any).imageFit as "cover" | "contain" | undefined,
+  imagePosition: (item as any).imagePosition as string | undefined
+}));
 ---
 
 <BaseLayout title={title} description={description} canonicalPath="/works-and-services">
@@ -592,6 +115,34 @@ const industries = [
       <!-- Left Panel: Media Showcase Viewport (Aspect-Preserving & Uncropped) -->
       <div class="md:w-[58%] lg:w-[62%] bg-[#0e0e0e] flex flex-col justify-between relative overflow-hidden min-h-[320px] sm:min-h-[440px] md:min-h-[580px] shrink-0 border-b md:border-b-0 md:border-r border-white/10">
         
+        <!-- Floating Counter Badge (Top-Left) -->
+        <div id="modal-counter-badge" class="absolute top-4 left-4 z-20 px-3 py-1.5 rounded-full bg-black/75 backdrop-blur-md text-white text-[11px] font-bold border border-white/15 flex items-center gap-2 shadow-xl select-none">
+          <span id="modal-counter-dot" class="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
+          <span id="modal-counter-text">1 / 1</span>
+        </div>
+
+        <!-- Floating Prev Arrow -->
+        <button 
+          id="modal-prev-btn" 
+          class="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/70 hover:bg-brand-orange text-white flex items-center justify-center transition-all cursor-pointer shadow-xl backdrop-blur-md border border-white/15 hover:scale-105 active:scale-95"
+          aria-label="Previous deliverable"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>
+        </button>
+
+        <!-- Floating Next Arrow -->
+        <button 
+          id="modal-next-btn" 
+          class="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/70 hover:bg-brand-orange text-white flex items-center justify-center transition-all cursor-pointer shadow-xl backdrop-blur-md border border-white/15 hover:scale-105 active:scale-95"
+          aria-label="Next deliverable"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </button>
+
         <!-- Main Media Display (Centered, object-contain, never cut off!) -->
         <div class="flex-1 flex items-center justify-center p-4 sm:p-6 relative w-full overflow-hidden bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.04),transparent_70%)]">
           <!-- Image display -->
@@ -641,10 +192,10 @@ const industries = [
         </div>
 
         <!-- Deliverables Outputs Navigation Bar -->
-        <div class="bg-black/75 backdrop-blur-md border-t border-white/10 p-3 sm:p-4 z-10">
+        <div class="bg-black/85 backdrop-blur-md border-t border-white/10 p-3 sm:p-4 z-10">
           <div class="flex items-center justify-between gap-3 mb-2 px-1">
-            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/50 flex items-center gap-1.5">
-              <span class="w-1.5 h-1.5 rounded-full bg-brand-orange"></span>
+            <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-white/60 flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-brand-orange"></span>
               <span>Output Pengerjaan (<span id="modal-outputs-count">1</span>)</span>
             </span>
             <span class="text-[10px] sm:text-xs text-brand-orange font-bold truncate max-w-[240px]" id="modal-active-output-title">Output 1</span>
@@ -661,82 +212,59 @@ const industries = [
         <div class="flex flex-col gap-5 sm:gap-6">
           <div>
             <span id="modal-info-category" class="text-brand-orange text-[10px] sm:text-xs font-bold tracking-widest uppercase block mb-1">Content & Media</span>
-            <h2 id="modal-title" class="text-2xl sm:text-3xl md:text-4xl font-black uppercase tracking-tight text-brand-dark leading-tight">
-              Client Name
-            </h2>
+            <h3 class="text-2xl sm:text-3xl font-black text-brand-dark uppercase tracking-tight" id="modal-title">Nama Klien</h3>
           </div>
 
-          <!-- Metadata table -->
-          <div class="grid grid-cols-2 gap-3 sm:gap-4 border-y border-brand-dark/10 py-3 sm:py-4">
-            <div class="flex flex-col">
-              <span class="text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider">{t('portfolio.modal.client')}</span>
-              <span id="modal-client" class="text-xs sm:text-sm font-extrabold text-brand-dark">The Client</span>
+          <!-- Metadata Grid -->
+          <div class="grid grid-cols-2 gap-3 py-3 border-y border-brand-dark/10 text-xs">
+            <div>
+              <span class="text-brand-dark/50 font-bold block mb-0.5">{t('portfolio.modal.client')}</span>
+              <span class="font-bold text-brand-dark" id="modal-client">-</span>
             </div>
-            <div class="flex flex-col">
-              <span class="text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider">{t('portfolio.modal.year')}</span>
-              <span id="modal-year" class="text-xs sm:text-sm font-extrabold text-brand-dark">2024</span>
+            <div>
+              <span class="text-brand-dark/50 font-bold block mb-0.5">{t('portfolio.modal.year')}</span>
+              <span class="font-bold text-brand-dark" id="modal-year">2024</span>
             </div>
-            <div class="col-span-2 flex flex-col gap-1.5">
-              <span class="text-[10px] font-bold text-brand-dark/40 uppercase tracking-wider">{t('portfolio.modal.scopes')}</span>
-              <div id="modal-scopes" class="flex flex-wrap gap-1.5">
-                <!-- Chips injected here -->
-              </div>
+          </div>
+
+          <!-- Scopes -->
+          <div>
+            <span class="text-xs font-bold text-brand-dark/50 block mb-2">{t('portfolio.modal.scopes')}</span>
+            <div class="flex flex-wrap gap-1.5" id="modal-scopes">
+              <!-- Injected via JavaScript -->
             </div>
           </div>
 
           <!-- Description -->
-          <div class="flex flex-col gap-3 text-xs sm:text-sm font-medium text-brand-dark/75 leading-relaxed">
-            <p id="modal-desc">
-              Project case study details paragraph here.
+          <div>
+            <span class="text-xs font-bold text-brand-dark/50 block mb-1">Overview</span>
+            <p class="text-xs sm:text-sm text-brand-dark/80 leading-relaxed font-normal" id="modal-desc">
+              Deskripsi proyek klien...
             </p>
           </div>
         </div>
 
-        <div class="mt-8 pt-5 border-t border-brand-dark/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+        <!-- Action CTA inside Modal -->
+        <div class="mt-8 pt-5 border-t border-brand-dark/10 flex items-center justify-between gap-4">
           <a 
-            id="modal-wa-btn"
-            href="https://wa.me/628138238837"
-            target="_blank"
-            class="bg-brand-orange hover:bg-brand-orange-light text-white font-bold px-5 py-2.5 rounded-full text-xs transition-all text-center shadow-md flex items-center justify-center gap-2"
+            href={translatePath('/contact')} 
+            class="bg-brand-orange hover:bg-brand-orange-light text-white font-extrabold text-xs px-5 py-3 rounded-full transition-all duration-300 shadow-md hover:shadow-lg inline-flex items-center gap-2"
           >
-            <span>Konsultasi Serupa</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+            <span>{t('nav.contact')}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
             </svg>
           </a>
           <button 
-            id="modal-close-btn-bottom" 
-            class="border border-brand-dark/20 hover:border-brand-dark text-brand-dark font-bold px-5 py-2.5 rounded-full text-xs transition-colors cursor-pointer text-center"
+            id="modal-close-footer-btn" 
+            class="border border-brand-dark/20 hover:border-brand-dark text-brand-dark font-bold text-xs px-5 py-3 rounded-full transition-colors cursor-pointer"
           >
             {t('portfolio.modal.close')}
           </button>
         </div>
       </div>
-
     </div>
   </div>
-
-  <!-- Repeated Industry Expertise -->
-  <section class="py-14 sm:py-20 bg-brand-dark text-white relative overflow-hidden">
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_bottom,rgba(255,80,0,0.05),transparent_70%)] pointer-events-none" />
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center flex flex-col items-center gap-6 sm:gap-8">
-      <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">{t('expertise.title')}</span>
-      <h2 class="text-2xl sm:text-3xl md:text-5xl font-black uppercase tracking-tight max-w-3xl leading-tight">
-        Proven Across Premium Business Segments
-      </h2>
-      <div class="flex flex-wrap justify-center gap-2.5 sm:gap-4 max-w-4xl mt-2 sm:mt-4">
-        {industries.map((ind) => (
-          <div class="bg-white/5 border border-white/15 px-4 py-2.5 sm:px-6 sm:py-3.5 rounded-xl sm:rounded-2xl text-xs sm:text-sm md:text-base font-extrabold text-white tracking-tight hover:border-brand-orange hover:text-brand-orange transition-colors cursor-default">
-            {ind}
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- Simple Consultation WhatsApp CTA Section -->
-  <SimpleCTA />
-</BaseLayout>
 
 <script>
   // Filter functionality
@@ -744,7 +272,6 @@ const industries = [
   const items = document.querySelectorAll('.portfolio-item-wrap');
 
   const setFilter = (filter: string, shouldScroll = false) => {
-    // Update active button state
     buttons.forEach((b) => {
       if (b.getAttribute('data-filter') === filter) {
         b.classList.remove('bg-white', 'text-brand-dark');
@@ -755,7 +282,6 @@ const industries = [
       }
     });
 
-    // Filter portfolio items with smooth fade effect
     items.forEach((item) => {
       const category = item.getAttribute('data-category');
       const element = item as HTMLElement;
@@ -794,7 +320,6 @@ const industries = [
     });
   });
 
-  // Check URL search parameters (e.g. ?filter=content-media)
   const urlParams = new URLSearchParams(window.location.search);
   const initialFilter = urlParams.get('filter');
   if (initialFilter) {
@@ -810,6 +335,10 @@ const industries = [
   const modalPdfBtn = document.getElementById('modal-pdf-btn') as HTMLAnchorElement;
   const modalPdfLabel = document.getElementById('modal-pdf-label') as HTMLElement;
   const modalPdfTitle = document.getElementById('modal-pdf-title') as HTMLElement;
+
+  const modalPrevBtn = document.getElementById('modal-prev-btn') as HTMLElement;
+  const modalNextBtn = document.getElementById('modal-next-btn') as HTMLElement;
+  const modalCounterText = document.getElementById('modal-counter-text') as HTMLElement;
 
   const modalTitle = document.getElementById('modal-title') as HTMLElement;
   const modalInfoCategory = document.getElementById('modal-info-category') as HTMLElement;
@@ -830,26 +359,53 @@ const industries = [
     caption?: string;
   }
 
-  const switchOutput = (output: OutputData, activeBtn: HTMLElement | null) => {
-    modalActiveOutputTitle.textContent = output.title;
+  let activeOutputs: OutputData[] = [];
+  let currentOutputIndex = 0;
 
-    // Highlight active button in bar
-    const allTabBtns = modalOutputsBar.querySelectorAll('.output-tab-btn');
-    allTabBtns.forEach((b) => {
-      b.classList.remove('bg-brand-orange', 'text-white');
-      b.classList.add('bg-white/10', 'text-white/80');
-    });
-    if (activeBtn) {
-      activeBtn.classList.remove('bg-white/10', 'text-white/80');
-      activeBtn.classList.add('bg-brand-orange', 'text-white');
+  const updateCounterAndButtons = () => {
+    if (!activeOutputs.length) return;
+    const current = activeOutputs[currentOutputIndex];
+    let typeLabel = "Item";
+    if (current.type === 'video') typeLabel = "🎬 Video";
+    else if (current.type === 'pdf') typeLabel = "📄 Dokumen";
+    else typeLabel = "📸 Foto";
+
+    modalCounterText.textContent = `${typeLabel} ${currentOutputIndex + 1} / ${activeOutputs.length}`;
+
+    if (activeOutputs.length > 1) {
+      modalPrevBtn.style.display = 'flex';
+      modalNextBtn.style.display = 'flex';
+    } else {
+      modalPrevBtn.style.display = 'none';
+      modalNextBtn.style.display = 'none';
     }
 
-    // Reset video playback
+    const allTabBtns = modalOutputsBar.querySelectorAll('.output-tab-btn');
+    allTabBtns.forEach((b, idx) => {
+      if (idx === currentOutputIndex) {
+        b.classList.remove('bg-white/10', 'text-white/80');
+        b.classList.add('bg-brand-orange', 'text-white');
+        (b as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      } else {
+        b.classList.remove('bg-brand-orange', 'text-white');
+        b.classList.add('bg-white/10', 'text-white/80');
+      }
+    });
+  };
+
+  const switchOutput = (index: number) => {
+    if (!activeOutputs.length) return;
+    if (index < 0) index = activeOutputs.length - 1;
+    if (index >= activeOutputs.length) index = 0;
+    currentOutputIndex = index;
+
+    const output = activeOutputs[currentOutputIndex];
+    modalActiveOutputTitle.textContent = output.title;
+
     modalVideo.pause();
     modalVideo.classList.add('hidden');
     modalVideo.removeAttribute('src');
 
-    // Reset image and PDF
     modalImage.classList.add('hidden');
     modalPdfContainer.classList.add('hidden');
 
@@ -868,7 +424,19 @@ const industries = [
       modalImage.alt = output.title;
       modalImage.classList.remove('hidden');
     }
+
+    updateCounterAndButtons();
   };
+
+  modalPrevBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    switchOutput(currentOutputIndex - 1);
+  });
+
+  modalNextBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    switchOutput(currentOutputIndex + 1);
+  });
 
   items.forEach((card) => {
     card.addEventListener('click', () => {
@@ -879,92 +447,78 @@ const industries = [
       const desc = card.getAttribute('data-desc') || '';
       const rawOutputs = card.getAttribute('data-outputs') || '[]';
 
-      let outputs: OutputData[] = [];
       try {
-        outputs = JSON.parse(rawOutputs);
+        activeOutputs = JSON.parse(rawOutputs);
       } catch (e) {
-        outputs = [];
+        activeOutputs = [];
       }
 
-      // Populate text
       modalTitle.textContent = title;
       modalClient.textContent = title;
       modalInfoCategory.textContent = categoryName;
       modalYear.textContent = year;
       modalDesc.textContent = desc;
 
-      // Render scopes as chips
       modalScopes.innerHTML = '';
       scopes.split(',').forEach((s) => {
         const span = document.createElement('span');
-        span.className = 'bg-brand-dark/5 px-3 py-1 rounded-full text-[10px] font-bold text-brand-dark/75';
+        span.className = 'bg-brand-dark/5 text-brand-dark/80 text-[11px] font-semibold px-2.5 py-1 rounded-full border border-brand-dark/10';
         span.textContent = s.trim();
         modalScopes.appendChild(span);
       });
 
-      // Build outputs bar
-      modalOutputsCount.textContent = outputs.length.toString();
+      modalOutputsCount.textContent = activeOutputs.length.toString();
       modalOutputsBar.innerHTML = '';
+      currentOutputIndex = 0;
 
-      if (outputs.length === 0) {
-        // Fallback to card image
-        const img = card.querySelector('img');
-        const fallbackSrc = img ? img.getAttribute('src') || '' : '';
-        outputs = [{ id: 'f1', title: 'Main Showcase', type: 'image', src: fallbackSrc }];
+      if (activeOutputs.length > 0) {
+        activeOutputs.forEach((out, idx) => {
+          const btn = document.createElement('button');
+          btn.className = `output-tab-btn flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all shrink-0 cursor-pointer ${
+            idx === 0 ? 'bg-brand-orange text-white' : 'bg-white/10 text-white/80 hover:bg-white/20'
+          }`;
+          
+          let iconSvg = '';
+          if (out.type === 'video') {
+            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-3.5 h-3.5"><path d="M6.3 2.841A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.841z" /></svg>`;
+          } else if (out.type === 'pdf') {
+            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m.75 12l3 3m0 0l3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>`;
+          } else {
+            iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>`;
+          }
+
+          btn.innerHTML = `${iconSvg}<span>${out.title}</span>`;
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            switchOutput(idx);
+          });
+          modalOutputsBar.appendChild(btn);
+        });
+
+        switchOutput(0);
       }
 
-      outputs.forEach((out, idx) => {
-        const btn = document.createElement('button');
-        btn.className = `output-tab-btn px-3 py-1.5 rounded-lg text-[10px] sm:text-xs font-bold transition-all whitespace-nowrap cursor-pointer flex items-center gap-1.5 shrink-0 ${
-          idx === 0 
-            ? 'bg-brand-orange text-white shadow-sm' 
-            : 'bg-white/10 text-white/80 hover:bg-white/20 hover:text-white'
-        }`;
-
-        let iconSvg = '';
-        if (out.type === 'video') {
-          iconSvg = `<svg class="w-3 h-3 text-brand-orange-light shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>`;
-        } else if (out.type === 'pdf') {
-          iconSvg = `<svg class="w-3 h-3 text-amber-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`;
-        } else {
-          iconSvg = `<svg class="w-3 h-3 text-cyan-400 shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>`;
-        }
-
-        btn.innerHTML = `${iconSvg}<span>${out.title}</span>`;
-        btn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          switchOutput(out, btn);
-        });
-        modalOutputsBar.appendChild(btn);
-      });
-
-      // Switch to first output
-      switchOutput(outputs[0], modalOutputsBar.children[0] as HTMLElement);
-
-      // Open Modal
-      modal.classList.remove('pointer-events-none', 'opacity-0');
-      modal.classList.add('opacity-100');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
       modalContainer.classList.remove('scale-95');
       modalContainer.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
     });
   });
 
   const closeModal = () => {
-    modal.classList.remove('opacity-100');
+    modalVideo.pause();
+    modalVideo.removeAttribute('src');
     modal.classList.add('opacity-0', 'pointer-events-none');
     modalContainer.classList.remove('scale-100');
     modalContainer.classList.add('scale-95');
-
-    // Clean up video play to avoid background audio
-    setTimeout(() => {
-      modalVideo.pause();
-      modalVideo.removeAttribute('src');
-      modalVideo.load();
-    }, 300);
+    document.body.style.overflow = '';
   };
 
-  document.getElementById('modal-close-btn')?.addEventListener('click', closeModal);
-  document.getElementById('modal-close-btn-bottom')?.addEventListener('click', closeModal);
+  const closeBtn = document.getElementById('modal-close-btn');
+  const closeFooterBtn = document.getElementById('modal-close-footer-btn');
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (closeFooterBtn) closeFooterBtn.addEventListener('click', closeModal);
 
   modal.addEventListener('click', (e) => {
     if (e.target === modal) {
@@ -973,8 +527,14 @@ const industries = [
   });
 
   window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && modal.classList.contains('opacity-100')) {
+    if (modal.classList.contains('opacity-0')) return;
+    if (e.key === 'ArrowLeft') {
+      switchOutput(currentOutputIndex - 1);
+    } else if (e.key === 'ArrowRight') {
+      switchOutput(currentOutputIndex + 1);
+    } else if (e.key === 'Escape') {
       closeModal();
     }
   });
 </script>
+</BaseLayout>

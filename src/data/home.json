@@ -1,0 +1,186 @@
+{
+  "seo": {
+    "id": {
+      "title": "The Digital Grounds — Digital Marketing & Creative Agency Surabaya",
+      "description": "Ekosistem digital & brand lengkap: social media management, brand development, hingga produksi visual. Dipercaya 50+ brand di Surabaya & Indonesia.",
+      "ogImage": "/og-default.jpg"
+    },
+    "en": {
+      "title": "The Digital Grounds — Digital Marketing & Creative Agency Surabaya",
+      "description": "Complete digital & brand ecosystem: social media management, brand development, visual production. Trusted by 50+ brands in Surabaya & Indonesia.",
+      "ogImage": "/og-default.jpg"
+    }
+  },
+  "hero": {
+    "headlineMain": "TDG",
+    "headlineSub": "Creative Lab",
+    "subheadline": {
+      "id": "Digital Marketing & Creative Agency. Based in Indonesia.",
+      "en": "Digital Marketing & Creative Agency. Based in Indonesia."
+    },
+    "primaryCta": {
+      "id": "Hubungi Kami",
+      "en": "Contact Us"
+    },
+    "secondaryCta": {
+      "id": "Explore Works",
+      "en": "Explore Works"
+    }
+  },
+  "marquee": {
+    "badgeText": {
+      "id": "Trusted by Premium Brands",
+      "en": "Trusted by Premium Brands"
+    },
+    "logos": [
+      { "id": "logo-1", "alt": "Asmaraloka", "src": "/images/logos/ASMARALOKA LOGO.png", "heightClass": "h-5 sm:h-6" },
+      { "id": "logo-2", "alt": "Drs Elior", "src": "/images/logos/DRS ELIOR LOGO.png", "heightClass": "h-7 sm:h-8" },
+      { "id": "logo-3", "alt": "Inva Dental", "src": "/images/logos/INVA LOGO.png", "heightClass": "h-8 sm:h-9" },
+      { "id": "logo-4", "alt": "Mirevs Cafe", "src": "/images/logos/MIREVS LOGO.png", "heightClass": "h-5 sm:h-6" },
+      { "id": "logo-5", "alt": "Nara Dental", "src": "/images/logos/NARA LOGO.png", "heightClass": "h-8 sm:h-9" },
+      { "id": "logo-6", "alt": "PBPI Jatim", "src": "/images/logos/PBPI Jatim.png", "heightClass": "h-7 sm:h-8" },
+      { "id": "logo-7", "alt": "PT Panen", "src": "/images/logos/PT PANEN.png", "heightClass": "h-6 sm:h-7" },
+      { "id": "logo-8", "alt": "Razo Tooth", "src": "/images/logos/RAZO LOGO WHITE.png", "heightClass": "h-6 sm:h-7" },
+      { "id": "logo-9", "alt": "So Done", "src": "/images/logos/SO DONE LOGO.png", "heightClass": "h-8 sm:h-9" },
+      { "id": "logo-10", "alt": "Tispun Bakeshop", "src": "/images/logos/TISPUN LOGO.png", "heightClass": "h-6 sm:h-7" }
+    ]
+  },
+  "pitch": {
+    "tag": {
+      "id": "Core Proposition",
+      "en": "Core Proposition"
+    },
+    "title": {
+      "id": "Building The Digital & Brand Ecosystem.",
+      "en": "Building The Digital & Brand Ecosystem."
+    },
+    "description": {
+      "id": "Dipercaya oleh 50+ brand, kami tidak sekadar mengeksekusi layanan terpisah. Kami memiliki ekosistem digital yang utuh, mulai dari brand foundation, produksi visual, hingga kampanye harian, agar kamu bisa fokus pada pengembangan bisnis.",
+      "en": "Trusted by 50+ brands, we don't just execute standalone services. We build a cohesive digital ecosystem—from brand foundation and visual production to daily campaigns—so you can focus on growing your business."
+    },
+    "stats": [
+      {
+        "value": "50+",
+        "label": {
+          "id": "Brands Trusted",
+          "en": "Brands Trusted"
+        }
+      },
+      {
+        "value": "3",
+        "label": {
+          "id": "Core Scopes",
+          "en": "Core Scopes"
+        }
+      }
+    ]
+  },
+  "portfolioSection": {
+    "tag": {
+      "id": "Showcase",
+      "en": "Showcase"
+    },
+    "title": {
+      "id": "Some of Our Works",
+      "en": "Some of Our Works"
+    },
+    "ctaText": {
+      "id": "Lihat Semua Karya",
+      "en": "View All Works"
+    }
+  },
+  "serviceScopesSection": {
+    "tag": {
+      "id": "Capabilities",
+      "en": "Capabilities"
+    },
+    "title": {
+      "id": "Ruang Lingkup Layanan Kami",
+      "en": "Our Scopes of Services"
+    },
+    "exploreCta": {
+      "id": "Lihat Portofolio",
+      "en": "View Portfolio"
+    },
+    "exclusiveNote": {
+      "id": "*Catatan: Eksekusi area taktis ini bersifat eksklusif dan tidak dipublikasikan di portofolio umum. Mari jadwalkan diskusi untuk melihat detail case study.",
+      "en": "*Note: Tactical execution areas are exclusive and not published in the general portfolio. Let's schedule a discussion to view detailed case studies."
+    },
+    "exclusiveCta": {
+      "id": "Jadwalkan Diskusi",
+      "en": "Schedule a Discussion"
+    },
+    "scopes": [
+      {
+        "number": "01",
+        "name": {
+          "id": "Content & Media Management",
+          "en": "Content & Media Management"
+        },
+        "services": {
+          "id": ["Social Media Management", "Printed Design"],
+          "en": ["Social Media Management", "Printed Design"]
+        },
+        "filter": "content-media",
+        "isExclusive": false
+      },
+      {
+        "number": "02",
+        "name": {
+          "id": "Brand & Digital Foundation",
+          "en": "Brand & Digital Foundation"
+        },
+        "services": {
+          "id": ["Website Development", "Brand Development"],
+          "en": ["Website Development", "Brand Development"]
+        },
+        "filter": "brand-digital",
+        "isExclusive": false
+      },
+      {
+        "number": "03",
+        "name": {
+          "id": "Visual Production & Documentation",
+          "en": "Visual Production & Documentation"
+        },
+        "services": {
+          "id": ["Lookbook Photoshoot", "Profile Photoshoot", "Event Documentation"],
+          "en": ["Lookbook Photoshoot", "Profile Photoshoot", "Event Documentation"]
+        },
+        "filter": "visual-doc",
+        "isExclusive": false
+      },
+      {
+        "number": "04",
+        "name": {
+          "id": "Tactical Executions*",
+          "en": "Tactical Executions*"
+        },
+        "services": {
+          "id": ["Ads Management", "KOL Management", "Offline Activation", "Marketplace Optimization"],
+          "en": ["Ads Management", "KOL Management", "Offline Activation", "Marketplace Optimization"]
+        },
+        "filter": "tactical",
+        "isExclusive": true
+      }
+    ]
+  },
+  "industriesSection": {
+    "tag": {
+      "id": "Industry Expertise",
+      "en": "Industry Expertise"
+    },
+    "title": {
+      "id": "Supporting Diverse Industries in the Creative Sphere",
+      "en": "Supporting Diverse Industries in the Creative Sphere"
+    },
+    "industries": [
+      "Healthcare",
+      "Fashion",
+      "F&B",
+      "Sport",
+      "Architecture & Lifestyle"
+    ]
+  }
+}
+

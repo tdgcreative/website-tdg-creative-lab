@@ -1,6 +1,13 @@
 ---
 import { getLangFromUrl, useTranslations, useTranslatedPath, getRouteFromUrl } from '../i18n/utils';
 
+interface Props {
+  alternateIdPath?: string;
+  alternateEnPath?: string;
+}
+
+const { alternateIdPath, alternateEnPath } = Astro.props;
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
@@ -9,12 +16,13 @@ const translatePath = useTranslatedPath(lang);
 const currentRoute = getRouteFromUrl(Astro.url);
 
 // Paths for the switcher
-const idPath = currentRoute === '/' ? '/' : currentRoute;
-const enPath = currentRoute === '/' ? '/en' : `/en${currentRoute}`;
+const idPath = alternateIdPath || (currentRoute === '/' ? '/' : currentRoute);
+const enPath = alternateEnPath || (currentRoute === '/' ? '/en' : `/en${currentRoute}`);
 
 const navItems = [
   { href: '/', label: t('nav.home') },
   { href: '/works-and-services', label: t('nav.works') },
+  { href: '/blog', label: t('nav.blog') },
   { href: '/contact', label: t('nav.contact') },
 ];
 ---
@@ -33,8 +41,10 @@ const navItems = [
     <!-- Desktop Navigation Links -->
     <nav class="hidden md:flex items-center gap-8 font-semibold text-sm">
       {navItems.map((item) => {
-        const isCurrent = Astro.url.pathname === translatePath(item.href) || 
-                          (item.href === '/' && Astro.url.pathname === '/en');
+        const targetPath = translatePath(item.href);
+        const isCurrent = Astro.url.pathname === targetPath || 
+                          (item.href === '/' && Astro.url.pathname === '/en') ||
+                          (item.href !== '/' && Astro.url.pathname.startsWith(`${targetPath}/`));
         return (
           <a 
             href={translatePath(item.href)} 

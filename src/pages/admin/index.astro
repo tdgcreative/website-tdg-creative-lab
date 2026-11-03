@@ -1,0 +1,2210 @@
+---
+import '../../styles/global.css';
+import initialHome from '../../data/home.json';
+import initialPortfolios from '../../data/portfolios.json';
+import initialBlog from '../../data/blog.json';
+
+const initialPayload = JSON.stringify({
+  home: initialHome,
+  portfolios: initialPortfolios,
+  blog: initialBlog
+});
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TDG Creative Lab — Admin & SEO Studio</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/png" href="/TDG LOGO TRANSPARENT.png" />
+  </head>
+  <body class="min-h-screen bg-[#111111] text-white font-sans antialiased selection:bg-brand-orange selection:text-white">
+    <!-- LOGIN GATE OVERLAY -->
+    <div id="admin-login-gate" class="fixed inset-0 z-50 bg-[#0b0b0b] flex items-center justify-center p-4">
+      <div class="w-full max-w-md bg-[#161616] border border-white/10 rounded-3xl p-8 shadow-2xl">
+        <div class="flex items-center gap-3 mb-6">
+          <img src="/TDG LOGO TRANSPARENT.png" alt="TDG Logo" class="h-10 w-auto invert brightness-0" />
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange block">Internal System</span>
+            <h1 class="text-xl font-black uppercase tracking-tight text-white">TDG Admin & SEO CMS</h1>
+          </div>
+        </div>
+
+        <p class="text-xs text-white/60 leading-relaxed mb-6">
+          Masuk untuk mengelola konten halaman <strong>Home</strong>, <strong>Portofolio</strong>, dan <strong>Artikel Blog SEO Bilingual (ID & EN)</strong>.
+        </p>
+
+        <form id="login-form" class="flex flex-col gap-4">
+          <div>
+            <label for="admin-pass-input" class="block text-[11px] font-bold uppercase tracking-wider text-white/60 mb-1.5">
+              Admin Access Code
+            </label>
+            <input
+              id="admin-pass-input"
+              type="password"
+              required
+              placeholder="Masukkan kode akses admin..."
+              class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-3 text-sm text-white outline-none transition-colors"
+            />
+            <span class="text-[11px] text-white/40 mt-1.5 block">Default akses lokal: <code class="text-brand-orange">tdgcreative2026</code></span>
+          </div>
+
+          <p id="login-error" class="text-xs font-bold text-red-400 hidden">
+            Kode akses tidak sesuai. Silakan coba lagi.
+          </p>
+
+          <button
+            type="submit"
+            class="w-full bg-brand-orange hover:bg-brand-orange-light text-white font-extrabold text-xs uppercase tracking-wider py-3.5 rounded-full transition-all shadow-lg cursor-pointer mt-1"
+          >
+            Masuk ke Dashboard Admin
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- MAIN ADMIN WORKSPACE -->
+    <div id="admin-app" class="hidden min-h-screen flex flex-col">
+      <!-- Top Navigation Bar -->
+      <header class="sticky top-0 z-40 bg-[#141414]/95 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4">
+            <a href="/admin" class="flex items-center gap-3">
+              <img src="/TDG LOGO TRANSPARENT.png" alt="TDG" class="h-8 sm:h-9 w-auto invert brightness-0" />
+              <div class="hidden sm:block">
+                <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange block leading-none">CMS & SEO Studio</span>
+                <span class="text-sm font-black uppercase tracking-tight text-white">The Digital Grounds</span>
+              </div>
+            </a>
+
+            <!-- Main Module Tabs -->
+            <nav class="flex items-center bg-black/50 p-1 rounded-full border border-white/10 ml-2 sm:ml-6">
+              <button
+                type="button"
+                data-tab="home"
+                class="admin-tab-btn px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer bg-brand-orange text-white"
+              >
+                🏠 Home Page
+              </button>
+              <button
+                type="button"
+                data-tab="portfolios"
+                class="admin-tab-btn px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer text-white/65 hover:text-white"
+              >
+                💼 Portofolio (<span id="nav-porto-count">0</span>)
+              </button>
+              <button
+                type="button"
+                data-tab="blog"
+                class="admin-tab-btn px-3.5 sm:px-5 py-1.5 sm:py-2 rounded-full text-xs font-extrabold transition-all cursor-pointer text-white/65 hover:text-white"
+              >
+                ✍️ Blog & SEO (<span id="nav-blog-count">0</span>)
+              </button>
+            </nav>
+          </div>
+
+          <!-- Right Actions: Mode Indicator, Git Push, Preview Links -->
+          <div class="flex items-center gap-2.5">
+            <span
+              id="storage-mode-badge"
+              class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+            >
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="storage-mode-text">Local File Mode</span>
+            </span>
+
+            <button
+              type="button"
+              id="btn-git-settings"
+              class="px-3 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold text-white/80 transition-colors cursor-pointer"
+              title="Konfigurasi GitHub Cloud API (tdgcreative)"
+            >
+              ⚙️ GitHub Config
+            </button>
+
+            <button
+              type="button"
+              id="btn-git-push"
+              class="px-4 py-2 rounded-full bg-white text-black hover:bg-brand-orange hover:text-white text-xs font-black uppercase tracking-wider transition-all cursor-pointer shadow-sm"
+            >
+              🚀 Push ke GitHub
+            </button>
+
+            <a
+              href="/"
+              target="_blank"
+              class="hidden lg:inline-flex items-center gap-1 px-3.5 py-2 rounded-full bg-white/5 hover:bg-white/15 text-xs font-bold text-white/80 transition-colors"
+            >
+              <span>Lihat Web ↗</span>
+            </a>
+
+            <button
+              type="button"
+              id="btn-logout"
+              class="p-2 rounded-xl bg-white/5 hover:bg-red-500/20 text-white/50 hover:text-red-400 text-xs font-bold transition-colors cursor-pointer"
+              title="Keluar"
+            >
+              Keluar
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Toast Notification Banner -->
+      <div
+        id="admin-toast"
+        class="fixed bottom-5 right-5 z-50 max-w-md bg-[#1c1c1c] border border-brand-orange text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 transform translate-y-24 opacity-0 pointer-events-none transition-all duration-300"
+      >
+        <span class="w-2.5 h-2.5 rounded-full bg-brand-orange shrink-0"></span>
+        <span id="admin-toast-msg" class="text-xs font-bold leading-snug">Berhasil disimpan!</span>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- TAB 1: HOME PAGE EDITOR (BILINGUAL ID & EN)               -->
+      <!-- ========================================================= -->
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8">
+        <section id="tab-panel-home" class="space-y-8">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#181818] p-6 rounded-3xl border border-white/10">
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange">Modul 01 • Beranda Bilingual</span>
+              <h2 class="text-2xl font-black uppercase tracking-tight">Pengaturan Halaman Home (`/` & `/en`)</h2>
+              <p class="text-xs text-white/60 mt-1">
+                Perbarui headline hero, klaim statistik, logo klien marquee, hingga ruang lingkup layanan untuk Bahasa Indonesia & Inggris.
+              </p>
+            </div>
+            <div class="flex items-center gap-3">
+              <!-- Language Toggle for Home Form -->
+              <div class="flex bg-black p-1 rounded-full border border-white/10">
+                <button
+                  type="button"
+                  data-home-lang="id"
+                  class="home-lang-btn px-3.5 py-1.5 rounded-full text-xs font-extrabold bg-brand-orange text-white cursor-pointer"
+                >
+                  🇮🇩 ID
+                </button>
+                <button
+                  type="button"
+                  data-home-lang="en"
+                  class="home-lang-btn px-3.5 py-1.5 rounded-full text-xs font-extrabold text-white/60 hover:text-white cursor-pointer"
+                >
+                  🇬🇧 EN
+                </button>
+              </div>
+
+              <button
+                type="button"
+                id="btn-save-home"
+                class="bg-brand-orange hover:bg-brand-orange-light text-white font-black text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg transition-all cursor-pointer"
+              >
+                💾 Simpan Perubahan Home
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <!-- Left Column: SEO, Hero, Pitch -->
+            <div class="lg:col-span-7 space-y-6">
+              <!-- SEO Metadata Card -->
+              <div class="bg-[#181818] p-6 rounded-3xl border border-white/10 space-y-4">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-sm font-black uppercase tracking-wider text-brand-orange">1. Meta SEO Beranda (<span class="home-active-lang-label">ID</span>)</h3>
+                  <span class="text-[11px] text-white/45">Tampil di hasil pencarian Google</span>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-white/70 mb-1">Meta Title (Tag Title)</label>
+                  <input id="home-seo-title" type="text" class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-2.5 text-sm text-white outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-white/70 mb-1">Meta Description</label>
+                  <textarea id="home-seo-desc" rows="2" class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-2.5 text-sm text-white outline-none"></textarea>
+                </div>
+              </div>
+
+              <!-- Hero Section Card -->
+              <div class="bg-[#181818] p-6 rounded-3xl border border-white/10 space-y-4">
+                <h3 class="text-sm font-black uppercase tracking-wider text-brand-orange">2. Hero Section (<span class="home-active-lang-label">ID</span>)</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-white/70 mb-1">Headline Utama (Besar)</label>
+                    <input id="home-hero-main" type="text" class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-2.5 text-sm text-white outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-white/70 mb-1">Sub-Headline Kedua</label>
+                    <input id="home-hero-sub" type="text" class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-2.5 text-sm text-white outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-white/70 mb-1">Deskripsi Subheadline (<span class="home-active-lang-label">ID</span>)</label>
+                  <input id="home-hero-desc" type="text" class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-2.5 text-sm text-white outline-none" />
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-bold text-white/70 mb-1">Teks Tombol Utama (CTA)</label>
+                    <input id="home-hero-cta1" type="text" class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-2.5 text-sm text-white outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-xs font-bold text-white/70 mb-1">Teks Tombol Kedua</label>
+                    <input id="home-hero-cta2" type="text" class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-2.5 text-sm text-white outline-none" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Core Pitch & Stats Card -->
+              <div class="bg-[#181818] p-6 rounded-3xl border border-white/10 space-y-4">
+                <h3 class="text-sm font-black uppercase tracking-wider text-brand-orange">3. Core Pitch & Statistik (<span class="home-active-lang-label">ID</span>)</h3>
+                <div>
+                  <label class="block text-xs font-bold text-white/70 mb-1">Judul Core Pitch</label>
+                  <input id="home-pitch-title" type="text" class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-2.5 text-sm text-white outline-none" />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-white/70 mb-1">Paragraf Core Pitch (<span class="home-active-lang-label">ID</span>)</label>
+                  <textarea id="home-pitch-desc" rows="3" class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-2.5 text-sm text-white outline-none"></textarea>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+                  <div>
+                    <label class="block text-[11px] font-bold text-white/60 mb-1">Stat 1 (Angka)</label>
+                    <input id="home-stat1-val" type="text" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-sm text-brand-orange font-black outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-white/60 mb-1">Stat 1 (Label)</label>
+                    <input id="home-stat1-label" type="text" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-sm text-white outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-white/60 mb-1">Stat 2 (Angka)</label>
+                    <input id="home-stat2-val" type="text" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-sm text-brand-orange font-black outline-none" />
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-white/60 mb-1">Stat 2 (Label)</label>
+                    <input id="home-stat2-label" type="text" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-sm text-white outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-white/70 mb-1">Spesialisasi Industri (Pisahkan dengan koma)</label>
+                  <input id="home-industries-input" type="text" class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-2.5 text-sm text-white outline-none" />
+                </div>
+              </div>
+
+              <!-- Service Scopes Editor -->
+              <div class="bg-[#181818] p-6 rounded-3xl border border-white/10 space-y-4">
+                <h3 class="text-sm font-black uppercase tracking-wider text-brand-orange">4. Ruang Lingkup Layanan (Scopes 01–04)</h3>
+                <div id="home-scopes-container" class="space-y-4">
+                  <!-- Populated dynamically via JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Client Logos Marquee & Featured Home Portfolios -->
+            <div class="lg:col-span-5 space-y-6">
+              <!-- Featured Portfolios on Home -->
+              <div class="bg-[#181818] p-6 rounded-3xl border border-white/10 space-y-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-sm font-black uppercase tracking-wider text-brand-orange">5. Portofolio Unggulan di Home</h3>
+                    <p class="text-[11px] text-white/55 mt-0.5">Pilih proyek yang ditampilkan pada seksi "Some of Our Works" di halaman Beranda.</p>
+                  </div>
+                </div>
+                <div id="home-featured-portfolios-list" class="space-y-2 max-h-80 overflow-y-auto pr-1">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+
+              <!-- Client Logos Marquee Manager -->
+              <div class="bg-[#181818] p-6 rounded-3xl border border-white/10 space-y-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h3 class="text-sm font-black uppercase tracking-wider text-brand-orange">6. Logo Klien (Marquee)</h3>
+                    <p class="text-[11px] text-white/55 mt-0.5">Kelola barisan logo brand yang berjalan di bawah Hero.</p>
+                  </div>
+                  <label class="bg-white/10 hover:bg-brand-orange text-white text-xs font-extrabold px-3.5 py-2 rounded-full cursor-pointer transition-colors">
+                    <span>+ Upload Logo</span>
+                    <input id="upload-logo-input" type="file" accept="image/*" class="hidden" />
+                  </label>
+                </div>
+
+                <div id="home-logos-list" class="space-y-2.5 max-h-[420px] overflow-y-auto pr-1">
+                  <!-- Populated via JS -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 2: PORTFOLIO MANAGER                                  -->
+        <!-- ========================================================= -->
+        <section id="tab-panel-portfolios" class="hidden space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#181818] p-6 rounded-3xl border border-white/10">
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange">Modul 02 • Case Studies & Deliverables</span>
+              <h2 class="text-2xl font-black uppercase tracking-tight">Manajemen Portofolio (`works-and-services`)</h2>
+              <p class="text-xs text-white/60 mt-1">
+                Tambah proyek baru, kelola deskripsi studi kasus bilingual (ID & EN), dan atur foto, video reels, maupun PDF brandbook/menubook.
+              </p>
+            </div>
+            <button
+              type="button"
+              id="btn-new-portfolio"
+              class="bg-brand-orange hover:bg-brand-orange-light text-white font-black text-xs uppercase tracking-wider px-6 py-3.5 rounded-full shadow-lg transition-all cursor-pointer shrink-0"
+            >
+              ➕ Tambah Portofolio Baru
+            </button>
+          </div>
+
+          <!-- Filter & Search Bar -->
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+            <div class="flex flex-wrap gap-2">
+              <button type="button" data-porto-filter="all" class="porto-admin-filter px-4 py-2 rounded-full text-xs font-bold bg-brand-orange text-white cursor-pointer">
+                Semua Proyek
+              </button>
+              <button type="button" data-porto-filter="content-media" class="porto-admin-filter px-4 py-2 rounded-full text-xs font-bold bg-[#181818] text-white/70 hover:text-white border border-white/10 cursor-pointer">
+                Content & Media
+              </button>
+              <button type="button" data-porto-filter="brand-digital" class="porto-admin-filter px-4 py-2 rounded-full text-xs font-bold bg-[#181818] text-white/70 hover:text-white border border-white/10 cursor-pointer">
+                Brand & Digital
+              </button>
+              <button type="button" data-porto-filter="visual-doc" class="porto-admin-filter px-4 py-2 rounded-full text-xs font-bold bg-[#181818] text-white/70 hover:text-white border border-white/10 cursor-pointer">
+                Visual Production
+              </button>
+            </div>
+
+            <input
+              id="porto-search-input"
+              type="search"
+              placeholder="Cari nama klien atau tag..."
+              class="bg-[#181818] border border-white/15 focus:border-brand-orange rounded-full px-4 py-2 text-xs text-white outline-none w-full sm:w-64"
+            />
+          </div>
+
+          <!-- Portfolio Cards Grid -->
+          <div id="admin-portfolios-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <!-- Injected via JS -->
+          </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 3: SEO BLOG STUDIO                                    -->
+        <!-- ========================================================= -->
+        <section id="tab-panel-blog" class="hidden space-y-6">
+          <!-- Blog List View -->
+          <div id="blog-list-view" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#181818] p-6 rounded-3xl border border-white/10">
+              <div>
+                <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange">Modul 03 • Content Marketing & Technical SEO</span>
+                <h2 class="text-2xl font-black uppercase tracking-tight">Artikel Blog & Asisten SEO (`/blog` & `/en/blog`)</h2>
+                <p class="text-xs text-white/60 mt-1">
+                  Tulis artikel ramah mesin pencari Google lengkap dengan JSON-LD Schema otomatis, Daftar Isi (ToC), `hreflang` ID-EN, dan skor audit SEO real-time.
+                </p>
+              </div>
+              <button
+                type="button"
+                id="btn-new-blog"
+                class="bg-brand-orange hover:bg-brand-orange-light text-white font-black text-xs uppercase tracking-wider px-6 py-3.5 rounded-full shadow-lg transition-all cursor-pointer shrink-0"
+              >
+                ✍️ Tulis Artikel Baru
+              </button>
+            </div>
+
+            <div id="admin-blog-list" class="grid grid-cols-1 gap-4">
+              <!-- Injected via JS -->
+            </div>
+          </div>
+
+          <!-- Blog Editor + Real-time SEO Studio View -->
+          <div id="blog-editor-view" class="hidden space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-4 bg-[#181818] p-5 rounded-3xl border border-white/10">
+              <div class="flex items-center gap-3">
+                <button
+                  type="button"
+                  id="btn-back-blog-list"
+                  class="px-4 py-2 rounded-full bg-white/5 hover:bg-white/15 text-xs font-bold text-white transition-colors cursor-pointer"
+                >
+                  ← Kembali ke Daftar
+                </button>
+                <div>
+                  <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange block">Live SEO Editor</span>
+                  <h3 id="blog-editor-heading" class="text-lg font-black uppercase tracking-tight">Edit Artikel Blog</h3>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <!-- Language Switcher inside Blog Editor -->
+                <div class="flex bg-black p-1 rounded-full border border-white/10">
+                  <button
+                    type="button"
+                    data-blog-lang="id"
+                    class="blog-lang-btn px-4 py-1.5 rounded-full text-xs font-extrabold bg-brand-orange text-white cursor-pointer"
+                  >
+                    🇮🇩 Bahasa Indonesia
+                  </button>
+                  <button
+                    type="button"
+                    data-blog-lang="en"
+                    class="blog-lang-btn px-4 py-1.5 rounded-full text-xs font-extrabold text-white/60 hover:text-white cursor-pointer"
+                  >
+                    🇬🇧 English Version
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  id="btn-save-blog-article"
+                  class="bg-brand-orange hover:bg-brand-orange-light text-white font-black text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg transition-all cursor-pointer"
+                >
+                  💾 Simpan & Publikasikan Artikel
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <!-- Left 8 Cols: Content & Metadata Form -->
+              <div class="lg:col-span-8 space-y-6">
+                <!-- Shared Article Settings -->
+                <div class="bg-[#181818] p-6 rounded-3xl border border-white/10 space-y-4">
+                  <h4 class="text-xs font-black uppercase tracking-wider text-brand-orange">Pengaturan Umum & Gambar Cover</h4>
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                      <label class="block text-[11px] font-bold text-white/70 mb-1">Kategori Topik</label>
+                      <select id="blog-category" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none">
+                        <option value="Content & Media Management">Content & Media Management</option>
+                        <option value="Brand & Digital Foundation">Brand & Digital Foundation</option>
+                        <option value="Visual Production & Documentation">Visual Production & Documentation</option>
+                        <option value="Digital Strategy">Digital Strategy</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-bold text-white/70 mb-1">Tanggal Publikasi</label>
+                      <input id="blog-published-at" type="date" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none" />
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-bold text-white/70 mb-1">Status & Highlight</label>
+                      <div class="flex items-center gap-3 pt-1.5">
+                        <select id="blog-status" class="bg-black/60 border border-white/15 rounded-xl px-3 py-2 text-xs text-white outline-none">
+                          <option value="published">🟢 Published</option>
+                          <option value="draft">⚪ Draft</option>
+                        </select>
+                        <label class="inline-flex items-center gap-1.5 text-xs font-bold text-white/80 cursor-pointer">
+                          <input id="blog-featured" type="checkbox" class="accent-brand-orange w-4 h-4" />
+                          <span>Featured</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end">
+                    <div class="sm:col-span-9">
+                      <label class="block text-[11px] font-bold text-white/70 mb-1">Cover Image URL (LCP Banner 16:9)</label>
+                      <input id="blog-cover-image" type="text" placeholder="/images/blog/..." class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none" />
+                    </div>
+                    <div class="sm:col-span-3">
+                      <label class="w-full flex items-center justify-center bg-white/10 hover:bg-brand-orange text-white text-xs font-extrabold py-2.5 px-4 rounded-xl cursor-pointer transition-colors">
+                        <span>📤 Upload Cover</span>
+                        <input id="blog-cover-upload" type="file" accept="image/*" class="hidden" />
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Language-Specific Article Content & SEO Fields -->
+                <div class="bg-[#181818] p-6 rounded-3xl border border-white/10 space-y-4">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-black uppercase tracking-wider text-brand-orange">
+                      Konten & On-Page SEO (<span id="blog-active-lang-badge">Bahasa Indonesia</span>)
+                    </h4>
+                    <button
+                      type="button"
+                      id="btn-auto-slug"
+                      class="text-[11px] font-bold text-brand-orange hover:underline cursor-pointer"
+                    >
+                      ⚡ Buat Slug & Meta Otomatis dari Judul
+                    </button>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-[11px] font-bold text-white/70 mb-1">
+                        🎯 Focus Keyword (Kata Kunci Utama Target Google)
+                      </label>
+                      <input
+                        id="blog-focus-keyword"
+                        type="text"
+                        placeholder="contoh: digital marketing klinik kecantikan"
+                        class="w-full bg-black/60 border border-brand-orange/50 focus:border-brand-orange rounded-xl px-3.5 py-2.5 text-xs text-white outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-bold text-white/70 mb-1">
+                        URL Slug (<code id="blog-slug-prefix">/blog/</code>)
+                      </label>
+                      <input
+                        id="blog-slug"
+                        type="text"
+                        placeholder="strategi-digital-marketing-..."
+                        class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-3.5 py-2.5 text-xs text-white font-mono outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-bold text-white/70 mb-1">Judul Utama Artikel (H1)</label>
+                    <input
+                      id="blog-title"
+                      type="text"
+                      placeholder="Masukkan judul artikel yang menarik & relevan..."
+                      class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-4 py-3 text-base font-bold text-white outline-none"
+                    />
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <div class="flex justify-between text-[11px] mb-1">
+                        <label class="font-bold text-white/70">SEO Meta Title (Tag Title)</label>
+                        <span id="seo-title-counter" class="text-white/50 font-mono">0 / 60</span>
+                      </div>
+                      <input
+                        id="blog-seo-title"
+                        type="text"
+                        placeholder="Judul khusus di hasil pencarian Google..."
+                        class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-3.5 py-2.5 text-xs text-white outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-bold text-white/70 mb-1">Alt Text Gambar Cover (Wajib untuk Image SEO)</label>
+                      <input
+                        id="blog-cover-alt"
+                        type="text"
+                        placeholder="Deskripsikan gambar cover dan kaitannya dengan topik..."
+                        class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-3.5 py-2.5 text-xs text-white outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div class="flex justify-between text-[11px] mb-1">
+                      <label class="font-bold text-white/70">SEO Meta Description (120–160 karakter disarankan)</label>
+                      <span id="seo-desc-counter" class="text-white/50 font-mono">0 / 160</span>
+                    </div>
+                    <textarea
+                      id="blog-seo-desc"
+                      rows="2"
+                      placeholder="Ringkasan 1-2 kalimat yang mengundang klik di halaman hasil pencarian Google..."
+                      class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-3.5 py-2.5 text-xs text-white outline-none"
+                    ></textarea>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-[11px] font-bold text-white/70 mb-1">Ringkasan Kartu / Excerpt</label>
+                      <textarea
+                        id="blog-excerpt"
+                        rows="2"
+                        placeholder="Ringkasan singkat yang tampil di kartu halaman indeks blog..."
+                        class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-3.5 py-2.5 text-xs text-white outline-none"
+                      ></textarea>
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-bold text-white/70 mb-1">Tags Topik (Pisahkan dengan koma)</label>
+                      <input
+                        id="blog-tags"
+                        type="text"
+                        placeholder="Social Media Management, Healthcare, Brand Strategy"
+                        class="w-full bg-black/60 border border-white/15 focus:border-brand-orange rounded-xl px-3.5 py-2.5 text-xs text-white outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <!-- Markdown Toolbar & Content Textarea -->
+                  <div class="pt-2">
+                    <div class="flex flex-wrap items-center justify-between gap-2 bg-black/80 border border-white/15 rounded-t-2xl p-2.5">
+                      <div class="flex flex-wrap items-center gap-1.5">
+                        <button type="button" data-md="h2" class="md-tool-btn px-2.5 py-1 rounded-lg bg-white/5 hover:bg-brand-orange text-xs font-extrabold cursor-pointer" title="Subheading H2">H2</button>
+                        <button type="button" data-md="h3" class="md-tool-btn px-2.5 py-1 rounded-lg bg-white/5 hover:bg-brand-orange text-xs font-extrabold cursor-pointer" title="Subheading H3">H3</button>
+                        <button type="button" data-md="bold" class="md-tool-btn px-2.5 py-1 rounded-lg bg-white/5 hover:bg-brand-orange text-xs font-extrabold cursor-pointer" title="Tebal">B</button>
+                        <button type="button" data-md="italic" class="md-tool-btn px-2.5 py-1 rounded-lg bg-white/5 hover:bg-brand-orange text-xs italic cursor-pointer" title="Miring">I</button>
+                        <button type="button" data-md="quote" class="md-tool-btn px-2.5 py-1 rounded-lg bg-white/5 hover:bg-brand-orange text-xs font-bold cursor-pointer" title="Kutipan Highlight">❝ Quote</button>
+                        <button type="button" data-md="ul" class="md-tool-btn px-2.5 py-1 rounded-lg bg-white/5 hover:bg-brand-orange text-xs font-bold cursor-pointer" title="Bullet List">• List</button>
+                        <button type="button" data-md="link-works" class="md-tool-btn px-2.5 py-1 rounded-lg bg-brand-orange/20 hover:bg-brand-orange text-brand-orange hover:text-white text-xs font-bold cursor-pointer" title="Internal Link ke Portofolio">🔗 Link Portofolio</button>
+                        <button type="button" data-md="link-contact" class="md-tool-btn px-2.5 py-1 rounded-lg bg-brand-orange/20 hover:bg-brand-orange text-brand-orange hover:text-white text-xs font-bold cursor-pointer" title="Internal Link ke Kontak">🔗 Link Kontak</button>
+                      </div>
+
+                      <label class="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-white/10 hover:bg-brand-orange text-xs font-bold cursor-pointer transition-colors">
+                        <span>🖼️ Sisipkan Gambar</span>
+                        <input id="blog-inline-image-upload" type="file" accept="image/*" class="hidden" />
+                      </label>
+                    </div>
+
+                    <textarea
+                      id="blog-content"
+                      rows="16"
+                      placeholder="Tulis isi artikel dengan format Markdown. Gunakan ## untuk Subheading H2 (otomatis menjadi Daftar Isi)..."
+                      class="w-full bg-black/60 border-x border-b border-white/15 focus:border-brand-orange rounded-b-2xl p-4 text-sm text-white/90 font-mono leading-relaxed outline-none"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right 4 Cols: Live Google SERP Preview & Real-Time SEO Scorer -->
+              <div class="lg:col-span-4 space-y-6">
+                <!-- Google SERP Snippet Simulator -->
+                <div class="bg-[#181818] p-5 rounded-3xl border border-white/10 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[11px] font-black uppercase tracking-wider text-brand-orange">🔍 Live Google SERP Preview</span>
+                    <span class="text-[10px] text-white/40 font-semibold">Mobile / Desktop</span>
+                  </div>
+                  <div class="bg-white text-[#202124] rounded-2xl p-4 shadow-inner space-y-1">
+                    <div class="flex items-center gap-2 text-xs text-[#4d5156]">
+                      <div class="w-5 h-5 rounded-full bg-black flex items-center justify-center text-[9px] text-white font-black">TDG</div>
+                      <div class="truncate">
+                        <div class="font-semibold text-[12px] text-[#202124] leading-tight">The Digital Grounds</div>
+                        <div id="serp-preview-url" class="text-[11px] text-[#4d5156] truncate">https://www.thedigitalgrounds.com › blog</div>
+                      </div>
+                    </div>
+                    <div id="serp-preview-title" class="text-[#1a0dab] text-base font-semibold leading-snug pt-1 line-clamp-2">
+                      Judul Artikel Anda Akan Tampil di Sini — TDG
+                    </div>
+                    <div id="serp-preview-desc" class="text-[#4d5156] text-xs leading-relaxed line-clamp-3">
+                      Meta description artikel Anda akan ditampilkan sebagai cuplikan di hasil pencarian Google...
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Real-Time SEO Score & Checklist -->
+                <div class="bg-[#181818] p-5 rounded-3xl border border-white/10 space-y-4 lg:sticky lg:top-24">
+                  <div class="flex items-center justify-between pb-3 border-b border-white/10">
+                    <div>
+                      <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange block">Google Search Essentials</span>
+                      <h4 class="text-sm font-black uppercase tracking-tight">Skor Audit SEO Real-time</h4>
+                    </div>
+                    <div
+                      id="seo-score-circle"
+                      class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex flex-col items-center justify-center text-emerald-400"
+                    >
+                      <span id="seo-score-number" class="text-lg font-black leading-none">100</span>
+                      <span class="text-[9px] font-bold uppercase">/ 100</span>
+                    </div>
+                  </div>
+
+                  <ul id="seo-checklist-items" class="space-y-2.5 text-xs">
+                    <!-- Populated live via JS -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL: EDIT / ADD PORTFOLIO ITEM                          -->
+    <!-- ========================================================= -->
+    <div
+      id="porto-editor-modal"
+      class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 overflow-y-auto"
+    >
+      <div class="bg-[#181818] border border-white/15 rounded-3xl max-w-4xl w-full max-h-[92vh] overflow-y-auto p-6 sm:p-8 space-y-6 shadow-2xl">
+        <div class="flex items-center justify-between pb-4 border-b border-white/10">
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange block">Case Study & Deliverables</span>
+            <h3 id="porto-modal-heading" class="text-xl font-black uppercase tracking-tight">Edit Portofolio</h3>
+          </div>
+          <button type="button" id="btn-close-porto-modal" class="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer">
+            ✕
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-[11px] font-bold text-white/70 mb-1">Nama Klien / Judul Proyek</label>
+            <input id="pm-title" type="text" placeholder="Contoh: FAME" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-white/70 mb-1">Scope Utama (Filter Tab)</label>
+            <select id="pm-filter-class" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none">
+              <option value="content-media">Content & Media Management</option>
+              <option value="brand-digital">Brand & Digital Foundation</option>
+              <option value="visual-doc">Visual Production & Documentation</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-white/70 mb-1">Tahun & Ikon Industri</label>
+            <div class="grid grid-cols-2 gap-2">
+              <input id="pm-year" type="text" placeholder="2024" class="w-full bg-black/60 border border-white/15 rounded-xl px-3 py-2.5 text-xs text-white outline-none" />
+              <select id="pm-svg-icon" class="w-full bg-black/60 border border-white/15 rounded-xl px-2.5 py-2.5 text-xs text-white outline-none">
+                <option value="fashion">Fashion</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="fnb">F&B</option>
+                <option value="dental">Dental</option>
+                <option value="sport">Sport</option>
+                <option value="architecture">Architecture</option>
+                <option value="corporate">Corporate</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-end">
+          <div class="sm:col-span-6">
+            <label class="block text-[11px] font-bold text-white/70 mb-1">Cover Image URL</label>
+            <input id="pm-image-src" type="text" placeholder="/images/portfolio/..." class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none" />
+          </div>
+          <div class="sm:col-span-3">
+            <label class="w-full flex items-center justify-center bg-white/10 hover:bg-brand-orange text-white text-xs font-extrabold py-2.5 px-3 rounded-xl cursor-pointer transition-colors">
+              <span>📤 Upload Cover</span>
+              <input id="pm-cover-upload" type="file" accept="image/*" class="hidden" />
+            </label>
+          </div>
+          <div class="sm:col-span-3">
+            <label class="inline-flex items-center gap-2 text-xs font-bold text-white cursor-pointer pb-2">
+              <input id="pm-featured-home" type="checkbox" class="accent-brand-orange w-4 h-4" />
+              <span>Tampilkan di Home</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-[11px] font-bold text-white/70 mb-1">Tags Kartu (Pisahkan dengan koma)</label>
+            <input id="pm-tags" type="text" placeholder="Social Media, Reels Video, Feed Design" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-white/70 mb-1">Kategori Industri di Home (mis: Healthcare, F&B, Fashion)</label>
+            <input id="pm-home-category" type="text" placeholder="Healthcare" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none" />
+          </div>
+        </div>
+
+        <!-- Bilingual Scopes & Descriptions -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-white/10">
+          <div class="space-y-3">
+            <span class="text-[11px] font-black uppercase tracking-wider text-brand-orange block">🇮🇩 Konten Bahasa Indonesia</span>
+            <div>
+              <label class="block text-[11px] font-bold text-white/70 mb-1">Ruang Lingkup (Scopes ID)</label>
+              <input id="pm-scopes-id" type="text" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2 text-xs text-white outline-none" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-white/70 mb-1">Deskripsi Studi Kasus (ID)</label>
+              <textarea id="pm-desc-id" rows="3" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2 text-xs text-white outline-none"></textarea>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <span class="text-[11px] font-black uppercase tracking-wider text-brand-orange block">🇬🇧 Konten Bahasa Inggris</span>
+            <div>
+              <label class="block text-[11px] font-bold text-white/70 mb-1">Scopes Handled (EN)</label>
+              <input id="pm-scopes-en" type="text" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2 text-xs text-white outline-none" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-white/70 mb-1">Case Study Overview (EN)</label>
+              <textarea id="pm-desc-en" rows="3" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2 text-xs text-white outline-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Deliverables / Outputs Builder -->
+        <div class="pt-4 border-t border-white/10 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-xs font-black uppercase tracking-wider text-brand-orange">Output Pengerjaan / Deliverables (Foto, Video, PDF)</h4>
+              <p class="text-[11px] text-white/50">Ditampilkan pada galeri interaktif saat kartu portofolio diklik.</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                id="btn-add-output-row"
+                class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-brand-orange text-xs font-extrabold text-white transition-colors cursor-pointer"
+              >
+                + Tambah Baris Output
+              </button>
+              <label class="px-3.5 py-1.5 rounded-full bg-brand-orange/20 hover:bg-brand-orange text-brand-orange hover:text-white text-xs font-extrabold cursor-pointer transition-colors">
+                <span>📤 Upload File Output</span>
+                <input id="pm-output-file-upload" type="file" accept="image/*,video/mp4,application/pdf" class="hidden" />
+              </label>
+            </div>
+          </div>
+
+          <div id="pm-outputs-list" class="space-y-2 max-h-60 overflow-y-auto pr-1">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-white/10 flex items-center justify-end gap-3">
+          <button
+            type="button"
+            id="btn-cancel-porto-modal"
+            class="px-5 py-2.5 rounded-full bg-white/5 hover:bg-white/15 text-xs font-bold text-white cursor-pointer"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            id="btn-save-porto-modal"
+            class="px-6 py-2.5 rounded-full bg-brand-orange hover:bg-brand-orange-light text-xs font-black uppercase tracking-wider text-white shadow-lg cursor-pointer"
+          >
+            💾 Simpan Portofolio
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- MODAL: GITHUB CLOUD API CONFIGURATION                     -->
+    <!-- ========================================================= -->
+    <div
+      id="github-config-modal"
+      class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4"
+    >
+      <div class="bg-[#181818] border border-white/15 rounded-3xl max-w-lg w-full p-6 sm:p-8 space-y-5 shadow-2xl">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange block">Cloud Deployment Sync</span>
+            <h3 class="text-lg font-black uppercase tracking-tight">Konfigurasi GitHub (`tdgcreative`)</h3>
+          </div>
+          <button type="button" id="btn-close-gh-modal" class="w-8 h-8 rounded-full bg-white/10 text-white cursor-pointer">✕</button>
+        </div>
+
+        <p class="text-xs text-white/65 leading-relaxed">
+          Saat dijalankan secara lokal (<code class="text-brand-orange">npm run dev</code>), Admin langsung menyimpan ke file proyek dan dapat melakukan <code class="text-brand-orange">git push</code> otomatis. Saat diakses di hosting publik (Vercel/Netlify/Cloudflare), masukkan <strong>GitHub Personal Access Token</strong> akun <code class="text-brand-orange">tdgcreative</code> agar perubahan langsung di-commit ke repository.
+        </p>
+
+        <div class="space-y-3">
+          <div>
+            <label class="block text-[11px] font-bold text-white/70 mb-1">GitHub Repository (`owner/repo`)</label>
+            <input id="gh-repo-input" type="text" value="tdgcreative/website-tdg-creative-lab" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono outline-none" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-white/70 mb-1">Branch</label>
+            <input id="gh-branch-input" type="text" value="main" class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono outline-none" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-white/70 mb-1">GitHub Token (`ghp_...` / `gho_...`)</label>
+            <input id="gh-token-input" type="password" placeholder="Masukkan token GitHub tdgcreative (opsional saat lokal)..." class="w-full bg-black/60 border border-white/15 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono outline-none" />
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" id="btn-save-gh-config" class="bg-brand-orange hover:bg-brand-orange-light text-white font-black text-xs uppercase tracking-wider px-6 py-2.5 rounded-full cursor-pointer">
+            Simpan Konfigurasi
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- INITIAL BUNDLED STATE FOR STATIC FALLBACK -->
+    <script id="tdg-initial-state" type="application/json" set:html={initialPayload} />
+
+    <script>
+      // =========================================================
+      // STATE & PERSISTENCE ENGINE (LOCAL VITE API + GITHUB API)
+      // =========================================================
+      const rawBundled = document.getElementById('tdg-initial-state')?.textContent || '{}';
+      const bundledState = JSON.parse(rawBundled);
+
+      let state = {
+        mode: 'cloud' as 'local' | 'cloud',
+        home: structuredClone(bundledState.home),
+        portfolios: structuredClone(bundledState.portfolios),
+        blog: structuredClone(bundledState.blog),
+        homeLang: 'id' as 'id' | 'en',
+        portoFilter: 'all',
+        portoSearch: '',
+        editingPortoIndex: -1,
+        editingPortoOutputs: [] as any[],
+        editingBlogIndex: -1,
+        blogLang: 'id' as 'id' | 'en'
+      };
+
+      const AUTH_KEY = 'tdg_admin_session_v1';
+      const GH_CONFIG_KEY = 'tdg_admin_gh_config_v1';
+
+      function showToast(msg: string, isError = false) {
+        const toast = document.getElementById('admin-toast')!;
+        const toastMsg = document.getElementById('admin-toast-msg')!;
+        toastMsg.textContent = msg;
+        toast.classList.remove('translate-y-24', 'opacity-0', 'border-brand-orange', 'border-red-500');
+        toast.classList.add(isError ? 'border-red-500' : 'border-brand-orange');
+        setTimeout(() => {
+          toast.classList.add('translate-y-24', 'opacity-0');
+        }, 3800);
+      }
+
+      function getGhConfig() {
+        try {
+          const raw = localStorage.getItem(GH_CONFIG_KEY);
+          if (raw) return JSON.parse(raw);
+        } catch {}
+        return {
+          repo: 'tdgcreative/website-tdg-creative-lab',
+          branch: 'main',
+          token: ''
+        };
+      }
+
+      async function githubCommitFile(filePath: string, contentString: string, commitMessage: string, isBase64 = false) {
+        const cfg = getGhConfig();
+        if (!cfg.token) {
+          throw new Error('Mode Cloud membutuhkan GitHub Token (klik ⚙️ GitHub Config di kanan atas).');
+        }
+        const apiUrl = `https://api.github.com/repos/${cfg.repo}/contents/${filePath}`;
+        let sha: string | undefined;
+
+        const getRes = await fetch(`${apiUrl}?ref=${cfg.branch}`, {
+          headers: {
+            Authorization: `Bearer ${cfg.token}`,
+            Accept: 'application/vnd.github+json'
+          }
+        });
+        if (getRes.ok) {
+          const existing = await getRes.json();
+          sha = existing.sha;
+        }
+
+        const base64Content = isBase64
+          ? contentString
+          : btoa(unescape(encodeURIComponent(contentString)));
+
+        const putRes = await fetch(apiUrl, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${cfg.token}`,
+            Accept: 'application/vnd.github+json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            message: commitMessage,
+            content: base64Content,
+            branch: cfg.branch,
+            ...(sha ? { sha } : {})
+          })
+        });
+
+        if (!putRes.ok) {
+          const errData = await putRes.json().catch(() => ({}));
+          throw new Error(errData.message || `GitHub API error (${putRes.status})`);
+        }
+        return await putRes.json();
+      }
+
+      async function saveResource(endpoint: 'home' | 'portfolios' | 'blog', data: any) {
+        if (state.mode === 'local') {
+          const res = await fetch(`/api/admin/${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+          const json = await res.json();
+          if (!res.ok || !json.ok) throw new Error(json.error || 'Gagal menyimpan data');
+          return json.message;
+        } else {
+          const fileMap = {
+            home: 'src/data/home.json',
+            portfolios: 'src/data/portfolios.json',
+            blog: 'src/data/blog.json'
+          };
+          await githubCommitFile(
+            fileMap[endpoint],
+            JSON.stringify(data, null, 2) + '\n',
+            `chore(cms): update ${endpoint} via TDG Admin`
+          );
+          return `Berhasil di-commit ke GitHub (${fileMap[endpoint]})!`;
+        }
+      }
+
+      async function uploadMediaFile(file: File, folder: 'portfolio' | 'logos' | 'blog' | 'videos' | 'docs'): Promise<string> {
+        const dataUrl: string = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+
+        if (state.mode === 'local') {
+          const res = await fetch('/api/admin/upload', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ filename: file.name, folder, dataUrl })
+          });
+          const json = await res.json();
+          if (!res.ok || !json.ok) throw new Error(json.error || 'Gagal mengunggah file');
+          return json.url;
+        } else {
+          const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]/g, '-').replace(/-+/g, '-');
+          const folderMap: Record<string, string> = {
+            portfolio: 'public/images/portfolio',
+            logos: 'public/images/logos',
+            blog: 'public/images/blog',
+            videos: 'public/videos',
+            docs: 'public/docs'
+          };
+          const relDir = folderMap[folder] || 'public/images/portfolio';
+          const base64Clean = dataUrl.includes(',') ? dataUrl.split(',')[1] : dataUrl;
+          await githubCommitFile(`${relDir}/${safeName}`, base64Clean, `chore(cms): upload ${safeName}`, true);
+          return '/' + relDir.replace(/^public\//, '') + '/' + safeName;
+        }
+      }
+
+      // =========================================================
+      // INITIALIZE CONNECTION & AUTH
+      // =========================================================
+      async function initAdminState() {
+        try {
+          const res = await fetch('/api/admin/state');
+          if (res.ok) {
+            const data = await res.json();
+            if (data.ok) {
+              state.mode = 'local';
+              state.home = data.home;
+              state.portfolios = data.portfolios;
+              state.blog = data.blog;
+            }
+          }
+        } catch {
+          state.mode = 'cloud';
+        }
+
+        const modeText = document.getElementById('storage-mode-text')!;
+        const modeBadge = document.getElementById('storage-mode-badge')!;
+        if (state.mode === 'local') {
+          modeText.textContent = 'Local Dev File Mode';
+        } else {
+          modeText.textContent = 'GitHub Cloud Mode';
+          modeBadge.className = 'hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold bg-brand-orange/15 text-brand-orange border border-brand-orange/30';
+        }
+
+        updateNavCounters();
+        renderHomeTab();
+        renderPortfoliosTab();
+        renderBlogListTab();
+      }
+
+      function updateNavCounters() {
+        document.getElementById('nav-porto-count')!.textContent = state.portfolios.items.length.toString();
+        document.getElementById('nav-blog-count')!.textContent = state.blog.articles.length.toString();
+      }
+
+      // Login Handler
+      const loginGate = document.getElementById('admin-login-gate')!;
+      const adminApp = document.getElementById('admin-app')!;
+      const loginForm = document.getElementById('login-form') as HTMLFormElement;
+      const loginError = document.getElementById('login-error')!;
+
+      function unlockAdmin() {
+        loginGate.classList.add('hidden');
+        adminApp.classList.remove('hidden');
+        initAdminState();
+      }
+
+      if (sessionStorage.getItem(AUTH_KEY) === 'authenticated') {
+        unlockAdmin();
+      }
+
+      loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const pass = (document.getElementById('admin-pass-input') as HTMLInputElement).value.trim();
+        if (pass === 'tdgcreative2026' || pass === 'tdgadmin' || pass === 'admin123') {
+          sessionStorage.setItem(AUTH_KEY, 'authenticated');
+          loginError.classList.add('hidden');
+          unlockAdmin();
+        } else {
+          loginError.classList.remove('hidden');
+        }
+      });
+
+      document.getElementById('btn-logout')?.addEventListener('click', () => {
+        sessionStorage.removeItem(AUTH_KEY);
+        window.location.reload();
+      });
+
+      // Main Navigation Tabs
+      const tabBtns = document.querySelectorAll('.admin-tab-btn');
+      const panels: Record<string, HTMLElement> = {
+        home: document.getElementById('tab-panel-home')!,
+        portfolios: document.getElementById('tab-panel-portfolios')!,
+        blog: document.getElementById('tab-panel-blog')!
+      };
+
+      tabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-tab') || 'home';
+          tabBtns.forEach((b) => {
+            if (b.getAttribute('data-tab') === target) {
+              b.classList.add('bg-brand-orange', 'text-white');
+              b.classList.remove('text-white/65');
+            } else {
+              b.classList.remove('bg-brand-orange', 'text-white');
+              b.classList.add('text-white/65');
+            }
+          });
+          Object.keys(panels).forEach((k) => {
+            panels[k].classList.toggle('hidden', k !== target);
+          });
+        });
+      });
+
+      // =========================================================
+      // TAB 1: HOME EDITOR LOGIC
+      // =========================================================
+      function syncHomeFormFromMemory() {
+        const l = state.homeLang;
+        document.querySelectorAll('.home-active-lang-label').forEach((el) => {
+          el.textContent = l.toUpperCase();
+        });
+
+        (document.getElementById('home-seo-title') as HTMLInputElement).value = state.home.seo[l].title || '';
+        (document.getElementById('home-seo-desc') as HTMLTextAreaElement).value = state.home.seo[l].description || '';
+        (document.getElementById('home-hero-main') as HTMLInputElement).value = state.home.hero.headlineMain || '';
+        (document.getElementById('home-hero-sub') as HTMLInputElement).value = state.home.hero.headlineSub || '';
+        (document.getElementById('home-hero-desc') as HTMLInputElement).value = state.home.hero.subheadline[l] || '';
+        (document.getElementById('home-hero-cta1') as HTMLInputElement).value = state.home.hero.primaryCta[l] || '';
+        (document.getElementById('home-hero-cta2') as HTMLInputElement).value = state.home.hero.secondaryCta[l] || '';
+
+        (document.getElementById('home-pitch-title') as HTMLInputElement).value = state.home.pitch.title[l] || '';
+        (document.getElementById('home-pitch-desc') as HTMLTextAreaElement).value = state.home.pitch.description[l] || '';
+        (document.getElementById('home-stat1-val') as HTMLInputElement).value = state.home.pitch.stats[0]?.value || '';
+        (document.getElementById('home-stat1-label') as HTMLInputElement).value = state.home.pitch.stats[0]?.label[l] || '';
+        (document.getElementById('home-stat2-val') as HTMLInputElement).value = state.home.pitch.stats[1]?.value || '';
+        (document.getElementById('home-stat2-label') as HTMLInputElement).value = state.home.pitch.stats[1]?.label[l] || '';
+        (document.getElementById('home-industries-input') as HTMLInputElement).value = (state.home.industriesSection.industries || []).join(', ');
+
+        // Render Service Scopes
+        const scopesWrap = document.getElementById('home-scopes-container')!;
+        scopesWrap.innerHTML = '';
+        state.home.serviceScopesSection.scopes.forEach((sc: any, idx: number) => {
+          const div = document.createElement('div');
+          div.className = 'p-4 rounded-2xl bg-black/50 border border-white/10 space-y-2.5';
+          div.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-brand-orange uppercase">Scope ${sc.number}</span>
+              <span class="text-[10px] text-white/40">${sc.isExclusive ? 'Exclusive Tactical Scope' : `Filter: ${sc.filter}`}</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="block text-[10px] font-bold text-white/60 mb-1">Nama Scope (${l.toUpperCase()})</label>
+                <input data-scope-name="${idx}" type="text" value="${sc.name[l] || ''}" class="w-full bg-black border border-white/15 rounded-xl px-3 py-2 text-xs text-white outline-none" />
+              </div>
+              <div>
+                <label class="block text-[10px] font-bold text-white/60 mb-1">Daftar Sub-Layanan (Pisahkan dengan koma)</label>
+                <input data-scope-services="${idx}" type="text" value="${(sc.services[l] || []).join(', ')}" class="w-full bg-black border border-white/15 rounded-xl px-3 py-2 text-xs text-white outline-none" />
+              </div>
+            </div>
+          `;
+          scopesWrap.appendChild(div);
+        });
+      }
+
+      function readHomeFormIntoMemory() {
+        const l = state.homeLang;
+        state.home.seo[l].title = (document.getElementById('home-seo-title') as HTMLInputElement).value.trim();
+        state.home.seo[l].description = (document.getElementById('home-seo-desc') as HTMLTextAreaElement).value.trim();
+        state.home.hero.headlineMain = (document.getElementById('home-hero-main') as HTMLInputElement).value.trim();
+        state.home.hero.headlineSub = (document.getElementById('home-hero-sub') as HTMLInputElement).value.trim();
+        state.home.hero.subheadline[l] = (document.getElementById('home-hero-desc') as HTMLInputElement).value.trim();
+        state.home.hero.primaryCta[l] = (document.getElementById('home-hero-cta1') as HTMLInputElement).value.trim();
+        state.home.hero.secondaryCta[l] = (document.getElementById('home-hero-cta2') as HTMLInputElement).value.trim();
+
+        state.home.pitch.title[l] = (document.getElementById('home-pitch-title') as HTMLInputElement).value.trim();
+        state.home.pitch.description[l] = (document.getElementById('home-pitch-desc') as HTMLTextAreaElement).value.trim();
+        if (state.home.pitch.stats[0]) {
+          state.home.pitch.stats[0].value = (document.getElementById('home-stat1-val') as HTMLInputElement).value.trim();
+          state.home.pitch.stats[0].label[l] = (document.getElementById('home-stat1-label') as HTMLInputElement).value.trim();
+        }
+        if (state.home.pitch.stats[1]) {
+          state.home.pitch.stats[1].value = (document.getElementById('home-stat2-val') as HTMLInputElement).value.trim();
+          state.home.pitch.stats[1].label[l] = (document.getElementById('home-stat2-label') as HTMLInputElement).value.trim();
+        }
+
+        const indRaw = (document.getElementById('home-industries-input') as HTMLInputElement).value;
+        state.home.industriesSection.industries = indRaw.split(',').map((s) => s.trim()).filter(Boolean);
+
+        document.querySelectorAll('[data-scope-name]').forEach((inp) => {
+          const idx = Number(inp.getAttribute('data-scope-name'));
+          state.home.serviceScopesSection.scopes[idx].name[l] = (inp as HTMLInputElement).value.trim();
+        });
+        document.querySelectorAll('[data-scope-services]').forEach((inp) => {
+          const idx = Number(inp.getAttribute('data-scope-services'));
+          state.home.serviceScopesSection.scopes[idx].services[l] = (inp as HTMLInputElement).value
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean);
+        });
+      }
+
+      function renderHomeLogos() {
+        const list = document.getElementById('home-logos-list')!;
+        list.innerHTML = '';
+        state.home.marquee.logos.forEach((logo: any, idx: number) => {
+          const row = document.createElement('div');
+          row.className = 'flex items-center justify-between gap-3 bg-black/50 p-3 rounded-2xl border border-white/10';
+          row.innerHTML = `
+            <div class="flex items-center gap-3 min-w-0 flex-1">
+              <div class="w-14 h-10 rounded-xl bg-white/10 flex items-center justify-center p-1.5 shrink-0">
+                <img src="${logo.src}" alt="${logo.alt}" class="max-h-full max-w-full object-contain" />
+              </div>
+              <input data-logo-alt="${idx}" type="text" value="${logo.alt}" class="bg-black border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white w-full outline-none" />
+            </div>
+            <button type="button" data-del-logo="${idx}" class="text-xs text-red-400 hover:text-red-300 font-bold px-2 py-1 cursor-pointer">
+              Hapus
+            </button>
+          `;
+          list.appendChild(row);
+        });
+
+        list.querySelectorAll('[data-logo-alt]').forEach((inp) => {
+          inp.addEventListener('input', () => {
+            const idx = Number(inp.getAttribute('data-logo-alt'));
+            state.home.marquee.logos[idx].alt = (inp as HTMLInputElement).value;
+          });
+        });
+
+        list.querySelectorAll('[data-del-logo]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.getAttribute('data-del-logo'));
+            state.home.marquee.logos.splice(idx, 1);
+            renderHomeLogos();
+          });
+        });
+      }
+
+      function renderHomeFeaturedPortfolios() {
+        const wrap = document.getElementById('home-featured-portfolios-list')!;
+        wrap.innerHTML = '';
+        state.portfolios.items.forEach((item: any, idx: number) => {
+          const row = document.createElement('label');
+          row.className = `flex items-center justify-between gap-3 p-3 rounded-2xl border cursor-pointer transition-colors ${
+            item.featuredOnHome ? 'bg-brand-orange/15 border-brand-orange/50' : 'bg-black/40 border-white/10 hover:bg-black/60'
+          }`;
+          row.innerHTML = `
+            <div class="flex items-center gap-3 min-w-0">
+              <input type="checkbox" data-toggle-home-feat="${idx}" ${item.featuredOnHome ? 'checked' : ''} class="accent-brand-orange w-4 h-4 shrink-0" />
+              <img src="${item.imageSrc}" alt="${item.title}" class="w-10 h-10 rounded-lg object-cover shrink-0 bg-black" />
+              <div class="truncate">
+                <div class="text-xs font-extrabold text-white truncate">${item.title}</div>
+                <div class="text-[10px] text-white/50">${item.homeCategory || item.category}</div>
+              </div>
+            </div>
+            <input
+              type="number"
+              min="1"
+              max="20"
+              title="Urutan di Home"
+              data-home-order="${idx}"
+              value="${item.homeOrder ?? 99}"
+              class="w-14 bg-black border border-white/15 rounded-lg px-2 py-1 text-xs text-center font-bold text-white"
+            />
+          `;
+          wrap.appendChild(row);
+        });
+
+        wrap.querySelectorAll('[data-toggle-home-feat]').forEach((chk) => {
+          chk.addEventListener('change', async () => {
+            const idx = Number(chk.getAttribute('data-toggle-home-feat'));
+            state.portfolios.items[idx].featuredOnHome = (chk as HTMLInputElement).checked;
+            if (state.portfolios.items[idx].featuredOnHome && state.portfolios.items[idx].homeOrder === 99) {
+              state.portfolios.items[idx].homeOrder = 1;
+            }
+            renderHomeFeaturedPortfolios();
+            renderPortfoliosTab();
+          });
+        });
+
+        wrap.querySelectorAll('[data-home-order]').forEach((inp) => {
+          inp.addEventListener('change', () => {
+            const idx = Number(inp.getAttribute('data-home-order'));
+            state.portfolios.items[idx].homeOrder = Number((inp as HTMLInputElement).value) || 99;
+          });
+        });
+      }
+
+      function renderHomeTab() {
+        syncHomeFormFromMemory();
+        renderHomeLogos();
+        renderHomeFeaturedPortfolios();
+      }
+
+      document.querySelectorAll('.home-lang-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          readHomeFormIntoMemory();
+          state.homeLang = (btn.getAttribute('data-home-lang') as 'id' | 'en') || 'id';
+          document.querySelectorAll('.home-lang-btn').forEach((b) => {
+            const isTarget = b.getAttribute('data-home-lang') === state.homeLang;
+            b.classList.toggle('bg-brand-orange', isTarget);
+            b.classList.toggle('text-white', isTarget);
+            b.classList.toggle('text-white/60', !isTarget);
+          });
+          syncHomeFormFromMemory();
+        });
+      });
+
+      document.getElementById('upload-logo-input')?.addEventListener('change', async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+        try {
+          showToast('Mengunggah logo klien...');
+          const url = await uploadMediaFile(file, 'logos');
+          const cleanAlt = file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' ');
+          state.home.marquee.logos.push({
+            id: `logo-${Date.now()}`,
+            alt: cleanAlt,
+            src: url,
+            heightClass: 'h-6 sm:h-7'
+          });
+          renderHomeLogos();
+          showToast('Logo berhasil ditambahkan! Klik Simpan Perubahan Home untuk menyimpan.');
+        } catch (err: any) {
+          showToast(err.message || 'Gagal upload logo', true);
+        }
+      });
+
+      document.getElementById('btn-save-home')?.addEventListener('click', async () => {
+        try {
+          readHomeFormIntoMemory();
+          const msg1 = await saveResource('home', state.home);
+          await saveResource('portfolios', state.portfolios);
+          showToast(msg1);
+        } catch (err: any) {
+          showToast(err.message || 'Gagal menyimpan Home', true);
+        }
+      });
+
+      // =========================================================
+      // TAB 2: PORTFOLIO MANAGER LOGIC
+      // =========================================================
+      function renderPortfoliosTab() {
+        const grid = document.getElementById('admin-portfolios-grid')!;
+        grid.innerHTML = '';
+
+        state.portfolios.items.forEach((item: any, idx: number) => {
+          if (state.portoFilter !== 'all' && item.filterClass !== state.portoFilter) return;
+          if (
+            state.portoSearch &&
+            !item.title.toLowerCase().includes(state.portoSearch) &&
+            !(item.tags || []).join(' ').toLowerCase().includes(state.portoSearch)
+          ) {
+            return;
+          }
+
+          const card = document.createElement('div');
+          card.className = 'bg-[#181818] rounded-3xl overflow-hidden border border-white/10 flex flex-col justify-between group';
+          card.innerHTML = `
+            <div>
+              <div class="relative aspect-[16/10] bg-black overflow-hidden">
+                <img src="${item.imageSrc}" alt="${item.title}" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-500" />
+                <span class="absolute top-3 left-3 bg-black/80 backdrop-blur-md text-brand-orange text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full border border-white/10">
+                  ${item.category}
+                </span>
+                ${
+                  item.featuredOnHome
+                    ? `<span class="absolute top-3 right-3 bg-brand-orange text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full shadow">★ Home #${item.homeOrder ?? 1}</span>`
+                    : ''
+                }
+              </div>
+              <div class="p-5 space-y-2">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-lg font-black uppercase tracking-tight text-white">${item.title}</h3>
+                  <span class="text-xs font-bold text-white/45">${item.year}</span>
+                </div>
+                <p class="text-xs text-white/60 line-clamp-2 leading-relaxed">
+                  ${typeof item.description === 'object' ? item.description.id : item.description}
+                </p>
+                <div class="flex flex-wrap gap-1.5 pt-1">
+                  ${(item.tags || [])
+                    .map((t: string) => `<span class="text-[10px] font-bold bg-white/5 text-white/75 px-2.5 py-0.5 rounded-full">${t}</span>`)
+                    .join('')}
+                </div>
+              </div>
+            </div>
+            <div class="px-5 py-3.5 bg-black/40 border-t border-white/10 flex items-center justify-between">
+              <span class="text-[11px] font-bold text-white/55">
+                📦 ${(item.outputs || []).length} Deliverables
+              </span>
+              <div class="flex items-center gap-2">
+                <button type="button" data-edit-porto="${idx}" class="px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-brand-orange text-xs font-extrabold text-white transition-colors cursor-pointer">
+                  Edit
+                </button>
+                <button type="button" data-del-porto="${idx}" class="px-3 py-1.5 rounded-full bg-red-500/10 hover:bg-red-500/30 text-xs font-bold text-red-400 transition-colors cursor-pointer">
+                  Hapus
+                </button>
+              </div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        grid.querySelectorAll('[data-edit-porto]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            openPortfolioModal(Number(btn.getAttribute('data-edit-porto')));
+          });
+        });
+
+        grid.querySelectorAll('[data-del-porto]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const idx = Number(btn.getAttribute('data-del-porto'));
+            const item = state.portfolios.items[idx];
+            if (!confirm(`Hapus portofolio "${item.title}"?`)) return;
+            state.portfolios.items.splice(idx, 1);
+            updateNavCounters();
+            renderPortfoliosTab();
+            renderHomeFeaturedPortfolios();
+            try {
+              const msg = await saveResource('portfolios', state.portfolios);
+              showToast(msg);
+            } catch (err: any) {
+              showToast(err.message, true);
+            }
+          });
+        });
+      }
+
+      document.querySelectorAll('.porto-admin-filter').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          state.portoFilter = btn.getAttribute('data-porto-filter') || 'all';
+          document.querySelectorAll('.porto-admin-filter').forEach((b) => {
+            const active = b.getAttribute('data-porto-filter') === state.portoFilter;
+            b.className = active
+              ? 'porto-admin-filter px-4 py-2 rounded-full text-xs font-bold bg-brand-orange text-white cursor-pointer'
+              : 'porto-admin-filter px-4 py-2 rounded-full text-xs font-bold bg-[#181818] text-white/70 hover:text-white border border-white/10 cursor-pointer';
+          });
+          renderPortfoliosTab();
+        });
+      });
+
+      document.getElementById('porto-search-input')?.addEventListener('input', (e) => {
+        state.portoSearch = (e.target as HTMLInputElement).value.toLowerCase().trim();
+        renderPortfoliosTab();
+      });
+
+      // Portfolio Editor Modal
+      const portoModal = document.getElementById('porto-editor-modal')!;
+
+      function renderModalOutputsList() {
+        const list = document.getElementById('pm-outputs-list')!;
+        list.innerHTML = '';
+        state.editingPortoOutputs.forEach((out, idx) => {
+          const row = document.createElement('div');
+          row.className = 'grid grid-cols-1 sm:grid-cols-12 gap-2 items-center bg-black/60 p-2.5 rounded-xl border border-white/10';
+          row.innerHTML = `
+            <div class="sm:col-span-4">
+              <input data-out-title="${idx}" type="text" value="${out.title || ''}" placeholder="Judul Output (mis: Reels Video)" class="w-full bg-black border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white outline-none" />
+            </div>
+            <div class="sm:col-span-2">
+              <select data-out-type="${idx}" class="w-full bg-black border border-white/15 rounded-lg px-2 py-1.5 text-xs text-white outline-none">
+                <option value="image" ${out.type === 'image' ? 'selected' : ''}>📸 Foto</option>
+                <option value="video" ${out.type === 'video' ? 'selected' : ''}>🎬 Video</option>
+                <option value="pdf" ${out.type === 'pdf' ? 'selected' : ''}>📄 PDF</option>
+              </select>
+            </div>
+            <div class="sm:col-span-5">
+              <input data-out-src="${idx}" type="text" value="${out.src || ''}" placeholder="/images/... atau /videos/..." class="w-full bg-black border border-white/15 rounded-lg px-2.5 py-1.5 text-xs text-white font-mono outline-none" />
+            </div>
+            <div class="sm:col-span-1 flex justify-end">
+              <button type="button" data-del-out="${idx}" class="text-red-400 hover:text-red-300 text-xs font-bold px-2 py-1 cursor-pointer">✕</button>
+            </div>
+          `;
+          list.appendChild(row);
+        });
+
+        list.querySelectorAll('[data-out-title]').forEach((inp) => {
+          inp.addEventListener('input', () => {
+            const idx = Number(inp.getAttribute('data-out-title'));
+            state.editingPortoOutputs[idx].title = (inp as HTMLInputElement).value;
+          });
+        });
+        list.querySelectorAll('[data-out-type]').forEach((sel) => {
+          sel.addEventListener('change', () => {
+            const idx = Number(sel.getAttribute('data-out-type'));
+            state.editingPortoOutputs[idx].type = (sel as HTMLSelectElement).value;
+          });
+        });
+        list.querySelectorAll('[data-out-src]').forEach((inp) => {
+          inp.addEventListener('input', () => {
+            const idx = Number(inp.getAttribute('data-out-src'));
+            state.editingPortoOutputs[idx].src = (inp as HTMLInputElement).value;
+          });
+        });
+        list.querySelectorAll('[data-del-out]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const idx = Number(btn.getAttribute('data-del-out'));
+            state.editingPortoOutputs.splice(idx, 1);
+            renderModalOutputsList();
+          });
+        });
+      }
+
+      function openPortfolioModal(index: number) {
+        state.editingPortoIndex = index;
+        const isNew = index === -1;
+        document.getElementById('porto-modal-heading')!.textContent = isNew ? 'Tambah Portofolio Baru' : 'Edit Portofolio Klien';
+
+        const item = isNew
+          ? {
+              id: `porto-${Date.now()}`,
+              title: '',
+              category: 'Content & Media Management',
+              homeCategory: 'Healthcare',
+              tags: ['Social Media Management'],
+              homeTags: ['Social Media Management'],
+              imageSrc: '/images/portfolio/fame.jpg',
+              svgIcon: 'healthcare',
+              filterClass: 'content-media',
+              scopes: { id: 'Social Media Management', en: 'Social Media Management' },
+              year: '2026',
+              featuredOnHome: false,
+              homeOrder: 99,
+              description: { id: '', en: '' },
+              outputs: []
+            }
+          : state.portfolios.items[index];
+
+        (document.getElementById('pm-title') as HTMLInputElement).value = item.title || '';
+        (document.getElementById('pm-filter-class') as HTMLSelectElement).value = item.filterClass || 'content-media';
+        (document.getElementById('pm-year') as HTMLInputElement).value = item.year || '2026';
+        (document.getElementById('pm-svg-icon') as HTMLSelectElement).value = item.svgIcon || 'fashion';
+        (document.getElementById('pm-image-src') as HTMLInputElement).value = item.imageSrc || '';
+        (document.getElementById('pm-featured-home') as HTMLInputElement).checked = Boolean(item.featuredOnHome);
+        (document.getElementById('pm-tags') as HTMLInputElement).value = (item.tags || []).join(', ');
+        (document.getElementById('pm-home-category') as HTMLInputElement).value = item.homeCategory || 'Healthcare';
+        (document.getElementById('pm-scopes-id') as HTMLInputElement).value =
+          typeof item.scopes === 'object' ? item.scopes.id : item.scopes || '';
+        (document.getElementById('pm-scopes-en') as HTMLInputElement).value =
+          typeof item.scopes === 'object' ? item.scopes.en : item.scopes || '';
+        (document.getElementById('pm-desc-id') as HTMLTextAreaElement).value =
+          typeof item.description === 'object' ? item.description.id : item.description || '';
+        (document.getElementById('pm-desc-en') as HTMLTextAreaElement).value =
+          typeof item.description === 'object' ? item.description.en : item.description || '';
+
+        state.editingPortoOutputs = structuredClone(item.outputs || []);
+        renderModalOutputsList();
+
+        portoModal.classList.remove('hidden');
+        portoModal.classList.add('flex');
+      }
+
+      function closePortfolioModal() {
+        portoModal.classList.add('hidden');
+        portoModal.classList.remove('flex');
+      }
+
+      document.getElementById('btn-new-portfolio')?.addEventListener('click', () => openPortfolioModal(-1));
+      document.getElementById('btn-close-porto-modal')?.addEventListener('click', closePortfolioModal);
+      document.getElementById('btn-cancel-porto-modal')?.addEventListener('click', closePortfolioModal);
+
+      document.getElementById('btn-add-output-row')?.addEventListener('click', () => {
+        state.editingPortoOutputs.push({
+          id: `out-${Date.now()}`,
+          title: 'Deliverable Baru',
+          type: 'image',
+          src: '/images/portfolio/fame.jpg'
+        });
+        renderModalOutputsList();
+      });
+
+      document.getElementById('pm-cover-upload')?.addEventListener('change', async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+        try {
+          showToast('Mengunggah cover portofolio...');
+          const url = await uploadMediaFile(file, 'portfolio');
+          (document.getElementById('pm-image-src') as HTMLInputElement).value = url;
+          showToast('Cover berhasil diunggah!');
+        } catch (err: any) {
+          showToast(err.message, true);
+        }
+      });
+
+      document.getElementById('pm-output-file-upload')?.addEventListener('change', async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+        try {
+          let folder: 'portfolio' | 'videos' | 'docs' = 'portfolio';
+          let type: 'image' | 'video' | 'pdf' = 'image';
+          if (file.type.includes('video') || file.name.endsWith('.mp4')) {
+            folder = 'videos';
+            type = 'video';
+          } else if (file.type.includes('pdf') || file.name.endsWith('.pdf')) {
+            folder = 'docs';
+            type = 'pdf';
+          }
+          showToast(`Mengunggah deliverable (${file.name})...`);
+          const url = await uploadMediaFile(file, folder);
+          state.editingPortoOutputs.push({
+            id: `out-${Date.now()}`,
+            title: file.name.replace(/\.[^.]+$/, '').replace(/[-_]/g, ' '),
+            type,
+            src: url
+          });
+          renderModalOutputsList();
+          showToast('Deliverable berhasil ditambahkan!');
+        } catch (err: any) {
+          showToast(err.message, true);
+        }
+      });
+
+      document.getElementById('btn-save-porto-modal')?.addEventListener('click', async () => {
+        const title = (document.getElementById('pm-title') as HTMLInputElement).value.trim();
+        if (!title) {
+          showToast('Nama klien / proyek wajib diisi!', true);
+          return;
+        }
+        const filterClass = (document.getElementById('pm-filter-class') as HTMLSelectElement).value;
+        const categoryMap: Record<string, string> = {
+          'content-media': 'Content & Media Management',
+          'brand-digital': 'Brand & Digital Foundation',
+          'visual-doc': 'Visual Production & Documentation'
+        };
+        const tags = (document.getElementById('pm-tags') as HTMLInputElement).value
+          .split(',')
+          .map((t) => t.trim())
+          .filter(Boolean);
+
+        const newItem = {
+          id: state.editingPortoIndex === -1 ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : state.portfolios.items[state.editingPortoIndex].id,
+          title,
+          category: categoryMap[filterClass] || 'Content & Media Management',
+          homeCategory: (document.getElementById('pm-home-category') as HTMLInputElement).value.trim() || 'Healthcare',
+          tags,
+          homeTags: tags,
+          imageSrc: (document.getElementById('pm-image-src') as HTMLInputElement).value.trim() || '/images/portfolio/fame.jpg',
+          svgIcon: (document.getElementById('pm-svg-icon') as HTMLSelectElement).value,
+          filterClass,
+          scopes: {
+            id: (document.getElementById('pm-scopes-id') as HTMLInputElement).value.trim(),
+            en: (document.getElementById('pm-scopes-en') as HTMLInputElement).value.trim()
+          },
+          year: (document.getElementById('pm-year') as HTMLInputElement).value.trim() || '2026',
+          featuredOnHome: (document.getElementById('pm-featured-home') as HTMLInputElement).checked,
+          homeOrder:
+            state.editingPortoIndex !== -1
+              ? state.portfolios.items[state.editingPortoIndex].homeOrder ?? 4
+              : 4,
+          description: {
+            id: (document.getElementById('pm-desc-id') as HTMLTextAreaElement).value.trim(),
+            en: (document.getElementById('pm-desc-en') as HTMLTextAreaElement).value.trim()
+          },
+          outputs: state.editingPortoOutputs
+        };
+
+        if (state.editingPortoIndex === -1) {
+          state.portfolios.items.unshift(newItem);
+        } else {
+          state.portfolios.items[state.editingPortoIndex] = newItem;
+        }
+
+        closePortfolioModal();
+        updateNavCounters();
+        renderPortfoliosTab();
+        renderHomeFeaturedPortfolios();
+
+        try {
+          const msg = await saveResource('portfolios', state.portfolios);
+          showToast(msg);
+        } catch (err: any) {
+          showToast(err.message, true);
+        }
+      });
+
+      // =========================================================
+      // TAB 3: BLOG & REAL-TIME SEO STUDIO LOGIC
+      // =========================================================
+      let workingArticle: any = null;
+
+      function computeArticleSeoScore(postLang: any) {
+        const kw = (postLang.focusKeyword || '').toLowerCase().trim();
+        const title = (postLang.title || '').toLowerCase();
+        const seoTitle = postLang.seoTitle || postLang.title || '';
+        const seoDesc = postLang.seoDescription || postLang.excerpt || '';
+        const slug = (postLang.slug || '').toLowerCase();
+        const content = postLang.content || '';
+        const coverAlt = (postLang.coverAlt || '').trim();
+
+        const firstPara = (content.split('\n\n')[0] || '').toLowerCase();
+        const hasH2 = /^##\s+.+/m.test(content);
+        const hasInternalLink = /\]\((\/works-and-services|\/contact|\/en\/works-and-services|\/en\/contact|\/blog\/)/i.test(content);
+
+        const checks = [
+          {
+            label: 'Focus Keyword telah ditentukan',
+            pass: kw.length >= 3,
+            points: 15
+          },
+          {
+            label: 'Focus Keyword muncul di Judul Utama (H1) atau Meta Title',
+            pass: kw.length >= 3 && (title.includes(kw) || seoTitle.toLowerCase().includes(kw)),
+            points: 15
+          },
+          {
+            label: `Panjang Meta Title optimal (${seoTitle.length} karakter — ideal 40–65)`,
+            pass: seoTitle.length >= 35 && seoTitle.length <= 68,
+            points: 15
+          },
+          {
+            label: `Panjang Meta Description optimal (${seoDesc.length} karakter — ideal 110–165)`,
+            pass: seoDesc.length >= 100 && seoDesc.length <= 170,
+            points: 15
+          },
+          {
+            label: 'URL Slug bersih, deskriptif & huruf kecil',
+            pass: /^[a-z0-9-]+$/.test(slug) && slug.length >= 8,
+            points: 10
+          },
+          {
+            label: 'Focus Keyword muncul di paragraf pembuka',
+            pass: kw.length >= 3 && firstPara.includes(kw),
+            points: 10
+          },
+          {
+            label: 'Memiliki struktur Subheading (## H2) untuk Table of Contents',
+            pass: hasH2,
+            points: 10
+          },
+          {
+            label: 'Alt Text gambar terisi & memiliki Internal Link ke layanan/kontak',
+            pass: coverAlt.length >= 10 && hasInternalLink,
+            points: 10
+          }
+        ];
+
+        const score = checks.reduce((sum, c) => sum + (c.pass ? c.points : 0), 0);
+        return { score, checks };
+      }
+
+      function renderBlogListTab() {
+        const list = document.getElementById('admin-blog-list')!;
+        list.innerHTML = '';
+
+        state.blog.articles.forEach((art: any, idx: number) => {
+          const { score } = computeArticleSeoScore(art.id_lang);
+          const row = document.createElement('div');
+          row.className = 'bg-[#181818] p-5 rounded-3xl border border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:border-white/25 transition-all';
+          row.innerHTML = `
+            <div class="flex items-start sm:items-center gap-4 min-w-0">
+              <img src="${art.coverImage}" alt="${art.id_lang.coverAlt || art.id_lang.title}" class="w-20 h-16 rounded-2xl object-cover bg-black shrink-0" />
+              <div class="space-y-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                    art.status === 'published' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white/10 text-white/60'
+                  }">${art.status}</span>
+                  <span class="text-[11px] font-bold text-brand-orange">${art.category}</span>
+                  <span class="text-[11px] text-white/40">• ${art.publishedAt}</span>
+                  ${art.featured ? `<span class="text-[10px] font-black bg-brand-orange text-white px-2 py-0.5 rounded-full">★ Featured</span>` : ''}
+                </div>
+                <h3 class="text-base font-black text-white truncate">${art.id_lang.title}</h3>
+                <div class="text-[11px] text-white/50 truncate">
+                  🇮🇩 <code>/blog/${art.id_lang.slug}</code> &nbsp;|&nbsp; 🇬🇧 <code>/en/blog/${art.en_lang.slug}</code>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 self-end md:self-center shrink-0">
+              <div class="px-3 py-1.5 rounded-xl bg-black/60 border border-white/10 text-center">
+                <span class="text-[10px] text-white/45 block font-bold">SEO Score</span>
+                <span class="text-xs font-black ${score >= 80 ? 'text-emerald-400' : score >= 55 ? 'text-amber-400' : 'text-red-400'}">${score} / 100</span>
+              </div>
+              <a href="/blog/${art.id_lang.slug}" target="_blank" class="px-3.5 py-2 rounded-full bg-white/5 hover:bg-white/15 text-xs font-bold text-white/80">
+                Lihat ↗
+              </a>
+              <button type="button" data-edit-blog="${idx}" class="px-4 py-2 rounded-full bg-brand-orange hover:bg-brand-orange-light text-xs font-extrabold text-white cursor-pointer">
+                Edit Artikel
+              </button>
+              <button type="button" data-del-blog="${idx}" class="px-3 py-2 rounded-full bg-red-500/10 hover:bg-red-500/25 text-xs font-bold text-red-400 cursor-pointer">
+                Hapus
+              </button>
+            </div>
+          `;
+          list.appendChild(row);
+        });
+
+        list.querySelectorAll('[data-edit-blog]').forEach((btn) => {
+          btn.addEventListener('click', () => openBlogEditor(Number(btn.getAttribute('data-edit-blog'))));
+        });
+
+        list.querySelectorAll('[data-del-blog]').forEach((btn) => {
+          btn.addEventListener('click', async () => {
+            const idx = Number(btn.getAttribute('data-del-blog'));
+            const art = state.blog.articles[idx];
+            if (!confirm(`Hapus artikel "${art.id_lang.title}"?`)) return;
+            state.blog.articles.splice(idx, 1);
+            updateNavCounters();
+            renderBlogListTab();
+            try {
+              const msg = await saveResource('blog', state.blog);
+              showToast(msg);
+            } catch (err: any) {
+              showToast(err.message, true);
+            }
+          });
+        });
+      }
+
+      function syncBlogEditorFromWorking() {
+        if (!workingArticle) return;
+        const langKey = state.blogLang === 'id' ? 'id_lang' : 'en_lang';
+        const post = workingArticle[langKey];
+
+        document.getElementById('blog-active-lang-badge')!.textContent =
+          state.blogLang === 'id' ? '🇮🇩 Bahasa Indonesia' : '🇬🇧 English Version';
+        document.getElementById('blog-slug-prefix')!.textContent =
+          state.blogLang === 'id' ? '/blog/' : '/en/blog/';
+
+        (document.getElementById('blog-category') as HTMLSelectElement).value = workingArticle.category || 'Content & Media Management';
+        (document.getElementById('blog-published-at') as HTMLInputElement).value = workingArticle.publishedAt || '2026-11-03';
+        (document.getElementById('blog-status') as HTMLSelectElement).value = workingArticle.status || 'published';
+        (document.getElementById('blog-featured') as HTMLInputElement).checked = Boolean(workingArticle.featured);
+        (document.getElementById('blog-cover-image') as HTMLInputElement).value = workingArticle.coverImage || '';
+
+        (document.getElementById('blog-focus-keyword') as HTMLInputElement).value = post.focusKeyword || '';
+        (document.getElementById('blog-slug') as HTMLInputElement).value = post.slug || '';
+        (document.getElementById('blog-title') as HTMLInputElement).value = post.title || '';
+        (document.getElementById('blog-seo-title') as HTMLInputElement).value = post.seoTitle || '';
+        (document.getElementById('blog-cover-alt') as HTMLInputElement).value = post.coverAlt || '';
+        (document.getElementById('blog-seo-desc') as HTMLTextAreaElement).value = post.seoDescription || '';
+        (document.getElementById('blog-excerpt') as HTMLTextAreaElement).value = post.excerpt || '';
+        (document.getElementById('blog-tags') as HTMLInputElement).value = (post.tags || []).join(', ');
+        (document.getElementById('blog-content') as HTMLTextAreaElement).value = post.content || '';
+
+        updateLiveSeoPanel();
+      }
+
+      function readBlogEditorIntoWorking() {
+        if (!workingArticle) return;
+        const langKey = state.blogLang === 'id' ? 'id_lang' : 'en_lang';
+        const post = workingArticle[langKey];
+
+        workingArticle.category = (document.getElementById('blog-category') as HTMLSelectElement).value;
+        workingArticle.publishedAt = (document.getElementById('blog-published-at') as HTMLInputElement).value;
+        workingArticle.updatedAt = new Date().toISOString().slice(0, 10);
+        workingArticle.status = (document.getElementById('blog-status') as HTMLSelectElement).value;
+        workingArticle.featured = (document.getElementById('blog-featured') as HTMLInputElement).checked;
+        workingArticle.coverImage = (document.getElementById('blog-cover-image') as HTMLInputElement).value.trim();
+
+        post.focusKeyword = (document.getElementById('blog-focus-keyword') as HTMLInputElement).value.trim();
+        post.slug = (document.getElementById('blog-slug') as HTMLInputElement).value
+          .toLowerCase()
+          .replace(/[^a-z0-9-]+/g, '-')
+          .replace(/^-|-$/g, '');
+        post.title = (document.getElementById('blog-title') as HTMLInputElement).value.trim();
+        post.seoTitle = (document.getElementById('blog-seo-title') as HTMLInputElement).value.trim();
+        post.coverAlt = (document.getElementById('blog-cover-alt') as HTMLInputElement).value.trim();
+        post.seoDescription = (document.getElementById('blog-seo-desc') as HTMLTextAreaElement).value.trim();
+        post.excerpt = (document.getElementById('blog-excerpt') as HTMLTextAreaElement).value.trim();
+        post.tags = (document.getElementById('blog-tags') as HTMLInputElement).value
+          .split(',')
+          .map((t) => t.trim())
+          .filter(Boolean);
+        post.content = (document.getElementById('blog-content') as HTMLTextAreaElement).value;
+      }
+
+      function updateLiveSeoPanel() {
+        if (!workingArticle) return;
+        readBlogEditorIntoWorking();
+        const langKey = state.blogLang === 'id' ? 'id_lang' : 'en_lang';
+        const post = workingArticle[langKey];
+
+        const seoTitle = post.seoTitle || post.title || 'Judul Artikel — The Digital Grounds';
+        const seoDesc = post.seoDescription || post.excerpt || 'Tulis meta description untuk menampilkan ringkasan di Google...';
+        const slugPrefix = state.blogLang === 'id' ? 'blog' : 'en › blog';
+
+        document.getElementById('seo-title-counter')!.textContent = `${seoTitle.length} / 60`;
+        document.getElementById('seo-desc-counter')!.textContent = `${seoDesc.length} / 160`;
+
+        document.getElementById('serp-preview-url')!.textContent = `https://www.thedigitalgrounds.com › ${slugPrefix} › ${post.slug || '...'}`;
+        document.getElementById('serp-preview-title')!.textContent = seoTitle;
+        document.getElementById('serp-preview-desc')!.textContent = seoDesc;
+
+        const { score, checks } = computeArticleSeoScore(post);
+        const scoreEl = document.getElementById('seo-score-number')!;
+        const circleEl = document.getElementById('seo-score-circle')!;
+        scoreEl.textContent = score.toString();
+
+        if (score >= 80) {
+          circleEl.className = 'w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/40 flex flex-col items-center justify-center text-emerald-400';
+        } else if (score >= 55) {
+          circleEl.className = 'w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex flex-col items-center justify-center text-amber-400';
+        } else {
+          circleEl.className = 'w-14 h-14 rounded-2xl bg-red-500/20 border border-red-500/40 flex flex-col items-center justify-center text-red-400';
+        }
+
+        const listEl = document.getElementById('seo-checklist-items')!;
+        listEl.innerHTML = checks
+          .map(
+            (c) => `
+          <li class="flex items-start gap-2.5">
+            <span class="mt-0.5 text-xs ${c.pass ? 'text-emerald-400' : 'text-white/30'}">${c.pass ? '✔' : '○'}</span>
+            <span class="${c.pass ? 'text-white/90 font-semibold' : 'text-white/50'} leading-snug">${c.label}</span>
+          </li>
+        `
+          )
+          .join('');
+      }
+
+      function openBlogEditor(index: number) {
+        state.editingBlogIndex = index;
+        state.blogLang = 'id';
+        const today = new Date().toISOString().slice(0, 10);
+
+        workingArticle =
+          index === -1
+            ? {
+                id: `post-${Date.now()}`,
+                category: 'Digital Strategy',
+                coverImage: '/images/portfolio/fame.jpg',
+                author: 'The Digital Grounds Team',
+                publishedAt: today,
+                updatedAt: today,
+                featured: false,
+                status: 'published',
+                id_lang: {
+                  slug: '',
+                  title: '',
+                  seoTitle: '',
+                  seoDescription: '',
+                  focusKeyword: '',
+                  coverAlt: '',
+                  excerpt: '',
+                  tags: ['Digital Marketing', 'Brand Ecosystem'],
+                  content: 'Paragraf pembuka yang memuat kata kunci utama secara natural.\n\n## 1. Subjudul Pertama (H2)\n\nJelaskan poin utama dan sisipkan tautan ke [Portofolio & Layanan TDG](/works-and-services) atau [Hubungi Kami](/contact).'
+                },
+                en_lang: {
+                  slug: '',
+                  title: '',
+                  seoTitle: '',
+                  seoDescription: '',
+                  focusKeyword: '',
+                  coverAlt: '',
+                  excerpt: '',
+                  tags: ['Digital Marketing', 'Brand Ecosystem'],
+                  content: 'Opening paragraph introducing the primary focus keyword naturally.\n\n## 1. First Key Section (H2)\n\nElaborate on your strategy and link to [TDG Portfolio & Services](/en/works-and-services) or [Contact Us](/en/contact).'
+                }
+              }
+            : structuredClone(state.blog.articles[index]);
+
+        document.querySelectorAll('.blog-lang-btn').forEach((b) => {
+          const isId = b.getAttribute('data-blog-lang') === 'id';
+          b.classList.toggle('bg-brand-orange', isId);
+          b.classList.toggle('text-white', isId);
+          b.classList.toggle('text-white/60', !isId);
+        });
+
+        document.getElementById('blog-list-view')!.classList.add('hidden');
+        document.getElementById('blog-editor-view')!.classList.remove('hidden');
+        syncBlogEditorFromWorking();
+      }
+
+      document.getElementById('btn-new-blog')?.addEventListener('click', () => openBlogEditor(-1));
+      document.getElementById('btn-back-blog-list')?.addEventListener('click', () => {
+        document.getElementById('blog-editor-view')!.classList.add('hidden');
+        document.getElementById('blog-list-view')!.classList.remove('hidden');
+      });
+
+      document.querySelectorAll('.blog-lang-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          readBlogEditorIntoWorking();
+          state.blogLang = (btn.getAttribute('data-blog-lang') as 'id' | 'en') || 'id';
+          document.querySelectorAll('.blog-lang-btn').forEach((b) => {
+            const active = b.getAttribute('data-blog-lang') === state.blogLang;
+            b.classList.toggle('bg-brand-orange', active);
+            b.classList.toggle('text-white', active);
+            b.classList.toggle('text-white/60', !active);
+          });
+          syncBlogEditorFromWorking();
+        });
+      });
+
+      [
+        'blog-focus-keyword',
+        'blog-slug',
+        'blog-title',
+        'blog-seo-title',
+        'blog-cover-alt',
+        'blog-seo-desc',
+        'blog-excerpt',
+        'blog-tags',
+        'blog-content'
+      ].forEach((id) => {
+        document.getElementById(id)?.addEventListener('input', updateLiveSeoPanel);
+      });
+
+      document.getElementById('btn-auto-slug')?.addEventListener('click', () => {
+        const titleVal = (document.getElementById('blog-title') as HTMLInputElement).value.trim();
+        if (!titleVal) return;
+        const generatedSlug = titleVal
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .trim()
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-');
+        (document.getElementById('blog-slug') as HTMLInputElement).value = generatedSlug;
+        const seoTitleInput = document.getElementById('blog-seo-title') as HTMLInputElement;
+        if (!seoTitleInput.value) {
+          seoTitleInput.value = `${titleVal.slice(0, 50)} — TDG`;
+        }
+        updateLiveSeoPanel();
+      });
+
+      // Markdown Toolbar Helpers
+      document.querySelectorAll('.md-tool-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const action = btn.getAttribute('data-md');
+          const textarea = document.getElementById('blog-content') as HTMLTextAreaElement;
+          const start = textarea.selectionStart;
+          const end = textarea.selectionEnd;
+          const selected = textarea.value.slice(start, end) || 'Teks';
+          let insert = '';
+
+          if (action === 'h2') insert = `\n## ${selected}\n`;
+          else if (action === 'h3') insert = `\n### ${selected}\n`;
+          else if (action === 'bold') insert = `**${selected}**`;
+          else if (action === 'italic') insert = `*${selected}*`;
+          else if (action === 'quote') insert = `\n> ${selected}\n`;
+          else if (action === 'ul') insert = `\n- ${selected}\n`;
+          else if (action === 'link-works') {
+            insert =
+              state.blogLang === 'id'
+                ? `[Portofolio & Layanan TDG](/works-and-services)`
+                : `[TDG Portfolio & Services](/en/works-and-services)`;
+          } else if (action === 'link-contact') {
+            insert =
+              state.blogLang === 'id'
+                ? `[Hubungi Tim The Digital Grounds](/contact)`
+                : `[Contact The Digital Grounds](/en/contact)`;
+          }
+
+          textarea.setRangeText(insert, start, end, 'end');
+          textarea.focus();
+          updateLiveSeoPanel();
+        });
+      });
+
+      document.getElementById('blog-cover-upload')?.addEventListener('change', async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+        try {
+          showToast('Mengunggah gambar cover artikel...');
+          const url = await uploadMediaFile(file, 'blog');
+          (document.getElementById('blog-cover-image') as HTMLInputElement).value = url;
+          showToast('Cover artikel berhasil diunggah!');
+        } catch (err: any) {
+          showToast(err.message, true);
+        }
+      });
+
+      document.getElementById('blog-inline-image-upload')?.addEventListener('change', async (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (!file) return;
+        const altPrompt = prompt('Masukkan Alt Text deskriptif untuk gambar ini (Wajib untuk SEO):', file.name.replace(/\.[^.]+$/, ''));
+        if (altPrompt === null) return;
+        try {
+          showToast('Mengunggah gambar ke dalam artikel...');
+          const url = await uploadMediaFile(file, 'blog');
+          const textarea = document.getElementById('blog-content') as HTMLTextAreaElement;
+          const mdImg = `\n![${altPrompt || 'Ilustrasi artikel The Digital Grounds'}](${url})\n`;
+          textarea.setRangeText(mdImg, textarea.selectionStart, textarea.selectionEnd, 'end');
+          updateLiveSeoPanel();
+          showToast('Gambar berhasil disisipkan ke artikel!');
+        } catch (err: any) {
+          showToast(err.message, true);
+        }
+      });
+
+      document.getElementById('btn-save-blog-article')?.addEventListener('click', async () => {
+        readBlogEditorIntoWorking();
+        if (!workingArticle.id_lang.title || !workingArticle.id_lang.slug) {
+          showToast('Judul dan URL Slug Bahasa Indonesia wajib diisi!', true);
+          return;
+        }
+        // Fallback English fields if user only filled Indonesian first
+        if (!workingArticle.en_lang.title) {
+          workingArticle.en_lang.title = workingArticle.id_lang.title;
+        }
+        if (!workingArticle.en_lang.slug) {
+          workingArticle.en_lang.slug = `${workingArticle.id_lang.slug}-en`;
+        }
+        if (!workingArticle.en_lang.seoTitle) {
+          workingArticle.en_lang.seoTitle = workingArticle.id_lang.seoTitle || workingArticle.en_lang.title;
+        }
+        if (!workingArticle.en_lang.seoDescription) {
+          workingArticle.en_lang.seoDescription = workingArticle.id_lang.seoDescription || workingArticle.id_lang.excerpt;
+        }
+        if (!workingArticle.en_lang.excerpt) {
+          workingArticle.en_lang.excerpt = workingArticle.id_lang.excerpt;
+        }
+        if (!workingArticle.en_lang.coverAlt) {
+          workingArticle.en_lang.coverAlt = workingArticle.id_lang.coverAlt || workingArticle.en_lang.title;
+        }
+        if (!workingArticle.en_lang.content) {
+          workingArticle.en_lang.content = workingArticle.id_lang.content;
+        }
+
+        if (state.editingBlogIndex === -1) {
+          state.blog.articles.unshift(workingArticle);
+        } else {
+          state.blog.articles[state.editingBlogIndex] = workingArticle;
+        }
+
+        updateNavCounters();
+        renderBlogListTab();
+        document.getElementById('blog-editor-view')!.classList.add('hidden');
+        document.getElementById('blog-list-view')!.classList.remove('hidden');
+
+        try {
+          const msg = await saveResource('blog', state.blog);
+          showToast(msg);
+        } catch (err: any) {
+          showToast(err.message, true);
+        }
+      });
+
+      // =========================================================
+      // GITHUB CONFIG & ONE-CLICK GIT PUSH
+      // =========================================================
+      const ghModal = document.getElementById('github-config-modal')!;
+      document.getElementById('btn-git-settings')?.addEventListener('click', () => {
+        const cfg = getGhConfig();
+        (document.getElementById('gh-repo-input') as HTMLInputElement).value = cfg.repo;
+        (document.getElementById('gh-branch-input') as HTMLInputElement).value = cfg.branch;
+        (document.getElementById('gh-token-input') as HTMLInputElement).value = cfg.token;
+        ghModal.classList.remove('hidden');
+        ghModal.classList.add('flex');
+      });
+
+      document.getElementById('btn-close-gh-modal')?.addEventListener('click', () => {
+        ghModal.classList.add('hidden');
+        ghModal.classList.remove('flex');
+      });
+
+      document.getElementById('btn-save-gh-config')?.addEventListener('click', () => {
+        const cfg = {
+          repo: (document.getElementById('gh-repo-input') as HTMLInputElement).value.trim(),
+          branch: (document.getElementById('gh-branch-input') as HTMLInputElement).value.trim(),
+          token: (document.getElementById('gh-token-input') as HTMLInputElement).value.trim()
+        };
+        localStorage.setItem(GH_CONFIG_KEY, JSON.stringify(cfg));
+        ghModal.classList.add('hidden');
+        ghModal.classList.remove('flex');
+        showToast('Konfigurasi GitHub berhasil disimpan!');
+      });
+
+      document.getElementById('btn-git-push')?.addEventListener('click', async () => {
+        try {
+          showToast('Menyinkronkan & melakukan push ke GitHub (tdgcreative)...');
+          if (state.mode === 'local') {
+            const res = await fetch('/api/admin/git-sync', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ message: 'chore(cms): update website content via TDG Admin' })
+            });
+            const json = await res.json();
+            if (!res.ok || !json.ok) throw new Error(json.error || 'Gagal push ke GitHub');
+            showToast(json.message);
+          } else {
+            await saveResource('home', state.home);
+            await saveResource('portfolios', state.portfolios);
+            await saveResource('blog', state.blog);
+            showToast('Seluruh data berhasil di-commit ke GitHub tdgcreative!');
+          }
+        } catch (err: any) {
+          showToast(err.message || 'Gagal melakukan Git Push', true);
+        }
+      });
+    </script>
+  </body>
+</html>

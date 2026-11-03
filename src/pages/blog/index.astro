@@ -1,0 +1,229 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SimpleCTA from '../../components/SimpleCTA.astro';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
+import blogData from '../../data/blog.json';
+import { estimateReadingTime } from '../../utils/blog-renderer';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+
+const publishedArticles = blogData.articles
+  .filter((a) => a.status === 'published')
+  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  .map((a) => ({
+    id: a.id,
+    category: a.category,
+    coverImage: a.coverImage,
+    author: a.author,
+    publishedAt: a.publishedAt,
+    updatedAt: a.updatedAt,
+    featured: a.featured,
+    ...a.id_lang,
+    readingTime: estimateReadingTime(a.id_lang.content)
+  }));
+
+const featuredArticle = publishedArticles.find((a) => a.featured) || publishedArticles[0];
+const categories = Array.from(new Set(publishedArticles.map((a) => a.category)));
+
+const formatDate = (dateStr: string) => {
+  try {
+    return new Date(dateStr).toLocaleDateString('id-ID', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  } catch {
+    return dateStr;
+  }
+};
+---
+
+<BaseLayout
+  title={blogData.seo.id.title}
+  description={blogData.seo.id.description}
+  canonicalPath="/blog"
+  alternateIdPath="/blog"
+  alternateEnPath="/en/blog"
+>
+  <!-- Hero Section -->
+  <section class="py-12 sm:py-16 md:py-24 border-b border-brand-dark/10 relative bg-white overflow-hidden">
+    <div class="absolute inset-0 bg-[linear-gradient(to_right,rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none" />
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative z-10 flex flex-col gap-3 sm:gap-5">
+      <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">{t('blog.tag')}</span>
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight text-brand-dark leading-tight max-w-4xl">
+        {t('blog.title')}
+      </h1>
+      <p class="text-sm sm:text-base md:text-lg text-brand-dark/70 max-w-2xl leading-relaxed">
+        {t('blog.subtitle')}
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12 sm:py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <!-- Featured Article Highlight -->
+      {featuredArticle && (
+        <div class="mb-12 sm:mb-16">
+          <a
+            href={`/blog/${featuredArticle.slug}`}
+            class="group grid grid-cols-1 lg:grid-cols-12 bg-brand-dark text-white rounded-3xl overflow-hidden border border-brand-dark/10 shadow-xl hover:shadow-2xl transition-all duration-500"
+          >
+            <div class="lg:col-span-7 relative min-h-[260px] sm:min-h-[360px] overflow-hidden bg-black">
+              <img
+                src={featuredArticle.coverImage}
+                alt={featuredArticle.coverAlt}
+                width="960"
+                height="540"
+                loading="eager"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-brand-dark/90" />
+              <span class="absolute top-4 left-4 bg-brand-orange text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-widest px-3.5 py-1.5 rounded-full shadow-md">
+                Featured Insight
+              </span>
+            </div>
+
+            <div class="lg:col-span-5 p-6 sm:p-8 md:p-10 flex flex-col justify-between gap-6">
+              <div class="flex flex-col gap-3 sm:gap-4">
+                <div class="flex flex-wrap items-center gap-2 text-xs font-bold text-brand-orange uppercase tracking-wider">
+                  <span>{featuredArticle.category}</span>
+                  <span class="text-white/30">•</span>
+                  <span class="text-white/60">{featuredArticle.readingTime} {t('blog.readingTime')}</span>
+                </div>
+                <h2 class="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight leading-snug group-hover:text-brand-orange transition-colors">
+                  {featuredArticle.title}
+                </h2>
+                <p class="text-xs sm:text-sm text-white/70 leading-relaxed line-clamp-3">
+                  {featuredArticle.excerpt}
+                </p>
+              </div>
+
+              <div class="pt-4 border-t border-white/10 flex items-center justify-between text-xs">
+                <span class="text-white/50 font-semibold">{formatDate(featuredArticle.publishedAt)}</span>
+                <span class="inline-flex items-center gap-1.5 font-extrabold text-brand-orange group-hover:translate-x-1 transition-transform">
+                  <span>{t('blog.readMore')}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </a>
+        </div>
+      )}
+
+      <!-- Category Filter Tabs -->
+      <div class="flex flex-wrap gap-2 sm:gap-3 mb-8 sm:mb-10" role="group" aria-label="Blog category filter">
+        <button
+          class="blog-filter-btn px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold border border-brand-dark/10 bg-brand-dark text-white transition-all cursor-pointer"
+          data-category="all"
+        >
+          {t('blog.filterAll')}
+        </button>
+        {categories.map((cat) => (
+          <button
+            class="blog-filter-btn px-4 sm:px-5 py-2.5 rounded-full text-xs font-bold border border-brand-dark/10 bg-white text-brand-dark hover:border-brand-orange hover:text-brand-orange transition-all cursor-pointer"
+            data-category={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <!-- Articles Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8" id="blog-grid">
+        {publishedArticles.map((article) => (
+          <article
+            class="blog-card-item bg-white rounded-3xl overflow-hidden border border-brand-dark/10 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1"
+            data-category={article.category}
+          >
+            <div>
+              <a href={`/blog/${article.slug}`} class="block relative aspect-[16/10] overflow-hidden bg-brand-dark">
+                <img
+                  src={article.coverImage}
+                  alt={article.coverAlt}
+                  width="640"
+                  height="400"
+                  loading="lazy"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <span class="absolute top-3 left-3 bg-brand-dark/85 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+                  {article.category}
+                </span>
+              </a>
+
+              <div class="p-6 flex flex-col gap-3">
+                <div class="flex items-center gap-2 text-[11px] font-semibold text-brand-dark/50">
+                  <time datetime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
+                  <span>•</span>
+                  <span>{article.readingTime} {t('blog.readingTime')}</span>
+                </div>
+
+                <h2 class="text-lg sm:text-xl font-black uppercase tracking-tight text-brand-dark group-hover:text-brand-orange transition-colors leading-snug">
+                  <a href={`/blog/${article.slug}`}>{article.title}</a>
+                </h2>
+
+                <p class="text-xs sm:text-sm text-brand-dark/70 leading-relaxed line-clamp-3">
+                  {article.excerpt}
+                </p>
+              </div>
+            </div>
+
+            <div class="px-6 pb-6 pt-3 border-t border-brand-dark/5 flex items-center justify-between">
+              <div class="flex flex-wrap gap-1.5">
+                {article.tags.slice(0, 2).map((tag) => (
+                  <span class="text-[10px] font-bold bg-brand-dark/5 text-brand-dark/70 px-2.5 py-1 rounded-full">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <a
+                href={`/blog/${article.slug}`}
+                class="inline-flex items-center gap-1 text-xs font-extrabold text-brand-orange group-hover:translate-x-1 transition-transform shrink-0"
+              >
+                <span>{t('blog.readMore')}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <SimpleCTA />
+</BaseLayout>
+
+<script>
+  const filterBtns = document.querySelectorAll('.blog-filter-btn');
+  const cards = document.querySelectorAll('.blog-card-item');
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-category') || 'all';
+      filterBtns.forEach((b) => {
+        if (b.getAttribute('data-category') === cat) {
+          b.classList.remove('bg-white', 'text-brand-dark');
+          b.classList.add('bg-brand-dark', 'text-white');
+        } else {
+          b.classList.remove('bg-brand-dark', 'text-white');
+          b.classList.add('bg-white', 'text-brand-dark');
+        }
+      });
+
+      cards.forEach((c) => {
+        const el = c as HTMLElement;
+        if (cat === 'all' || c.getAttribute('data-category') === cat) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>
+

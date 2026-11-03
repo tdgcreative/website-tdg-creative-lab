@@ -4,131 +4,44 @@ import PortfolioCard from '../components/PortfolioCard.astro';
 import SimpleCTA from '../components/SimpleCTA.astro';
 import { Image } from 'astro:assets';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
-
-// Import Portfolio Images
-import fameImg from '../assets/portfolio/fame.jpg';
-import aioImg from '../assets/portfolio/aio.png';
-import tispunImg from '../assets/portfolio/tispun.jpg';
-import naraImg from '../assets/portfolio/nara.jpg';
-
-// Import Client Logos
-import asmaralokaLogo from '../assets/logos/ASMARALOKA LOGO.png';
-import drsEliorLogo from '../assets/logos/DRS ELIOR LOGO.png';
-import invaLogo from '../assets/logos/INVA LOGO.png';
-import mirevsLogo from '../assets/logos/MIREVS LOGO.png';
-import naraLogo from '../assets/logos/NARA LOGO.png';
-import pbpiLogo from '../assets/logos/PBPI Jatim.png';
-import panenLogo from '../assets/logos/PT PANEN.png';
-import razoLogo from '../assets/logos/RAZO LOGO WHITE.png';
-import sodoneLogo from '../assets/logos/SO DONE LOGO.png';
-import tispunLogo from '../assets/logos/TISPUN LOGO.png';
+import homeData from '../data/home.json';
+import portfoliosData from '../data/portfolios.json';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
 
-const serviceScopes = [
-  {
-    number: "01",
-    name: "Content & Media Management",
-    services: [
-      "Social Media Management",
-      "Printed Design"
-    ],
-    filter: "content-media"
-  },
-  {
-    number: "02",
-    name: "Brand & Digital Foundation",
-    services: [
-      "Website Development",
-      "Brand Development"
-    ],
-    filter: "brand-digital"
-  },
-  {
-    number: "03",
-    name: "Visual Production & Documentation",
-    services: [
-      "Lookbook Photoshoot",
-      "Profile Photoshoot",
-      "Event Documentation"
-    ],
-    filter: "visual-doc"
-  },
-  {
-    number: "04",
-    name: "Tactical Executions*",
-    services: [
-      "Ads Management",
-      "KOL Management",
-      "Offline Activation",
-      "Marketplace Optimization"
-    ],
-    isExclusive: true
-  }
-];
+const logoAssets = import.meta.glob<{ default: ImageMetadata }>('../assets/logos/*.{jpg,jpeg,png,webp}', { eager: true });
 
-const title = "The Digital Grounds — Digital Marketing & Creative Agency Surabaya";
-const description = "Ekosistem digital & brand lengkap: social media management, brand development, hingga produksi visual. Dipercaya 50+ brand di Surabaya & Indonesia.";
-
-const clientLogos = [
-  { src: asmaralokaLogo, alt: "Asmaraloka", heightClass: "h-5 sm:h-6" },
-  { src: drsEliorLogo, alt: "Drs Elior", heightClass: "h-7 sm:h-8" },
-  { src: invaLogo, alt: "Inva Dental", heightClass: "h-8 sm:h-9" },
-  { src: mirevsLogo, alt: "Mirevs Cafe", heightClass: "h-5 sm:h-6" },
-  { src: naraLogo, alt: "Nara Dental", heightClass: "h-8 sm:h-9" },
-  { src: pbpiLogo, alt: "PBPI Jatim", heightClass: "h-7 sm:h-8" },
-  { src: panenLogo, alt: "PT Panen", heightClass: "h-6 sm:h-7" },
-  { src: razoLogo, alt: "Razo Tooth", heightClass: "h-6 sm:h-7" },
-  { src: sodoneLogo, alt: "So Done", heightClass: "h-8 sm:h-9" },
-  { src: tispunLogo, alt: "Tispun Bakeshop", heightClass: "h-6 sm:h-7" },
-];
+const clientLogos = homeData.marquee.logos.map((logo) => {
+  const filename = logo.src.split('/').pop();
+  const assetKey = filename ? `../assets/logos/${filename}` : '';
+  const resolvedAsset = assetKey && logoAssets[assetKey]?.default ? logoAssets[assetKey].default : null;
+  return {
+    ...logo,
+    resolvedAsset
+  };
+});
 
 const marqueeList = [...clientLogos, ...clientLogos];
 
-const portfolios = [
-  {
-    title: "FAME",
-    category: "Fashion",
-    tags: ["Lookbook Photoshoot", "Social Media Management"],
-    imageSrc: fameImg,
-    svgIcon: "fashion",
-    loading: "eager" as const
-  },
-  {
-    title: "AIO Aesthetic Clinic",
-    category: "Healthcare",
-    tags: ["Social Media", "KOL Management", "Event Documentation"],
-    imageSrc: aioImg,
-    svgIcon: "healthcare",
-    loading: "eager" as const
-  },
-  {
-    title: "Tispun Bakeshop",
-    category: "F&B",
-    tags: ["Product Photoshoot", "Social Media Management"],
-    imageSrc: tispunImg,
-    svgIcon: "fnb",
-    loading: "lazy" as const
-  },
-  {
-    title: "Nara Dental",
-    category: "Healthcare",
-    tags: ["Social Media", "Profile Photoshoot", "Event Documentation"],
-    imageSrc: naraImg,
-    svgIcon: "dental",
-    loading: "lazy" as const
-  }
-];
+const featuredPortfolios = [...portfoliosData.items]
+  .filter((item) => item.featuredOnHome)
+  .sort((a, b) => (a.homeOrder ?? 99) - (b.homeOrder ?? 99))
+  .map((item, idx) => ({
+    title: item.title,
+    category: item.homeCategory || item.category,
+    tags: item.homeTags?.length ? item.homeTags : item.tags,
+    imageSrc: item.imageSrc,
+    svgIcon: item.svgIcon,
+    loading: (idx < 2 ? 'eager' : 'lazy') as 'eager' | 'lazy'
+  }));
 
-const industries = [
-  "Healthcare",
-  "Fashion",
-  "F&B",
-  "Sport",
-  "Architecture & Lifestyle"
-];
+const serviceScopes = homeData.serviceScopesSection.scopes;
+const industries = homeData.industriesSection.industries;
+
+const title = homeData.seo.id.title;
+const description = homeData.seo.id.description;
 ---
 
 <BaseLayout title={title} description={description} canonicalPath="/">
@@ -144,15 +57,15 @@ const industries = [
       <!-- Two-tier Hierarchical Hero Headline: Massive "TDG" + Refined Wide "CREATIVE LAB" -->
       <h1 class="flex flex-col items-center justify-center uppercase text-brand-dark select-none text-center max-w-5xl">
         <span class="text-6xl sm:text-8xl md:text-9xl lg:text-[10.5rem] xl:text-[12.5rem] font-black leading-none tracking-tighter">
-          {t('hero.headline.main')}
+          {homeData.hero.headlineMain}
         </span>
         <span class="text-xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-[0.25em] sm:tracking-[0.3em] md:tracking-[0.35em] text-brand-dark/90 mt-1 sm:mt-2 md:mt-3 pl-[0.25em] sm:pl-[0.3em] md:pl-[0.35em]">
-          {t('hero.headline.sub')}
+          {homeData.hero.headlineSub}
         </span>
       </h1>
       
       <p class="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-brand-dark/75 max-w-3xl leading-relaxed px-2">
-        {t('hero.subheadline')}
+        {homeData.hero.subheadline.id}
       </p>
 
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-2 sm:mt-4 w-full sm:w-auto px-2 sm:px-0">
@@ -160,13 +73,13 @@ const industries = [
           href={translatePath('/contact')} 
           class="bg-brand-orange hover:bg-brand-orange-light text-white font-bold px-7 sm:px-8 py-3.5 sm:py-4 rounded-full transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 text-center text-sm sm:text-base w-full sm:w-auto"
         >
-          {t('nav.contact')}
+          {homeData.hero.primaryCta.id}
         </a>
         <a 
           href="#works" 
           class="border border-brand-dark/20 hover:border-brand-dark bg-transparent text-brand-dark font-bold px-7 sm:px-8 py-3.5 sm:py-4 rounded-full transition-all duration-300 text-center text-sm sm:text-base w-full sm:w-auto"
         >
-          Explore Works
+          {homeData.hero.secondaryCta.id}
         </a>
       </div>
     </div>
@@ -175,7 +88,7 @@ const industries = [
   <!-- Client Logo Marquee Section -->
   <section class="py-10 sm:py-14 bg-brand-dark/5 border-y border-brand-dark/10 overflow-hidden relative w-full">
     <div class="max-w-7xl mx-auto px-6 mb-6 sm:mb-8 text-center">
-      <span class="text-[10px] sm:text-xs font-bold text-brand-dark/50 uppercase tracking-widest block">Trusted by Premium Brands</span>
+      <span class="text-[10px] sm:text-xs font-bold text-brand-dark/50 uppercase tracking-widest block">{homeData.marquee.badgeText.id}</span>
     </div>
     
     <!-- Seamless Infinite Marquee with Soft Edge Vignette -->
@@ -184,11 +97,20 @@ const industries = [
       <div class="flex shrink-0 items-center gap-12 sm:gap-16 md:gap-20 animate-marquee pr-12 sm:pr-16 md:pr-20">
         {marqueeList.map((logo) => (
           <div class="flex items-center justify-center shrink-0">
-            <Image 
-              src={logo.src} 
-              alt={logo.alt} 
-              class={`w-auto object-contain opacity-65 hover:opacity-100 transition-opacity duration-300 ${logo.heightClass}`} 
-            />
+            {logo.resolvedAsset ? (
+              <Image 
+                src={logo.resolvedAsset} 
+                alt={logo.alt} 
+                class={`w-auto object-contain opacity-65 hover:opacity-100 transition-opacity duration-300 ${logo.heightClass}`} 
+              />
+            ) : (
+              <img 
+                src={logo.src} 
+                alt={logo.alt} 
+                loading="lazy"
+                class={`w-auto object-contain opacity-65 hover:opacity-100 transition-opacity duration-300 ${logo.heightClass}`} 
+              />
+            )}
           </div>
         ))}
       </div>
@@ -196,11 +118,20 @@ const industries = [
       <div class="flex shrink-0 items-center gap-12 sm:gap-16 md:gap-20 animate-marquee pr-12 sm:pr-16 md:pr-20" aria-hidden="true">
         {marqueeList.map((logo) => (
           <div class="flex items-center justify-center shrink-0">
-            <Image 
-              src={logo.src} 
-              alt={logo.alt} 
-              class={`w-auto object-contain opacity-65 hover:opacity-100 transition-opacity duration-300 ${logo.heightClass}`} 
-            />
+            {logo.resolvedAsset ? (
+              <Image 
+                src={logo.resolvedAsset} 
+                alt={logo.alt} 
+                class={`w-auto object-contain opacity-65 hover:opacity-100 transition-opacity duration-300 ${logo.heightClass}`} 
+              />
+            ) : (
+              <img 
+                src={logo.src} 
+                alt={logo.alt} 
+                loading="lazy"
+                class={`w-auto object-contain opacity-65 hover:opacity-100 transition-opacity duration-300 ${logo.heightClass}`} 
+              />
+            )}
           </div>
         ))}
       </div>
@@ -213,25 +144,23 @@ const industries = [
     
     <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
       <div class="lg:col-span-7 flex flex-col gap-4 sm:gap-6">
-        <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">Core Proposition</span>
+        <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">{homeData.pitch.tag.id}</span>
         <h2 class="text-2xl sm:text-3xl md:text-5xl font-black uppercase tracking-tight leading-tight">
-          {t('pitch.title')}
+          {homeData.pitch.title.id}
         </h2>
         <p class="text-sm sm:text-base md:text-lg text-white/70 leading-relaxed max-w-2xl">
-          {t('pitch.desc')}
+          {homeData.pitch.description.id}
         </p>
       </div>
 
       <!-- Stats Grid -->
       <div class="lg:col-span-5 grid grid-cols-2 gap-6 border-t pt-8 lg:border-t-0 lg:pt-0 lg:border-l border-white/10 pl-0 lg:pl-12">
-        <div class="flex flex-col gap-1 sm:gap-2">
-          <span class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-brand-orange">50+</span>
-          <span class="text-xs sm:text-sm font-semibold text-white/60 uppercase tracking-wider">Brands Trusted</span>
-        </div>
-        <div class="flex flex-col gap-1 sm:gap-2">
-          <span class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-brand-orange">3</span>
-          <span class="text-xs sm:text-sm font-semibold text-white/60 uppercase tracking-wider">Core Scopes</span>
-        </div>
+        {homeData.pitch.stats.map((stat) => (
+          <div class="flex flex-col gap-1 sm:gap-2">
+            <span class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight text-brand-orange">{stat.value}</span>
+            <span class="text-xs sm:text-sm font-semibold text-white/60 uppercase tracking-wider">{stat.label.id}</span>
+          </div>
+        ))}
         <div class="flex flex-col gap-2 col-span-2 pt-4 border-t border-white/5">
           <span class="text-[10px] sm:text-xs font-bold text-white/50 uppercase tracking-widest block mb-2">Specializations</span>
           <div class="flex flex-wrap gap-1.5 sm:gap-2">
@@ -249,16 +178,16 @@ const industries = [
     <div class="max-w-7xl mx-auto px-6">
       <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12 md:mb-16">
         <div class="flex flex-col gap-2 sm:gap-4">
-          <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">Showcase</span>
+          <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">{homeData.portfolioSection.tag.id}</span>
           <h2 class="text-3xl sm:text-4xl md:text-6xl font-black uppercase tracking-tight text-brand-dark">
-            {t('portfolio.title')}
+            {homeData.portfolioSection.title.id}
           </h2>
         </div>
         <a 
           href={translatePath('/works-and-services')} 
           class="inline-flex items-center gap-2.5 bg-brand-dark hover:bg-brand-orange text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 group w-fit self-start sm:self-auto shrink-0"
         >
-          <span>{t('portfolio.cta')}</span>
+          <span>{homeData.portfolioSection.ctaText.id}</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 transform transition-transform duration-300 group-hover:translate-x-1">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
           </svg>
@@ -267,7 +196,7 @@ const industries = [
 
       <!-- Portfolio Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-        {portfolios.map((portfolio) => (
+        {featuredPortfolios.map((portfolio) => (
           <PortfolioCard 
             title={portfolio.title}
             category={portfolio.category}
@@ -285,9 +214,9 @@ const industries = [
   <section class="py-16 sm:py-20 md:py-32 bg-white border-t border-brand-dark/5" id="services">
     <div class="max-w-7xl mx-auto px-6">
       <div class="flex flex-col gap-2 sm:gap-4 mb-10 sm:mb-16 text-center md:text-left">
-        <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">Capabilities</span>
+        <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">{homeData.serviceScopesSection.tag.id}</span>
         <h2 class="text-3xl sm:text-4xl md:text-6xl font-black uppercase tracking-tight text-brand-dark">
-          {t('home.scopes.title')}
+          {homeData.serviceScopesSection.title.id}
         </h2>
       </div>
 
@@ -309,11 +238,11 @@ const industries = [
               </div>
               
               <h3 class="text-lg sm:text-xl font-black uppercase tracking-tight mb-3 sm:mb-4 leading-snug">
-                {scope.name}
+                {scope.name.id}
               </h3>
               
               <ul class="flex flex-col gap-2">
-                {scope.services.map((service) => (
+                {scope.services.id.map((service) => (
                   <li class="flex items-center gap-2 text-xs font-semibold">
                     <span class={`w-1.5 h-1.5 rounded-full shrink-0 ${scope.isExclusive ? 'bg-brand-orange' : 'bg-brand-dark/35'}`}></span>
                     <span>{service}</span>
@@ -328,7 +257,7 @@ const industries = [
                   href={`${translatePath('/works-and-services')}?filter=${scope.filter}`} 
                   class="inline-flex items-center justify-between w-full border border-brand-dark/20 hover:border-brand-dark hover:bg-brand-dark hover:text-white text-brand-dark font-bold px-4 py-2.5 rounded-full transition-all duration-300 text-xs group"
                 >
-                  <span>{t('scope.cta.explore')}</span>
+                  <span>{homeData.serviceScopesSection.exploreCta.id}</span>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5 transform transition-transform duration-300 group-hover:translate-x-1">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                   </svg>
@@ -339,13 +268,13 @@ const industries = [
             {scope.isExclusive && (
               <div class="mt-6 pt-5 sm:pt-6 border-t border-white/10 flex flex-col gap-3 sm:gap-4">
                 <p class="text-[10px] text-white/50 leading-relaxed italic">
-                  {t('works.note')}
+                  {homeData.serviceScopesSection.exclusiveNote.id}
                 </p>
                 <a 
                   href={translatePath('/contact')} 
                   class="bg-brand-orange hover:bg-brand-orange-light text-white font-bold text-center px-5 sm:px-6 py-2.5 rounded-full transition-all duration-300 text-xs shadow-md"
                 >
-                  {t('works.cta')}
+                  {homeData.serviceScopesSection.exclusiveCta.id}
                 </a>
               </div>
             )}
@@ -358,9 +287,9 @@ const industries = [
   <!-- Industry Expertise Section -->
   <section class="py-14 sm:py-20 bg-brand-dark/5 border-t border-brand-dark/5 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-6 text-center flex flex-col items-center gap-6 sm:gap-8">
-      <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">{t('expertise.title')}</span>
+      <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">{homeData.industriesSection.tag.id}</span>
       <h2 class="text-2xl sm:text-3xl md:text-5xl font-black uppercase tracking-tight text-brand-dark max-w-3xl leading-tight">
-        Supporting Diverse Industries in the Creative Sphere
+        {homeData.industriesSection.title.id}
       </h2>
       <div class="flex flex-wrap justify-center gap-2.5 sm:gap-4 max-w-4xl mt-2 sm:mt-4">
         {industries.map((ind) => (

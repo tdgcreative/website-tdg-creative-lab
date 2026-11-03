@@ -1,0 +1,783 @@
+{
+  "seo": {
+    "id": {
+      "title": "Layanan & Portofolio — TDG Creative Lab",
+      "description": "Lihat portofolio lengkap kami di TDG Creative Lab: Content & Media Management, Brand & Digital Foundation, Visual Production & Documentation."
+    },
+    "en": {
+      "title": "Services & Portfolio — TDG Creative Lab",
+      "description": "Explore our complete creative portfolio at TDG Creative Lab: Content & Media Management, Brand & Digital Foundation, Visual Production & Documentation."
+    }
+  },
+  "items": [
+    {
+      "id": "fame",
+      "title": "FAME",
+      "category": "Content & Media Management",
+      "homeCategory": "Fashion",
+      "tags": ["Lookbook Photoshoot", "Social Media Management"],
+      "homeTags": ["Lookbook Photoshoot", "Social Media Management"],
+      "imageSrc": "/images/portfolio/fame.jpg",
+      "svgIcon": "fashion",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Social Media Management, Campaign Direction, Lookbook Photoshoot",
+        "en": "Social Media Management, Campaign Direction, Lookbook Photoshoot"
+      },
+      "year": "2024",
+      "featuredOnHome": true,
+      "homeOrder": 1,
+      "description": {
+        "id": "Kampanye kreatif dan visual lookbook fashion eksklusif. Kami merancang moodboard, mengarahkan sesi pemotretan model, serta mengelola kanal media sosial harian untuk memperkuat identitas brand di pasar retail fashion.",
+        "en": "Exclusive fashion lookbook and creative campaign. We crafted moodboards, directed model photoshoots, and managed daily social media channels to establish premium brand positioning."
+      },
+      "outputs": [
+        { "id": "fm1", "title": "Fall / Spring Campaign Video", "type": "video", "src": "/videos/fame-fall-spring.mp4" },
+        { "id": "fm2", "title": "Chinese New Year Campaign Video", "type": "video", "src": "/videos/fame-cny.mp4" },
+        { "id": "fm3", "title": "Fashion Lookbook Showcase", "type": "image", "src": "/images/portfolio/fame.jpg" }
+      ]
+    },
+    {
+      "id": "aio-aesthetic-clinic",
+      "title": "AIO Aesthetic Clinic",
+      "category": "Content & Media Management",
+      "homeCategory": "Healthcare",
+      "tags": ["Social Media", "KOL Campaign", "Clinic Menubook"],
+      "homeTags": ["Social Media", "KOL Management", "Event Documentation"],
+      "imageSrc": "/images/portfolio/aio.png",
+      "svgIcon": "healthcare",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Social Media Management, KOL Campaign, Event Documentation, Menubook Design",
+        "en": "Social Media Management, KOL Campaign, Event Documentation, Menubook Design"
+      },
+      "year": "2024",
+      "featuredOnHome": true,
+      "homeOrder": 2,
+      "description": {
+        "id": "Pengembangan konten visual terintegrasi untuk klinik estetika premium. Layanan kami mencakup manajemen media sosial harian, video edukasi dokter ahli, perancangan buku panduan menu klinis (PDF) yang mewah, serta dokumentasi klinik.",
+        "en": "Integrated visual content for a luxury aesthetic clinic. Services include daily social media management, doctor educational video reels, luxury clinical menu book design (PDF), and event documentation."
+      },
+      "outputs": [
+        { "id": "aio1", "title": "Video Edukasi Dokter (HIFU)", "type": "video", "src": "/videos/aio-edukasi-hifu.mp4" },
+        { "id": "aio2", "title": "Clinic Ambience & Treatment Rooms", "type": "video", "src": "/videos/aio-ruangan.mp4" },
+        { "id": "aio3", "title": "KOL Review & Brand Ambassador", "type": "video", "src": "/videos/aio-liana.mp4" },
+        { "id": "aio4", "title": "Buku Menu Perawatan (PDF)", "type": "pdf", "src": "/docs/aio-clinic-menubook.pdf" },
+        { "id": "aio5", "title": "Ruang Perawatan Estetika", "type": "image", "src": "/images/portfolio/aio.png" },
+        { "id": "aio6", "title": "Meet Our Medical Team", "type": "image", "src": "/images/portfolio/aio/meet-our-team.png" },
+        { "id": "aio7", "title": "Head Doctor - dr. Glenn", "type": "image", "src": "/images/portfolio/aio/dr-glenn.png" },
+        { "id": "aio8", "title": "Aesthetic Doctor - dr. Sike", "type": "image", "src": "/images/portfolio/aio/dr-sike.png" },
+        { "id": "aio9", "title": "Clinical Pharmacist & Nurse", "type": "image", "src": "/images/portfolio/aio/apt.png" }
+      ]
+    },
+    {
+      "id": "el-grande-padel",
+      "title": "El Grande Padel",
+      "category": "Content & Media Management",
+      "homeCategory": "Sport",
+      "tags": ["Social Media", "Reels Video", "Feed Design"],
+      "homeTags": ["Social Media", "Reels Video", "Feed Design"],
+      "imageSrc": "/images/portfolio/el-grande/post-1.png",
+      "svgIcon": "sport",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Social Media Management, High-Energy Reels, Instagram Feed Design",
+        "en": "Social Media Management, High-Energy Reels, Instagram Feed Design"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Pengembangan ekosistem digital olahraga modern untuk El Grande Padel. Kami mengarahkan pembuatan konten video reels sinematik, mengelola jadwal turnamen, dan mendesain identitas visual feed Instagram yang dinamis dan berenergi tinggi.",
+        "en": "Modern sports digital ecosystem development for El Grande Padel. We directed cinematic tournament reels, managed match announcements, and designed high-energy Instagram feed layouts."
+      },
+      "outputs": [
+        { "id": "eg1", "title": "Reels Sinematik Lapangan", "type": "video", "src": "/videos/el-grande-cinematic.mp4" },
+        { "id": "eg2", "title": "Ladies Day Highlight", "type": "video", "src": "/videos/el-grande-ladies-day.mp4" },
+        { "id": "eg3", "title": "Feed - Event Turnamen Terbesar", "type": "image", "src": "/images/portfolio/el-grande/post-1.png" },
+        { "id": "eg4", "title": "Feed - 12 Courts Showcase", "type": "image", "src": "/images/portfolio/el-grande/post-2.png" },
+        { "id": "eg5", "title": "Feed - Rules & Tips Padel", "type": "image", "src": "/images/portfolio/el-grande/post-3.png" },
+        { "id": "eg6", "title": "Feed - Match Schedule & Promo", "type": "image", "src": "/images/portfolio/el-grande/post-5.png" }
+      ]
+    },
+    {
+      "id": "the-k-style-salon",
+      "title": "The K Style Salon",
+      "category": "Content & Media Management",
+      "homeCategory": "Fashion",
+      "tags": ["Influencer Campaign", "Social Media", "Feed Design"],
+      "homeTags": ["Influencer Campaign", "Social Media", "Feed Design"],
+      "imageSrc": "/images/portfolio/the-k-style/f1.jpg",
+      "svgIcon": "fashion",
+      "filterClass": "content-media",
+      "imagePosition": "object-top",
+      "scopes": {
+        "id": "Social Media Management, Influencer Review Video, Instagram Feed Styling",
+        "en": "Social Media Management, Influencer Review Video, Instagram Feed Styling"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Strategi aktivasi salon rambut bergaya Korea. Kami memproduksi konten video ulasan influencer, promosi kampanye diskon perawatan rambut, serta merancang feed Instagram yang estetik dan elegan.",
+        "en": "Korean hair salon activation strategy. We produced influencer review reels, 50% discount promotional campaigns, and designed aesthetic, elegant Instagram feeds."
+      },
+      "outputs": [
+        { "id": "ks1", "title": "Video Influencer Review Salon", "type": "video", "src": "/videos/the-k-style-influencer.mp4" },
+        { "id": "ks2", "title": "Promo 50% Off Hair Treatment", "type": "video", "src": "/videos/the-k-style-promo-hair.mp4" },
+        { "id": "ks3", "title": "Feed - Campaign 50% Off All Treatments", "type": "image", "src": "/images/portfolio/the-k-style/f1.jpg" },
+        { "id": "ks4", "title": "Feed - Korean Keratin Treatment", "type": "image", "src": "/images/portfolio/the-k-style/f2.jpg" },
+        { "id": "ks5", "title": "Feed - Korean Hair Styling Trends", "type": "image", "src": "/images/portfolio/the-k-style/f3.jpg" },
+        { "id": "ks6", "title": "Feed - Balayage Glow Transformation", "type": "image", "src": "/images/portfolio/the-k-style/f4.jpg" },
+        { "id": "ks7", "title": "Feed - Daily Haircare Routine", "type": "image", "src": "/images/portfolio/the-k-style/f6.jpg" }
+      ]
+    },
+    {
+      "id": "razo-tooth-atelier",
+      "title": "Razo Tooth Atelier",
+      "category": "Content & Media Management",
+      "homeCategory": "Healthcare",
+      "tags": ["Dental Education", "Reels Video", "Medical Design"],
+      "homeTags": ["Dental Education", "Reels Video", "Medical Design"],
+      "imageSrc": "/images/portfolio/razo/razo-design-1.jpg",
+      "svgIcon": "healthcare",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Social Media Management, Medical Infographics, Dental Reels Video",
+        "en": "Social Media Management, Medical Infographics, Dental Reels Video"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Pendekatan edukatif dan elegan untuk studio perawatan gigi modern. Menggabungkan video suasana klinik harian, edukasi dokter gigi, serta seri infografis informatif mengenai kesehatan gigi dan mulut.",
+        "en": "Educational and elegant content strategy for a modern dental studio. Combining daily clinic ambience videos, doctor-led reels, and medical infographics regarding dental health."
+      },
+      "outputs": [
+        { "id": "rz1", "title": "A Regular Day at RAZO", "type": "video", "src": "/videos/razo-regular-day.mp4" },
+        { "id": "rz2", "title": "Dental Education Reel Dokter Gigi", "type": "video", "src": "/videos/razo-education.mp4" },
+        { "id": "rz3", "title": "Feed - Gigi Berlubang Parah & Solusi", "type": "image", "src": "/images/portfolio/razo/razo-design-1.jpg" },
+        { "id": "rz4", "title": "Feed - Anatomi Rahang & Beban Kunyah", "type": "image", "src": "/images/portfolio/razo/razo-design-2.jpg" },
+        { "id": "rz5", "title": "Feed - Gigi Bungsu Miring (Impaksi)", "type": "image", "src": "/images/portfolio/razo/razo-design-3.jpg" },
+        { "id": "rz6", "title": "Feed - Gaya Hidup, Kopi & Noda Gigi", "type": "image", "src": "/images/portfolio/razo/razo-design-4.jpg" }
+      ]
+    },
+    {
+      "id": "drs-elior",
+      "title": "Dr's Elior",
+      "category": "Content & Media Management",
+      "homeCategory": "Healthcare",
+      "tags": ["Motion Graphics", "Campaign Video", "Brand Identity"],
+      "homeTags": ["Motion Graphics", "Campaign Video", "Brand Identity"],
+      "imageSrc": "/images/portfolio/elior/cover.png",
+      "svgIcon": "healthcare",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Motion Graphic Production, Digital Campaign, Social Media Identity",
+        "en": "Motion Graphic Production, Digital Campaign, Social Media Identity"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Produksi motion graphic berstandar tinggi untuk kampanye digital Dr's Elior. Menghadirkan animasi grafis yang dinamis guna mengomunikasikan formula medis dan nilai estetika brand secara premium.",
+        "en": "High-standard motion graphics production for Dr's Elior digital campaign. Dynamic graphic animations highlighting medical formulas and premium skincare brand value."
+      },
+      "outputs": [
+        { "id": "el1", "title": "Motion Graphic Campaign Video", "type": "video", "src": "/videos/elior-motion.mp4" },
+        { "id": "el2", "title": "Brand Motion Graphic Key Visual", "type": "image", "src": "/images/portfolio/elior/cover.png" }
+      ]
+    },
+    {
+      "id": "gachi-korean-cuisine",
+      "title": "Gachi Korean Cuisine",
+      "category": "Content & Media Management",
+      "homeCategory": "F&B",
+      "tags": ["F&B Content", "Food Reels", "Social Media"],
+      "homeTags": ["F&B Content", "Food Reels", "Social Media"],
+      "imageSrc": "/images/portfolio/gachi/cover.png",
+      "svgIcon": "food",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Culinary Video Production, Food Styling, Social Media Marketing",
+        "en": "Culinary Video Production, Food Styling, Social Media Marketing"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Kampanye kuliner Korea yang menggugah selera untuk Gachi. Menyajikan konten video All You Can Eat BBQ, ulasan tempat makan khas Korea di Surabaya, dan eksplorasi dapur autentik.",
+        "en": "Mouth-watering Korean culinary campaign for Gachi. Showcasing All You Can Eat BBQ reels, viral must-visit dining guides in Surabaya, and authentic kitchen highlights."
+      },
+      "outputs": [
+        { "id": "gc1", "title": "All You Can Eat Korean BBQ", "type": "video", "src": "/videos/gachi-bbq.mp4" },
+        { "id": "gc2", "title": "Must-Visit Korean Food Surabaya", "type": "video", "src": "/videos/gachi-must-visit.mp4" },
+        { "id": "gc3", "title": "Best Korean Chicken in Town", "type": "video", "src": "/videos/gachi-korean-chicken.mp4" },
+        { "id": "gc4", "title": "Inside Gachi's Kitchen", "type": "video", "src": "/videos/gachi-kitchen.mp4" },
+        { "id": "gc5", "title": "Signature Korean BBQ Grill", "type": "image", "src": "/images/portfolio/gachi/cover.png" },
+        { "id": "gc6", "title": "Must-Visit Food Experience", "type": "image", "src": "/images/portfolio/gachi/must-visit.png" },
+        { "id": "gc7", "title": "Crispy Korean Chicken Showcase", "type": "image", "src": "/images/portfolio/gachi/korean-chicken.png" }
+      ]
+    },
+    {
+      "id": "mirevs-dessert-cafe",
+      "title": "Mirev's Dessert Cafe",
+      "category": "Content & Media Management",
+      "homeCategory": "F&B",
+      "tags": ["Dessert Styling", "Ambience Video", "Feed Design"],
+      "homeTags": ["Dessert Styling", "Ambience Video", "Feed Design"],
+      "imageSrc": "/images/portfolio/mirevs/feed-1.jpg",
+      "svgIcon": "food",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Social Media Management, Ambience Reels, Dessert Feed Catalog",
+        "en": "Social Media Management, Ambience Reels, Dessert Feed Catalog"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Pengelolaan media sosial dan visual estetik untuk kafe dessert Mirev's. Menghadirkan video reels ambience santai, pencicipan kue tiramisu artisan, serta katalog visual aneka dessert dan minuman.",
+        "en": "Social media and visual management for Mirev's dessert cafe. Producing relaxing ambience reels, artisanal tiramisu tasting videos, and dessert feed catalogs."
+      },
+      "outputs": [
+        { "id": "mv1", "title": "Ambience & Dessert Tasting Reel", "type": "video", "src": "/videos/mirevs-ambience.mp4" },
+        { "id": "mv2", "title": "Artisanal Tiramisu Reel", "type": "video", "src": "/videos/mirevs-tiramisu.mp4" },
+        { "id": "mv3", "title": "Feed - Brownie Cheesecake Bites", "type": "image", "src": "/images/portfolio/mirevs/feed-1.jpg" },
+        { "id": "mv4", "title": "Feed - Matcha Coconut Specialty", "type": "image", "src": "/images/portfolio/mirevs/feed-2.jpg" },
+        { "id": "mv5", "title": "Feed - Festive Classic Cake", "type": "image", "src": "/images/portfolio/mirevs/feed-3.jpg" },
+        { "id": "mv6", "title": "Feed - Roses & Red Velvet Cake", "type": "image", "src": "/images/portfolio/mirevs/feed-4.jpg" }
+      ]
+    },
+    {
+      "id": "fit-n-shape",
+      "title": "Fit N Shape Workout Center",
+      "category": "Content & Media Management",
+      "homeCategory": "Sport",
+      "tags": ["Gym & Fitness", "Transformation Reel", "Social Media"],
+      "homeTags": ["Gym & Fitness", "Transformation Reel", "Social Media"],
+      "imageSrc": "/images/portfolio/fit-n-shape/cover.png",
+      "svgIcon": "sport",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Social Media Management, Fitness Video Reels, Workout Campaign",
+        "en": "Social Media Management, Fitness Video Reels, Workout Campaign"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Pengelolaan media sosial dan dokumentasi aktivitas kebugaran di Fit N Shape. Memproduksi konten edukasi gerakan gym, testimoni hasil latihan member, serta keseruan kelas zumba dan olahraga bersama.",
+        "en": "Social media management and fitness activity documentation for Fit N Shape. Producing gym workout educational reels, member transformation testimonials, and high-energy Zumba classes."
+      },
+      "outputs": [
+        { "id": "fns1", "title": "Member Transformation & Training Reel", "type": "video", "src": "/videos/fit-n-shape.mp4" },
+        { "id": "fns2", "title": "Full Body Dumbbell Workout Reel", "type": "video", "src": "/videos/fit-n-shape-dumbbell.mp4" },
+        { "id": "fns3", "title": "Personal Trainer Glutes Session", "type": "video", "src": "/videos/fit-n-shape-glutes.mp4" },
+        { "id": "fns4", "title": "Zumba Halloween Party Event", "type": "video", "src": "/videos/fit-n-shape-zumba.mp4" },
+        { "id": "fns5", "title": "Gym Facility & Dumbbell Zone", "type": "image", "src": "/images/portfolio/fit-n-shape/cover.png" },
+        { "id": "fns6", "title": "PT Glutes Training Program", "type": "image", "src": "/images/portfolio/fit-n-shape/glutes.png" },
+        { "id": "fns7", "title": "Zumba Event Atmosphere", "type": "image", "src": "/images/portfolio/fit-n-shape/zumba.png" },
+        { "id": "fns8", "title": "Member Fitness Transformation", "type": "image", "src": "/images/portfolio/fit-n-shape/transformasi.png" }
+      ]
+    },
+    {
+      "id": "inva-dental-studio",
+      "title": "Inva Dental Studio",
+      "category": "Content & Media Management",
+      "homeCategory": "Healthcare",
+      "tags": ["Clinic Branding", "Video Walkthrough", "Dental Education"],
+      "homeTags": ["Clinic Branding", "Video Walkthrough", "Dental Education"],
+      "imageSrc": "/images/portfolio/inva-dental/cover.png",
+      "svgIcon": "healthcare",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Social Media Management, Clinic Tour Video, Dental Sterilisation Standards",
+        "en": "Social Media Management, Clinic Tour Video, Dental Sterilisation Standards"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Penyusunan fondasi media sosial dan video profil klinik gigi modern Inva Dental Studio. Kami memproduksi konten video tur klinik berestetika tinggi, edukasi standar sterilisasi alat medis, penanganan kasus nyata pasien, serta testimoni pasien.",
+        "en": "Social media foundation and clinic video profile for Inva Dental Studio. Producing high-aesthetic clinic walkthroughs, medical tool sterilisation standards, real case patient treatments, and client testimonials."
+      },
+      "outputs": [
+        { "id": "inv1", "title": "Dream Workplace Clinic Tour", "type": "video", "src": "/videos/inva-workplace-tour.mp4" },
+        { "id": "inv2", "title": "Standar Sterilisasi Alat Medis", "type": "video", "src": "/videos/inva-alat-steril.mp4" },
+        { "id": "inv3", "title": "Real Case Dental Treatment", "type": "video", "src": "/videos/inva-realcase.mp4" },
+        { "id": "inv4", "title": "Testimoni Pasien (Ce Erna)", "type": "video", "src": "/videos/inva-testimoni.mp4" },
+        { "id": "inv5", "title": "Grand Opening Walkthrough", "type": "video", "src": "/videos/inva-dental-opening.mp4" },
+        { "id": "inv6", "title": "Inva Dental Clinic Room", "type": "image", "src": "/images/portfolio/inva-dental/cover.png" },
+        { "id": "inv7", "title": "Ruang Sterilisasi Alat Medis", "type": "image", "src": "/images/portfolio/inva-dental/alat-steril.png" },
+        { "id": "inv8", "title": "Case Study Perawatan Pasien", "type": "image", "src": "/images/portfolio/inva-dental/realcase.png" },
+        { "id": "inv9", "title": "Dokumentasi Pelayanan Pasien", "type": "image", "src": "/images/portfolio/inva-dental/testimoni.png" }
+      ]
+    },
+    {
+      "id": "tispun-bakeshop",
+      "title": "Tispun Bakeshop",
+      "category": "Content & Media Management",
+      "homeCategory": "F&B",
+      "tags": ["Product Photoshoot", "Social Media Management", "Bakery Reels"],
+      "homeTags": ["Product Photoshoot", "Social Media Management"],
+      "imageSrc": "/images/portfolio/tispun.jpg",
+      "svgIcon": "fnb",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Product Photography, Social Media Management, Bakery Video Reels",
+        "en": "Product Photography, Social Media Management, Bakery Video Reels"
+      },
+      "year": "2024",
+      "featuredOnHome": true,
+      "homeOrder": 3,
+      "description": {
+        "id": "Strategi konten visual bakery yang menggugah selera. Mengombinasikan foto produk roti artisan beresolusi tinggi, video reels proses pembuatan adonan (baking), dan tata letak feed Instagram yang hangat.",
+        "en": "Artisanal bakery visual content strategy. Combining high-resolution pastry photography, behind-the-bake dough preparation reels, and warm Instagram feed layouts."
+      },
+      "outputs": [
+        { "id": "tsp1", "title": "Behind The Bake Reels", "type": "video", "src": "/videos/tispun-reels.mp4" },
+        { "id": "tsp2", "title": "Artisanal Croissant & Pastry Showcase", "type": "image", "src": "/images/portfolio/tispun.jpg" },
+        { "id": "tsp3", "title": "Feed - Bakeshop Daily Menu 1", "type": "image", "src": "/images/portfolio/tispun/tispun-feed-1.jpg" },
+        { "id": "tsp4", "title": "Feed - Bakeshop Daily Menu 2", "type": "image", "src": "/images/portfolio/tispun/tispun-feed-2.jpg" },
+        { "id": "tsp5", "title": "Feed - Bakeshop Daily Menu 3", "type": "image", "src": "/images/portfolio/tispun/tispun-feed-3.jpg" },
+        { "id": "tsp6", "title": "Feed - Sourdough & Fresh Bread", "type": "image", "src": "/images/portfolio/tispun/tispun-feed-4.jpg" }
+      ]
+    },
+    {
+      "id": "asmaraloka-villa",
+      "title": "Asmaraloka Villa & Resto",
+      "category": "Content & Media Management",
+      "homeCategory": "Architecture & Lifestyle",
+      "tags": ["Hospitality", "Ambience Video", "Villa Feed Design"],
+      "homeTags": ["Hospitality", "Ambience Video", "Villa Feed Design"],
+      "imageSrc": "/images/portfolio/asmaraloka/cover.png",
+      "svgIcon": "architecture",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Social Media Management, Ambience Video Production, Villa & Resto Feed Design",
+        "en": "Social Media Management, Ambience Video Production, Villa & Resto Feed Design"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Pengambilan rekaman video sinematik dan pengelolaan media sosial untuk menangkap suasana asri, tenang, dan kemewahan arsitektur Asmaraloka Villa & Resto di alam terbuka.",
+        "en": "Cinematic video shoots and social media management capturing the serene, calm atmosphere and architectural luxury of Asmaraloka Villa & Resto in nature."
+      },
+      "outputs": [
+        { "id": "asm1", "title": "The Ambience Video", "type": "video", "src": "/videos/asmaraloka-ambience.mp4" },
+        { "id": "asm2", "title": "Morning Routine & Villa View", "type": "video", "src": "/videos/asmaraloka-morning-view.mp4" },
+        { "id": "asm3", "title": "Calm Place to Go Reel", "type": "video", "src": "/videos/asmaraloka-calm-place.mp4" },
+        { "id": "asm4", "title": "Me Time at Asmaraloka", "type": "video", "src": "/videos/asmaraloka-me-time.mp4" },
+        { "id": "asm5", "title": "Feed - Villa Architecture & Panorama", "type": "image", "src": "/images/portfolio/asmaraloka/cover.png" },
+        { "id": "asm6", "title": "Feed - Resto Dining Experience", "type": "image", "src": "/images/portfolio/asmaraloka/s1.png" },
+        { "id": "asm7", "title": "Feed - Morning Atmosphere", "type": "image", "src": "/images/portfolio/asmaraloka/s2.png" },
+        { "id": "asm8", "title": "Feed - Outdoor Green View", "type": "image", "src": "/images/portfolio/asmaraloka/s3.png" },
+        { "id": "asm9", "title": "Feed - Hospitality & Healing Space", "type": "image", "src": "/images/portfolio/asmaraloka/konten.png" },
+        { "id": "asm10", "title": "Feed - Special Dining Menu Promo", "type": "image", "src": "/images/portfolio/asmaraloka/slide3-1.png" }
+      ]
+    },
+    {
+      "id": "nosh-menubook",
+      "title": "Nosh Menubook",
+      "category": "Content & Media Management",
+      "homeCategory": "F&B",
+      "tags": ["Printed Design", "Menubook", "Editorial Layout"],
+      "homeTags": ["Printed Design", "Menubook", "Editorial Layout"],
+      "imageSrc": "/images/portfolio/nosh/cover.png",
+      "svgIcon": "food",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Editorial Layout, F&B Menubook Design, Print Production Supervision",
+        "en": "Editorial Layout, F&B Menubook Design, Print Production Supervision"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Perancangan buku menu komprehensif untuk Nosh. Menyajikan susunan menu makanan dan minuman yang tertata apik, tipografi elegan, dan arahan visual hidangan yang memudahkan pelanggan memesan.",
+        "en": "Comprehensive menu book design for Nosh. Presenting well-structured food and beverage listings, elegant typography, and clear culinary visual direction."
+      },
+      "outputs": [
+        { "id": "nsh1", "title": "Nosh Menubook (PDF)", "type": "pdf", "src": "/docs/nosh-menubook.pdf" },
+        { "id": "nsh2", "title": "Menubook Layout & Cover Page", "type": "image", "src": "/images/portfolio/nosh/cover.png" }
+      ]
+    },
+    {
+      "id": "sunbrew-menubook",
+      "title": "Sunbrew Menubook",
+      "category": "Content & Media Management",
+      "homeCategory": "F&B",
+      "tags": ["Printed Design", "Coffee Catalog", "Beverage Menu"],
+      "homeTags": ["Printed Design", "Coffee Catalog", "Beverage Menu"],
+      "imageSrc": "/images/portfolio/sunbrew/cover.png",
+      "svgIcon": "food",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Coffee & Beverage Menu Design, Layout Formatting, Print Ready Files",
+        "en": "Coffee & Beverage Menu Design, Layout Formatting, Print Ready Files"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Desain buku menu kopi dan minuman untuk Sunbrew. Mengombinasikan sentuhan estetika modern dengan struktur katalog menu yang jelas untuk meningkatkan pengalaman pemesanan pengunjung kafe.",
+        "en": "Coffee and beverage menu book design for Sunbrew. Combining modern aesthetics with clear catalog structures to enhance customer ordering experience."
+      },
+      "outputs": [
+        { "id": "snb1", "title": "Sunbrew Menubook (PDF)", "type": "pdf", "src": "/docs/sunbrew-menubook.pdf" },
+        { "id": "snb2", "title": "Coffee & Beverage Menu Cover", "type": "image", "src": "/images/portfolio/sunbrew/cover.png" }
+      ]
+    },
+    {
+      "id": "delapanmeter-menubook",
+      "title": "Delapanmeter Menubook",
+      "category": "Content & Media Management",
+      "homeCategory": "F&B",
+      "tags": ["Printed Design", "Menubook", "Graphic Design"],
+      "homeTags": ["Printed Design", "Menubook", "Graphic Design"],
+      "imageSrc": "/images/portfolio/delapanmeter/cover.png",
+      "svgIcon": "food",
+      "filterClass": "content-media",
+      "scopes": {
+        "id": "Menubook Design, Visual Formatting, Typography & Print Final",
+        "en": "Menubook Design, Visual Formatting, Typography & Print Final"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Pembuatan tata letak dan desain visual buku menu Delapanmeter. Menampilkan identitas kuliner yang kuat dengan pembagian kategori hidangan yang terstruktur rapi dan siap cetak.",
+        "en": "Visual layout and graphic design for Delapanmeter menu book. Featuring strong culinary identity with well-structured dish categorisation ready for high-end print."
+      },
+      "outputs": [
+        { "id": "dlp1", "title": "Delapanmeter Menubook (PDF)", "type": "pdf", "src": "/docs/delapanmeter-menubook.pdf" },
+        { "id": "dlp2", "title": "Menubook Print Cover Page", "type": "image", "src": "/images/portfolio/delapanmeter/cover.png" }
+      ]
+    },
+    {
+      "id": "pt-panen",
+      "title": "PT Panen",
+      "category": "Brand & Digital Foundation",
+      "homeCategory": "Corporate",
+      "tags": ["Website UI/UX", "Corporate Web", "Executive Photoshoot"],
+      "homeTags": ["Website UI/UX", "Corporate Web", "Executive Photoshoot"],
+      "imageSrc": "/images/portfolio/panen.png",
+      "svgIcon": "corporate",
+      "filterClass": "brand-digital",
+      "scopes": {
+        "id": "Website UI/UX Development, Responsive Web Design, Executive Photoshoot",
+        "en": "Website UI/UX Development, Responsive Web Design, Executive Photoshoot"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Pengembangan fondasi website korporat lengkap untuk PT Panen. Menghadirkan antarmuka modern untuk halaman Beranda, Filosofi Produksi, Produk & Layanan, Riset, Kontak, serta dokumentasi foto profil jajaran direksi.",
+        "en": "Full corporate website development for PT Panen. Delivering responsive layouts for Home, Production Philosophy, Products & Services, Research, Contact, and executive board photography."
+      },
+      "outputs": [
+        { "id": "p1", "title": "Beranda Website", "type": "image", "src": "/images/portfolio/panen/page-beranda.png" },
+        { "id": "p2", "title": "Filosofi Produksi", "type": "image", "src": "/images/portfolio/panen/page-filosofi.png" },
+        { "id": "p3", "title": "Produk & Layanan", "type": "image", "src": "/images/portfolio/panen/page-produk.png" },
+        { "id": "p4", "title": "Riset Kami", "type": "image", "src": "/images/portfolio/panen/page-riset.png" },
+        { "id": "p5", "title": "Hubungi Kami", "type": "image", "src": "/images/portfolio/panen/page-hubungi.png" },
+        { "id": "p6", "title": "Foto Profil Direksi", "type": "image", "src": "/images/portfolio/panen/direksi-photoshoot.png" }
+      ]
+    },
+    {
+      "id": "cravinc",
+      "title": "Cravinc",
+      "category": "Brand & Digital Foundation",
+      "homeCategory": "Corporate",
+      "tags": ["Brand Guidelines", "Visual Identity", "Brand Strategy"],
+      "homeTags": ["Brand Guidelines", "Visual Identity", "Brand Strategy"],
+      "imageSrc": "/images/portfolio/cravinc.jpg",
+      "svgIcon": "corporate",
+      "filterClass": "brand-digital",
+      "scopes": {
+        "id": "Brand Identity, Brand Guideline Book, Logo System",
+        "en": "Brand Identity, Brand Guideline Book, Logo System"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Perumusan panduan identitas visual dan pedoman brand (Brand Guidelines) komprehensif untuk Cravinc. Menetapkan standar penggunaan logo, palet warna, tipografi, dan gaya aplikasi visual di berbagai media.",
+        "en": "Comprehensive brand guideline formulation for Cravinc. Establishing logo usage standards, color palettes, typography rules, and multi-channel visual application."
+      },
+      "outputs": [
+        { "id": "cr1", "title": "Brand Guideline Lengkap (PDF)", "type": "pdf", "src": "/docs/cravinc-brand-guideline.pdf" },
+        { "id": "cr2", "title": "Visual Identity & Logo Guidelines", "type": "image", "src": "/images/portfolio/cravinc.jpg" }
+      ]
+    },
+    {
+      "id": "primadona-skincare",
+      "title": "Primadona Skincare",
+      "category": "Brand & Digital Foundation",
+      "homeCategory": "Healthcare",
+      "tags": ["Brand Development", "Brand Guidelines", "Beauty Identity"],
+      "homeTags": ["Brand Development", "Brand Guidelines", "Beauty Identity"],
+      "imageSrc": "/images/portfolio/primadona/cover.png",
+      "svgIcon": "healthcare",
+      "filterClass": "brand-digital",
+      "scopes": {
+        "id": "Visual Identity System, Brand Guideline Documentation, Skincare Branding",
+        "en": "Visual Identity System, Brand Guideline Documentation, Skincare Branding"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Pembangunan identitas brand dan buku panduan visual untuk Primadona Skincare. Mengukuhkan karakter kecantikan yang anggun dan terpercaya melalui standarisasi grafis dan filosofi warna.",
+        "en": "Brand identity and visual guideline development for Primadona Skincare. Establishing graceful, trustworthy beauty brand character through graphic standardization."
+      },
+      "outputs": [
+        { "id": "pm1", "title": "Primadona Brand Guideline (PDF)", "type": "pdf", "src": "/docs/primadona-brand-guideline.pdf" },
+        { "id": "pm2", "title": "Brand Guideline Cover Page", "type": "image", "src": "/images/portfolio/primadona/cover.png" }
+      ]
+    },
+    {
+      "id": "rajawali-translog",
+      "title": "Rajawali Translog",
+      "category": "Brand & Digital Foundation",
+      "homeCategory": "Corporate",
+      "tags": ["Company Profile", "Corporate Branding", "B2B Design"],
+      "homeTags": ["Company Profile", "Corporate Branding", "B2B Design"],
+      "imageSrc": "/images/portfolio/rajawali/cover.png",
+      "svgIcon": "corporate",
+      "filterClass": "brand-digital",
+      "scopes": {
+        "id": "Corporate Profile Design, B2B Visual Identity, Editorial Layout",
+        "en": "Corporate Profile Design, B2B Visual Identity, Editorial Layout"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Penyusunan dokumen profil perusahaan (Company Profile) profesional untuk Rajawali Translog. Merangkum visi, armada logistik, jangkauan operasional, dan keunggulan layanan B2B ke dalam tata letak editorial yang meyakinkan.",
+        "en": "Professional corporate profile (Company Profile) for Rajawali Translog. Summarizing vision, logistics fleet, operational reach, and B2B services into compelling editorial layouts."
+      },
+      "outputs": [
+        { "id": "rj1", "title": "Rajawali Translog Compro (PDF)", "type": "pdf", "src": "/docs/rajawali-translog-compro.pdf" },
+        { "id": "rj2", "title": "Company Profile Cover Page", "type": "image", "src": "/images/portfolio/rajawali/cover.png" }
+      ]
+    },
+    {
+      "id": "nara-dental",
+      "title": "Nara Dental",
+      "category": "Visual Production & Documentation",
+      "homeCategory": "Healthcare",
+      "tags": ["Grand Opening", "Event Documentation", "Clinic Shoot"],
+      "homeTags": ["Social Media", "Profile Photoshoot", "Event Documentation"],
+      "imageSrc": "/images/portfolio/nara.jpg",
+      "svgIcon": "dental",
+      "filterClass": "visual-doc",
+      "scopes": {
+        "id": "Grand Opening Video Production, Aftermovie, Clinic Photography, Educational Feeds",
+        "en": "Grand Opening Video Production, Aftermovie, Clinic Photography, Educational Feeds"
+      },
+      "year": "2024",
+      "featuredOnHome": true,
+      "homeOrder": 4,
+      "description": {
+        "id": "Dokumentasi visual komprehensif peluncuran klinik Nara Dental. Mencakup video aftermovie sinematik pembukaan klinik, wawancara dokter spesialis, serta galeri foto profil tim dokter gigi dan ruang praktek modern.",
+        "en": "Comprehensive visual documentation for Nara Dental clinic launch. Featuring cinematic grand opening aftermovies, specialist doctor interviews, and dental team profile shoots."
+      },
+      "outputs": [
+        { "id": "nr1", "title": "Grand Opening Aftermovie", "type": "video", "src": "/videos/nara-grand-opening.mp4" },
+        { "id": "nr2", "title": "Edukasi - Solusi Gigi Rusak & Scaling", "type": "video", "src": "/videos/nara-edukasi-1.mp4" },
+        { "id": "nr3", "title": "Edukasi - Di Balik Senyum Indah", "type": "video", "src": "/videos/nara-edukasi-2.mp4" },
+        { "id": "nr4", "title": "Foto Profil Tim Dokter Spesialis", "type": "image", "src": "/images/portfolio/nara.jpg" },
+        { "id": "nr5", "title": "Feed - Edukasi Behel & Estetika Gigi", "type": "image", "src": "/images/portfolio/nara/nara-feed-1.jpg" },
+        { "id": "nr6", "title": "Feed - Mengapa Harus Miniscrew?", "type": "image", "src": "/images/portfolio/nara/nara-feed-2.jpg" },
+        { "id": "nr7", "title": "Feed - Tips Gigi Kuat & Sehat", "type": "image", "src": "/images/portfolio/nara/nara-feed-3.jpg" },
+        { "id": "nr8", "title": "Feed - Promo Perawatan Ramadhan", "type": "image", "src": "/images/portfolio/nara/nara-feed-4.jpg" },
+        { "id": "nr9", "title": "Feed - Prosthodontist & Gigi Tiruan", "type": "image", "src": "/images/portfolio/nara/nara-feed-5.jpg" },
+        { "id": "nr10", "title": "Feed - Penanganan Gigi Patah", "type": "image", "src": "/images/portfolio/nara/nara-feed-6.jpg" }
+      ]
+    },
+    {
+      "id": "pbpi-jatim",
+      "title": "PBPI Jatim",
+      "category": "Visual Production & Documentation",
+      "homeCategory": "Sport",
+      "tags": ["Tournament Coverage", "Athlete Interview", "Sport Video"],
+      "homeTags": ["Tournament Coverage", "Athlete Interview", "Sport Video"],
+      "imageSrc": "/images/portfolio/pbpi/cover.png",
+      "svgIcon": "sport",
+      "filterClass": "visual-doc",
+      "scopes": {
+        "id": "Championship Tournament Coverage, Athlete Interviews, Highlight Production",
+        "en": "Championship Tournament Coverage, Athlete Interviews, Highlight Production"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Dokumentasi kejuaraan resmi PBPI Jatim. Kami mengabadikan momen pertandingan Sirnas, mewawancarai para atlet peraih medali, dan menyusun video dokumentasi turnamen berenergi tinggi.",
+        "en": "Official tournament coverage for PBPI East Java. Documenting Sirnas tournament matches, interviewing medal-winning athletes, and producing high-energy tournament highlights."
+      },
+      "outputs": [
+        { "id": "pb1", "title": "Championship Interview Video", "type": "video", "src": "/videos/pbpi-jatim.mp4" },
+        { "id": "pb2", "title": "Sirnas Championship Match Frame", "type": "image", "src": "/images/portfolio/pbpi/cover.png" }
+      ]
+    },
+    {
+      "id": "apex-padel-league",
+      "title": "Apex Padel League",
+      "category": "Visual Production & Documentation",
+      "homeCategory": "Sport",
+      "tags": ["Event Documentation", "Tournament Video", "High Energy"],
+      "homeTags": ["Event Documentation", "Tournament Video", "High Energy"],
+      "imageSrc": "/images/portfolio/apex-padel.jpg",
+      "svgIcon": "sport",
+      "filterClass": "visual-doc",
+      "scopes": {
+        "id": "Tournament Documentation, Video Highlight, Action Photography",
+        "en": "Tournament Documentation, Video Highlight, Action Photography"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Liputan dinamis turnamen padel bergengsi Apex Padel League. Mengabadikan rally cepat, tensi kompetisi di lapangan, serta video kompilasi atmosfer turnamen olahraga yang seru.",
+        "en": "Dynamic coverage of Apex Padel League tournament. Capturing rapid rallies, on-court intensity, and high-energy sports tournament atmosphere."
+      },
+      "outputs": [
+        { "id": "apl1", "title": "High-Energy Tournament Video", "type": "video", "src": "/videos/apex-padel.mp4" },
+        { "id": "apl2", "title": "Tournament Action Photography", "type": "image", "src": "/images/portfolio/apex-padel.jpg" }
+      ]
+    },
+    {
+      "id": "casbar-combat",
+      "title": "Casbar Combat",
+      "category": "Visual Production & Documentation",
+      "homeCategory": "Sport",
+      "tags": ["Combat Sport", "MMA Event", "Highlight Video"],
+      "homeTags": ["Combat Sport", "MMA Event", "Highlight Video"],
+      "imageSrc": "/images/portfolio/casbar.jpg",
+      "svgIcon": "sport",
+      "filterClass": "visual-doc",
+      "scopes": {
+        "id": "Fight Night Documentation, Action Photography, Highlights Video",
+        "en": "Fight Night Documentation, Action Photography, Highlights Video"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Dokumentasi laga tarung MMA Casbar Fight League. Mengabadikan aksi para petarung di dalam arena sangkar, ketegangan duel fisik, dan video kompilasi pertarungan berintensitas maksimal.",
+        "en": "MMA combat fight night documentation for Casbar Fight League. Capturing cage action, intense physical duels, and combat highlight reels."
+      },
+      "outputs": [
+        { "id": "cb1", "title": "MMA Combat Highlights Video", "type": "video", "src": "/videos/casbar.mp4" },
+        { "id": "cb2", "title": "Cage Action Photography", "type": "image", "src": "/images/portfolio/casbar.jpg" }
+      ]
+    },
+    {
+      "id": "so-done-music-fest",
+      "title": "So Done Music Fest",
+      "category": "Visual Production & Documentation",
+      "homeCategory": "Fashion",
+      "tags": ["Music Festival", "Aftermovie", "Lighting Shoot"],
+      "homeTags": ["Music Festival", "Aftermovie", "Lighting Shoot"],
+      "imageSrc": "/images/portfolio/so-done.jpg",
+      "svgIcon": "fashion",
+      "filterClass": "visual-doc",
+      "scopes": {
+        "id": "Music Festival Documentation, Aftermovie Production, Stage Shoot",
+        "en": "Music Festival Documentation, Aftermovie Production, Stage Shoot"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Dokumentasi festival musik berskala besar So Done. Mengabadikan riuh antusiasme penonton, gemerlap pencahayaan panggung, serta meramu video aftermovie konser yang memikat.",
+        "en": "Large-scale music festival coverage for So Done. Capturing crowd energy, festival lighting, and crafting an engaging event aftermovie."
+      },
+      "outputs": [
+        { "id": "sd1", "title": "Music Fest Aftermovie Video", "type": "video", "src": "/videos/so-done.mp4" },
+        { "id": "sd2", "title": "Stage Lighting Shoot", "type": "image", "src": "/images/portfolio/so-done.jpg" }
+      ]
+    },
+    {
+      "id": "btc-board",
+      "title": "BTC Board",
+      "category": "Visual Production & Documentation",
+      "homeCategory": "Corporate",
+      "tags": ["Product Commercial", "Material Video", "Industrial"],
+      "homeTags": ["Product Commercial", "Material Video", "Industrial"],
+      "imageSrc": "/images/portfolio/btc-board.jpg",
+      "svgIcon": "corporate",
+      "filterClass": "visual-doc",
+      "scopes": {
+        "id": "Commercial Product Video, Material Photography, Application Shoot",
+        "en": "Commercial Product Video, Material Photography, Application Shoot"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Produksi visual komersial untuk material papan bangunan inovatif BTC Board. Menampilkan keunggulan ketahanan produk, instalasi di lokasi proyek, serta video showcase detail material.",
+        "en": "Commercial product video for innovative building material BTC Board. Highlighting product durability, on-site installation, and technical material showcases."
+      },
+      "outputs": [
+        { "id": "btc1", "title": "Product Showcase Commercial", "type": "video", "src": "/videos/btc-board.mp4" },
+        { "id": "btc2", "title": "Material Application Shoot", "type": "image", "src": "/images/portfolio/btc-board.jpg" }
+      ]
+    },
+    {
+      "id": "setase",
+      "title": "SETASE",
+      "category": "Visual Production & Documentation",
+      "homeCategory": "Fashion",
+      "tags": ["Lookbook Shoot", "Studio Photography", "Fashion Editorial"],
+      "homeTags": ["Lookbook Shoot", "Studio Photography", "Fashion Editorial"],
+      "imageSrc": "/images/portfolio/setase.jpg",
+      "svgIcon": "fashion",
+      "filterClass": "visual-doc",
+      "scopes": {
+        "id": "Studio Lookbook Shoot, Model Direction, Lighting Setup",
+        "en": "Studio Lookbook Shoot, Model Direction, Lighting Setup"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Pemotretan lookbook pakaian studio untuk SETASE. Mengutamakan tata cahaya studio yang presisi untuk menonjolkan tekstur kain, siluet pakaian, dan karakter rancangan busana kontemporer.",
+        "en": "Studio fashion lookbook photoshoot for SETASE. Utilizing precision studio lighting to emphasize fabric texture, garment silhouettes, and contemporary design."
+      },
+      "outputs": [
+        { "id": "st1", "title": "Studio Fashion Lookbook Shoot", "type": "image", "src": "/images/portfolio/setase.jpg" }
+      ]
+    },
+    {
+      "id": "d-regentist",
+      "title": "D'Regentist",
+      "category": "Visual Production & Documentation",
+      "homeCategory": "Architecture & Lifestyle",
+      "tags": ["Architectural Shoot", "Interior Documentation", "Space"],
+      "homeTags": ["Architectural Shoot", "Interior Documentation", "Space"],
+      "imageSrc": "/images/portfolio/regentist.jpg",
+      "svgIcon": "architecture",
+      "filterClass": "visual-doc",
+      "scopes": {
+        "id": "Architectural Photography, Interior Shoot, Lighting Balancing",
+        "en": "Architectural Photography, Interior Shoot, Lighting Balancing"
+      },
+      "year": "2024",
+      "featuredOnHome": false,
+      "homeOrder": 99,
+      "description": {
+        "id": "Dokumentasi fotografi arsitektur dan interior ruang praktek medis D'Regentist. Menangkap estetika desain interior, tata ruang yang fungsional, dan pencahayaan ruangan yang tenang.",
+        "en": "Architectural and interior documentation for D'Regentist medical clinic. Capturing functional clinic layouts, modern interior aesthetics, and soothing lighting."
+      },
+      "outputs": [
+        { "id": "dr1", "title": "Architectural & Interior Documentation", "type": "image", "src": "/images/portfolio/regentist.jpg" }
+      ]
+    }
+  ]
+}
+
