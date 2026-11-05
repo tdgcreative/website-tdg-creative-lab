@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import SimpleCTA from '../components/SimpleCTA.astro';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
 const lang = getLangFromUrl(Astro.url);
@@ -11,7 +12,8 @@ const description = 'Halaman yang Anda tuju tidak dapat ditemukan.';
 ---
 
 <BaseLayout title={title} description={description} noindex={true}>
-  <section class="min-h-[60vh] flex items-center justify-center py-20">
+  <!-- Standard 404 Fallback Container -->
+  <section id="fallback-404-section" class="min-h-[60vh] flex items-center justify-center py-20">
     <div class="max-w-xl mx-auto px-6 text-center flex flex-col items-center gap-6">
       <span class="text-6xl sm:text-7xl md:text-9xl font-black text-brand-orange leading-none">404</span>
       <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold uppercase tracking-tight text-brand-dark">
@@ -20,12 +22,255 @@ const description = 'Halaman yang Anda tuju tidak dapat ditemukan.';
       <p class="text-sm md:text-base text-brand-dark/60 leading-relaxed max-w-md">
         {t('404.subtitle')}
       </p>
-      <a 
-        href={translatePath('/')} 
-        class="bg-brand-dark hover:bg-brand-orange text-white font-bold px-8 py-3.5 rounded-full transition-colors text-sm uppercase tracking-wider mt-4"
-      >
-        {t('404.cta')}
-      </a>
+      <div class="flex flex-wrap justify-center gap-3 mt-4">
+        <a 
+          href={translatePath('/')} 
+          class="bg-brand-dark hover:bg-brand-orange text-white font-bold px-8 py-3.5 rounded-full transition-colors text-sm uppercase tracking-wider"
+        >
+          {t('404.cta')}
+        </a>
+        <a 
+          href={translatePath('/blog')} 
+          class="border border-brand-dark/20 hover:border-brand-orange text-brand-dark hover:text-brand-orange font-bold px-8 py-3.5 rounded-full transition-colors text-sm uppercase tracking-wider"
+        >
+          {t('nav.blog')}
+        </a>
+      </div>
     </div>
   </section>
+
+  <!-- Dynamic Blog Article Container (For newly created articles before static cloud rebuild finishes) -->
+  <div id="dynamic-blog-article-container" class="hidden">
+    <article id="dynamic-article-body" class="py-10 sm:py-14 md:py-20"></article>
+    <SimpleCTA />
+  </div>
 </BaseLayout>
+
+<script>
+  function slugifyHeading(text: string): string {
+    return text
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+  }
+
+  function renderClientMarkdown(md: string) {
+    const lines = (md || '').replace(/\r\n/g, '\n').split('\n');
+    const toc: { id: string; text: string; level: number }[] = [];
+    const htmlBlocks: string[] = [];
+    let listItems: string[] = [];
+    let paraLines: string[] = [];
+
+    const formatInline = (txt: string) =>
+      txt
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<figure class="my-8 overflow-hidden rounded-2xl border border-brand-dark/10 bg-brand-dark/5"><img src="$2" alt="$1" loading="lazy" class="w-full h-auto object-cover" /><figcaption class="px-4 py-2.5 text-xs text-brand-dark/60 font-medium text-center">$1</figcaption></figure>')
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-brand-orange font-bold underline underline-offset-4 hover:text-brand-dark transition-colors">$1</a>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-extrabold text-brand-dark">$1</strong>')
+        .replace(/\*([^*]+)\*/g, '<em class="italic">$1</em>')
+        .replace(/`([^`]+)`/g, '<code class="px-1.5 py-0.5 rounded bg-brand-dark/10 font-mono text-xs">$1</code>');
+
+    const flushList = () => {
+      if (listItems.length > 0) {
+        htmlBlocks.push(
+          `<ul class="my-5 space-y-2.5 pl-5 list-disc marker:text-brand-orange">${listItems
+            .map((li) => `<li class="text-brand-dark/80 leading-relaxed pl-1">${formatInline(li)}</li>`)
+            .join('')}</ul>`
+        );
+        listItems = [];
+      }
+    };
+
+    const flushPara = () => {
+      if (paraLines.length > 0) {
+        const joined = paraLines.join(' ').trim();
+        if (joined) {
+          htmlBlocks.push(`<p class="my-4 text-brand-dark/80 leading-relaxed text-base sm:text-lg">${formatInline(joined)}</p>`);
+        }
+        paraLines = [];
+      }
+    };
+
+    for (const raw of lines) {
+      const line = raw.trim();
+      if (!line) {
+        flushList();
+        flushPara();
+        continue;
+      }
+      if (line.startsWith('### ')) {
+        flushList();
+        flushPara();
+        const text = line.slice(4).trim();
+        const id = slugifyHeading(text);
+        toc.push({ id, text, level: 3 });
+        htmlBlocks.push(`<h3 id="${id}" class="scroll-mt-28 text-xl sm:text-2xl font-black uppercase tracking-tight text-brand-dark mt-8 mb-3">${formatInline(text)}</h3>`);
+        continue;
+      }
+      if (line.startsWith('## ')) {
+        flushList();
+        flushPara();
+        const text = line.slice(3).trim();
+        const id = slugifyHeading(text);
+        toc.push({ id, text, level: 2 });
+        htmlBlocks.push(`<h2 id="${id}" class="scroll-mt-28 text-2xl sm:text-3xl font-black uppercase tracking-tight text-brand-dark mt-10 mb-4 pt-4 border-t border-brand-dark/10">${formatInline(text)}</h2>`);
+        continue;
+      }
+      if (line.startsWith('> ')) {
+        flushList();
+        flushPara();
+        htmlBlocks.push(`<blockquote class="my-6 pl-5 border-l-4 border-brand-orange italic text-brand-dark/85 bg-brand-orange/5 py-4 pr-5 rounded-r-2xl font-medium">${formatInline(line.slice(2).trim())}</blockquote>`);
+        continue;
+      }
+      if (line.startsWith('- ') || line.startsWith('* ')) {
+        flushPara();
+        listItems.push(line.slice(2).trim());
+        continue;
+      }
+      flushList();
+      paraLines.push(line);
+    }
+    flushList();
+    flushPara();
+
+    const words = (md || '').trim().split(/\s+/).filter(Boolean).length;
+    const readingTime = Math.max(1, Math.ceil(words / 200));
+    return { html: htmlBlocks.join('\n'), toc, readingTime };
+  }
+
+  async function tryResolveDynamicBlogArticle() {
+    const path = window.location.pathname.replace(/\/$/, '');
+    const isEn = path.startsWith('/en/blog/');
+    const isId = path.startsWith('/blog/');
+    if (!isEn && !isId) return;
+
+    const slug = path.split('/').pop() || '';
+    if (!slug) return;
+
+    let articles: any[] = [];
+    try {
+      const rawCms = localStorage.getItem('tdg_cms_state_v1');
+      if (rawCms) {
+        const parsed = JSON.parse(rawCms);
+        if (parsed?.blog?.articles) {
+          articles = parsed.blog.articles;
+        }
+      }
+    } catch {}
+
+    if (articles.length === 0) {
+      try {
+        const ghRes = await fetch('https://raw.githubusercontent.com/tdgcreative/website-tdg-creative-lab/main/src/data/blog.json');
+        if (ghRes.ok) {
+          const ghData = await ghRes.json();
+          articles = ghData.articles || [];
+        }
+      } catch {}
+    }
+
+    const found = articles.find((a) =>
+      isEn ? a.en_lang?.slug === slug || a.id_lang?.slug === slug : a.id_lang?.slug === slug || a.en_lang?.slug === slug
+    );
+
+    if (!found) return;
+
+    const post = isEn ? found.en_lang : found.id_lang;
+    const otherPost = isEn ? found.id_lang : found.en_lang;
+    const { html, toc, readingTime } = renderClientMarkdown(post.content || '');
+
+    document.title = post.seoTitle || `${post.title} — The Digital Grounds`;
+
+    const tocHtml =
+      toc.length > 0
+        ? `
+      <aside class="lg:col-span-4 order-1 lg:order-2">
+        <div class="lg:sticky lg:top-28 bg-white rounded-3xl p-6 border border-brand-dark/10 shadow-sm">
+          <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange block mb-2">Navigation</span>
+          <h2 class="text-sm font-black uppercase tracking-tight text-brand-dark mb-4 pb-3 border-b border-brand-dark/10">
+            ${isEn ? 'Table of Contents' : 'Daftar Isi Artikel'}
+          </h2>
+          <nav aria-label="Table of contents">
+            <ul class="space-y-2.5 text-xs">
+              ${toc
+                .map(
+                  (item) => `
+                <li class="${item.level === 3 ? 'pl-4' : ''}">
+                  <a href="#${item.id}" class="text-brand-dark/70 hover:text-brand-orange font-bold transition-colors block leading-snug">${item.text}</a>
+                </li>
+              `
+                )
+                .join('')}
+            </ul>
+          </nav>
+        </div>
+      </aside>
+    `
+        : '';
+
+    const articleEl = document.getElementById('dynamic-article-body')!;
+    articleEl.innerHTML = `
+      <header class="max-w-4xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12">
+        <nav aria-label="Breadcrumb" class="flex flex-wrap items-center gap-2 text-xs font-bold text-brand-dark/50 mb-6">
+          <a href="${isEn ? '/en' : '/'}" class="hover:text-brand-orange transition-colors">Home</a>
+          <span>/</span>
+          <a href="${isEn ? '/en/blog' : '/blog'}" class="hover:text-brand-orange transition-colors">Blog</a>
+          <span>/</span>
+          <span class="text-brand-orange truncate max-w-[240px] sm:max-w-xs">${found.category}</span>
+        </nav>
+
+        <div class="flex flex-wrap items-center gap-2.5 mb-4">
+          <span class="bg-brand-orange text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full">${found.category}</span>
+          <span class="text-xs font-bold text-brand-dark/55">${readingTime} ${isEn ? 'min read' : 'menit baca'}</span>
+        </div>
+
+        <h1 class="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-brand-dark leading-tight mb-5">${post.title}</h1>
+        <p class="text-sm sm:text-base md:text-lg text-brand-dark/70 leading-relaxed mb-6">${post.excerpt || ''}</p>
+
+        <div class="flex flex-wrap items-center justify-between gap-4 py-4 border-y border-brand-dark/10 text-xs text-brand-dark/65 font-semibold">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-brand-dark text-white font-black flex items-center justify-center text-xs">TDG</div>
+            <div>
+              <span class="block font-extrabold text-brand-dark">${found.author || 'The Digital Grounds Team'}</span>
+              <span>${isEn ? 'Published' : 'Diterbitkan'}: <time datetime="${found.publishedAt}">${found.publishedAt}</time></span>
+            </div>
+          </div>
+          <a href="${isEn ? `/blog/${otherPost.slug}` : `/en/blog/${otherPost.slug}`}" class="inline-flex items-center gap-1.5 bg-brand-dark/5 hover:bg-brand-dark hover:text-white text-brand-dark px-3.5 py-1.5 rounded-full font-bold transition-colors text-xs">
+            <span>${isEn ? '🇮🇩 Baca dalam Bahasa Indonesia' : '🌐 Read in English'}</span>
+          </a>
+        </div>
+      </header>
+
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 mb-10 sm:mb-14">
+        <div class="rounded-3xl overflow-hidden border border-brand-dark/10 shadow-xl bg-brand-dark aspect-[16/9]">
+          <img src="${found.coverImage || '/images/portfolio/fame.jpg'}" alt="${post.coverAlt || post.title}" class="w-full h-full object-cover" />
+        </div>
+      </div>
+
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        ${tocHtml}
+        <div class="${toc.length > 0 ? 'lg:col-span-8' : 'lg:col-span-10 lg:col-start-2'} order-2 lg:order-1">
+          <div class="bg-white rounded-3xl p-6 sm:p-8 md:p-12 border border-brand-dark/10 shadow-sm">
+            <div class="prose-tdg">${html}</div>
+            <div class="mt-10 pt-6 border-t border-brand-dark/10 flex flex-wrap items-center justify-between gap-4">
+              <div class="flex flex-wrap items-center gap-2">
+                ${(post.tags || []).map((tg: string) => `<span class="bg-brand-bg text-brand-dark text-xs font-bold px-3 py-1 rounded-full border border-brand-dark/10">#${tg}</span>`).join('')}
+              </div>
+              <a href="${isEn ? '/en/blog' : '/blog'}" class="inline-flex items-center gap-1.5 text-xs font-extrabold text-brand-dark hover:text-brand-orange transition-colors">
+                ← ${isEn ? 'Back to All Articles' : 'Kembali ke Semua Artikel'}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('fallback-404-section')?.classList.add('hidden');
+    document.getElementById('dynamic-blog-article-container')?.classList.remove('hidden');
+  }
+
+  tryResolveDynamicBlogArticle();
+</script>

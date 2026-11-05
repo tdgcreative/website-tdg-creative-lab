@@ -4,8 +4,12 @@ import PortfolioCard from '../../components/PortfolioCard.astro';
 import SimpleCTA from '../../components/SimpleCTA.astro';
 import { Image } from 'astro:assets';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
-import homeData from '../../data/home.json';
-import portfoliosData from '../../data/portfolios.json';
+import { loadHomeData, loadPortfoliosData, loadBlogData } from '../../utils/data-loader';
+import { estimateReadingTime } from '../../utils/blog-renderer';
+
+const homeData = loadHomeData();
+const portfoliosData = loadPortfoliosData();
+const blogData = loadBlogData();
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -36,6 +40,31 @@ const featuredPortfolios = [...portfoliosData.items]
     svgIcon: item.svgIcon,
     loading: (idx < 2 ? 'eager' : 'lazy') as 'eager' | 'lazy'
   }));
+
+const latestArticles = [...blogData.articles]
+  .filter((a) => a.status === 'published')
+  .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+  .slice(0, 3)
+  .map((a) => ({
+    id: a.id,
+    category: a.category,
+    coverImage: a.coverImage,
+    publishedAt: a.publishedAt,
+    ...a.en_lang,
+    readingTime: estimateReadingTime(a.en_lang.content)
+  }));
+
+const formatDate = (dateStr: string) => {
+  try {
+    return new Date(dateStr).toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric'
+    });
+  } catch {
+    return dateStr;
+  }
+};
 
 const serviceScopes = homeData.serviceScopesSection.scopes;
 const industries = homeData.industriesSection.industries;
@@ -301,6 +330,128 @@ const description = homeData.seo.en.description;
     </div>
   </section>
 
+  <!-- Latest Blog & Strategic Insights Section -->
+  <section class="py-16 sm:py-20 md:py-28 bg-white border-t border-brand-dark/10" id="blog-insights">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 sm:gap-6 mb-10 sm:mb-14">
+        <div class="flex flex-col gap-2 sm:gap-3">
+          <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">TDG Journal & Insights</span>
+          <h2 class="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-brand-dark">
+            Latest Insights & Articles
+          </h2>
+        </div>
+        <a
+          href="/en/blog"
+          class="inline-flex items-center gap-2.5 bg-brand-dark hover:bg-brand-orange text-white font-bold text-xs sm:text-sm px-6 py-3 rounded-full transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5 group w-fit self-start sm:self-auto shrink-0"
+        >
+          <span>View All Blog Articles</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4 transform transition-transform duration-300 group-hover:translate-x-1">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+          </svg>
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8" id="home-blog-grid">
+        {latestArticles.map((article) => (
+          <article class="bg-brand-bg rounded-3xl overflow-hidden border border-brand-dark/10 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+            <div>
+              <a href={`/en/blog/${article.slug}`} class="block relative aspect-[16/10] overflow-hidden bg-brand-dark">
+                <img
+                  src={article.coverImage}
+                  alt={article.coverAlt}
+                  width="640"
+                  height="400"
+                  loading="lazy"
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <span class="absolute top-3 left-3 bg-brand-dark/85 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">
+                  {article.category}
+                </span>
+              </a>
+              <div class="p-6 flex flex-col gap-3">
+                <div class="flex items-center gap-2 text-[11px] font-semibold text-brand-dark/50">
+                  <time datetime={article.publishedAt}>{formatDate(article.publishedAt)}</time>
+                  <span>•</span>
+                  <span>{article.readingTime} min read</span>
+                </div>
+                <h3 class="text-lg sm:text-xl font-black uppercase tracking-tight text-brand-dark group-hover:text-brand-orange transition-colors leading-snug">
+                  <a href={`/en/blog/${article.slug}`}>{article.title}</a>
+                </h3>
+                <p class="text-xs sm:text-sm text-brand-dark/70 leading-relaxed line-clamp-3">
+                  {article.excerpt}
+                </p>
+              </div>
+            </div>
+            <div class="px-6 pb-6 pt-3 border-t border-brand-dark/5 flex items-center justify-between">
+              <span class="text-[11px] font-bold text-brand-dark/55">TDG Editorial</span>
+              <a
+                href={`/en/blog/${article.slug}`}
+                class="inline-flex items-center gap-1 text-xs font-extrabold text-brand-orange group-hover:translate-x-1 transition-transform"
+              >
+                <span>Read Article</span>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-3.5 h-3.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
   <!-- Simple Consultation WhatsApp CTA Section -->
   <SimpleCTA />
 </BaseLayout>
+
+<script>
+  try {
+    const rawCms = localStorage.getItem('tdg_cms_state_v1');
+    if (rawCms) {
+      const cms = JSON.parse(rawCms);
+      const grid = document.getElementById('home-blog-grid');
+      if (cms?.blog?.articles && grid) {
+        const pub = cms.blog.articles
+          .filter((a: any) => a.status === 'published' && a.en_lang?.title && a.en_lang?.slug)
+          .sort((a: any, b: any) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+          .slice(0, 3);
+        if (pub.length > 0) {
+          grid.innerHTML = pub
+            .map((a: any) => {
+              const p = a.en_lang;
+              const words = (p.content || '').trim().split(/\s+/).filter(Boolean).length;
+              const rt = Math.max(1, Math.ceil(words / 200));
+              return `
+                <article class="bg-brand-bg rounded-3xl overflow-hidden border border-brand-dark/10 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group hover:-translate-y-1">
+                  <div>
+                    <a href="/en/blog/${p.slug}" class="block relative aspect-[16/10] overflow-hidden bg-brand-dark">
+                      <img src="${a.coverImage || '/images/portfolio/fame.jpg'}" alt="${p.coverAlt || p.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <span class="absolute top-3 left-3 bg-brand-dark/85 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full">${a.category}</span>
+                    </a>
+                    <div class="p-6 flex flex-col gap-3">
+                      <div class="flex items-center gap-2 text-[11px] font-semibold text-brand-dark/50">
+                        <time datetime="${a.publishedAt}">${a.publishedAt}</time>
+                        <span>•</span>
+                        <span>${rt} min read</span>
+                      </div>
+                      <h3 class="text-lg sm:text-xl font-black uppercase tracking-tight text-brand-dark group-hover:text-brand-orange transition-colors leading-snug">
+                        <a href="/en/blog/${p.slug}">${p.title}</a>
+                      </h3>
+                      <p class="text-xs sm:text-sm text-brand-dark/70 leading-relaxed line-clamp-3">${p.excerpt || ''}</p>
+                    </div>
+                  </div>
+                  <div class="px-6 pb-6 pt-3 border-t border-brand-dark/5 flex items-center justify-between">
+                    <span class="text-[11px] font-bold text-brand-dark/55">TDG Editorial</span>
+                    <a href="/en/blog/${p.slug}" class="inline-flex items-center gap-1 text-xs font-extrabold text-brand-orange group-hover:translate-x-1 transition-transform">
+                      <span>Read Article →</span>
+                    </a>
+                  </div>
+                </article>
+              `;
+            })
+            .join('');
+        }
+      }
+    }
+  } catch {}
+</script>

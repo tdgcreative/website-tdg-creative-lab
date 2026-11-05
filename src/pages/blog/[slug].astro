@@ -2,19 +2,24 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import SimpleCTA from '../../components/SimpleCTA.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
-import blogData from '../../data/blog.json';
+import { loadBlogData } from '../../utils/data-loader';
 import { renderMarkdownWithToc, estimateReadingTime } from '../../utils/blog-renderer';
 
 export function getStaticPaths() {
-  return blogData.articles
-    .filter((a) => a.status === 'published')
+  const latestBlog = loadBlogData();
+  return latestBlog.articles
+    .filter((a) => a.status === 'published' && a.id_lang?.slug)
     .map((article) => ({
       params: { slug: article.id_lang.slug },
       props: { article }
     }));
 }
 
-const { article } = Astro.props;
+const blogData = loadBlogData();
+const currentSlug = Astro.params.slug;
+const article =
+  blogData.articles.find((a) => a.id_lang?.slug === currentSlug) || Astro.props.article;
+
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
@@ -253,4 +258,3 @@ const formatDate = (dateStr: string) => {
 
   <SimpleCTA />
 </BaseLayout>
-

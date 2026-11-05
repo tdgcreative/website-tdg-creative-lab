@@ -27,6 +27,19 @@ function sendJson(res: any, status: number, payload: any) {
   res.end(JSON.stringify(payload));
 }
 
+function invalidateViteFile(server: any, absFilePath: string) {
+  try {
+    const mods = server?.moduleGraph?.getModulesByFile(absFilePath);
+    if (mods) {
+      for (const mod of mods) {
+        server.moduleGraph.invalidateModule(mod);
+      }
+    }
+  } catch {
+    // Ignore moduleGraph errors if any
+  }
+}
+
 async function syncMarkdownFiles(rootDir: string, blogData: any) {
   try {
     const idDir = path.join(rootDir, 'src/content/blog/id');
@@ -115,6 +128,7 @@ export function tdgAdminVitePlugin() {
             const body = await parseJsonBody(req);
             const targetPath = path.join(rootDir, 'src/data/home.json');
             await fs.writeFile(targetPath, JSON.stringify(body, null, 2) + '\n', 'utf-8');
+            invalidateViteFile(server, targetPath);
             return sendJson(res, 200, { ok: true, message: 'Data Home berhasil disimpan ke src/data/home.json' });
           }
 
@@ -122,6 +136,7 @@ export function tdgAdminVitePlugin() {
             const body = await parseJsonBody(req);
             const targetPath = path.join(rootDir, 'src/data/portfolios.json');
             await fs.writeFile(targetPath, JSON.stringify(body, null, 2) + '\n', 'utf-8');
+            invalidateViteFile(server, targetPath);
             return sendJson(res, 200, { ok: true, message: 'Data Portofolio berhasil disimpan ke src/data/portfolios.json' });
           }
 
@@ -130,6 +145,7 @@ export function tdgAdminVitePlugin() {
             const targetPath = path.join(rootDir, 'src/data/blog.json');
             await fs.writeFile(targetPath, JSON.stringify(body, null, 2) + '\n', 'utf-8');
             await syncMarkdownFiles(rootDir, body);
+            invalidateViteFile(server, targetPath);
             return sendJson(res, 200, { ok: true, message: 'Artikel Blog berhasil disimpan & disinkronkan ke Markdown' });
           }
 
@@ -194,4 +210,3 @@ export function tdgAdminVitePlugin() {
     },
   };
 }
-

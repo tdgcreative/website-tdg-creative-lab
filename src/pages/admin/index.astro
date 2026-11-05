@@ -1,8 +1,10 @@
 ---
 import '../../styles/global.css';
-import initialHome from '../../data/home.json';
-import initialPortfolios from '../../data/portfolios.json';
-import initialBlog from '../../data/blog.json';
+import { loadHomeData, loadPortfoliosData, loadBlogData } from '../../utils/data-loader';
+
+const initialHome = loadHomeData();
+const initialPortfolios = loadPortfoliosData();
+const initialBlog = loadBlogData();
 
 const initialPayload = JSON.stringify({
   home: initialHome,
@@ -449,6 +451,14 @@ const initialPayload = JSON.stringify({
 
                 <button
                   type="button"
+                  id="btn-preview-blog-article"
+                  class="bg-white/10 hover:bg-white/20 text-white font-extrabold text-xs px-4 py-3 rounded-full border border-white/15 transition-all cursor-pointer"
+                >
+                  👁️ Preview Artikel
+                </button>
+
+                <button
+                  type="button"
                   id="btn-save-blog-article"
                   class="bg-brand-orange hover:bg-brand-orange-light text-white font-black text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg transition-all cursor-pointer"
                 >
@@ -890,6 +900,31 @@ const initialPayload = JSON.stringify({
       </div>
     </div>
 
+    <!-- ========================================================= -->
+    <!-- MODAL: LIVE BLOG ARTICLE PREVIEW                          -->
+    <!-- ========================================================= -->
+    <div
+      id="blog-preview-modal"
+      class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 overflow-y-auto"
+    >
+      <div class="bg-[#F4F0EA] text-[#1C1C1C] border border-white/20 rounded-3xl max-w-5xl w-full max-h-[92vh] overflow-y-auto shadow-2xl">
+        <div class="sticky top-0 z-20 bg-[#181818] text-white px-6 py-4 flex items-center justify-between border-b border-white/10">
+          <div class="flex items-center gap-3">
+            <span class="px-2.5 py-1 rounded-full bg-brand-orange text-white text-[10px] font-black uppercase tracking-wider">Live Preview</span>
+            <h3 id="blog-preview-modal-title" class="text-sm font-black uppercase tracking-tight truncate max-w-md">Pratinjau Artikel Blog</h3>
+          </div>
+          <button
+            type="button"
+            id="btn-close-blog-preview"
+            class="px-4 py-1.5 rounded-full bg-white/10 hover:bg-brand-orange text-xs font-extrabold text-white transition-colors cursor-pointer"
+          >
+            ✕ Tutup Preview
+          </button>
+        </div>
+        <div id="blog-preview-modal-body" class="p-6 sm:p-10"></div>
+      </div>
+    </div>
+
     <!-- INITIAL BUNDLED STATE FOR STATIC FALLBACK -->
     <script id="tdg-initial-state" type="application/json" set:html={initialPayload} />
 
@@ -916,6 +951,21 @@ const initialPayload = JSON.stringify({
 
       const AUTH_KEY = 'tdg_admin_session_v1';
       const GH_CONFIG_KEY = 'tdg_admin_gh_config_v1';
+      const CMS_CACHE_KEY = 'tdg_cms_state_v1';
+
+      function persistLocalCmsCache() {
+        try {
+          localStorage.setItem(
+            CMS_CACHE_KEY,
+            JSON.stringify({
+              updatedAt: new Date().toISOString(),
+              home: state.home,
+              portfolios: state.portfolios,
+              blog: state.blog
+            })
+          );
+        } catch {}
+      }
 
       function showToast(msg: string, isError = false) {
         const toast = document.getElementById('admin-toast')!;
@@ -986,6 +1036,8 @@ const initialPayload = JSON.stringify({
       }
 
       async function saveResource(endpoint: 'home' | 'portfolios' | 'blog', data: any) {
+        persistLocalCmsCache();
+
         if (state.mode === 'local') {
           const res = await fetch(`/api/admin/${endpoint}`, {
             method: 'POST',
@@ -996,6 +1048,10 @@ const initialPayload = JSON.stringify({
           if (!res.ok || !json.ok) throw new Error(json.error || 'Gagal menyimpan data');
           return json.message;
         } else {
+          const cfg = getGhConfig();
+          if (!cfg.token) {
+            return 'Disimpan secara instan di browser! (Isi GitHub Token di ⚙️ GitHub Config untuk auto-commit ke repository)';
+          }
           const fileMap = {
             home: 'src/data/home.json',
             portfolios: 'src/data/portfolios.json',
@@ -1006,7 +1062,7 @@ const initialPayload = JSON.stringify({
             JSON.stringify(data, null, 2) + '\n',
             `chore(cms): update ${endpoint} via TDG Admin`
           );
-          return `Berhasil di-commit ke GitHub (${fileMap[endpoint]})!`;
+          return `Berhasil disimpan & di-commit ke GitHub (${fileMap[endpoint]})!`;
         }
       }
 
@@ -1028,6 +1084,10 @@ const initialPayload = JSON.stringify({
           if (!res.ok || !json.ok) throw new Error(json.error || 'Gagal mengunggah file');
           return json.url;
         } else {
+          const cfg = getGhConfig();
+          if (!cfg.token) {
+            return dataUrl;
+          }
           const safeName = file.name.toLowerCase().replace(/[^a-z0-9._-]/g, '-').replace(/-+/g, '-');
           const folderMap: Record<string, string> = {
             portfolio: 'public/images/portfolio',
@@ -1056,10 +1116,20 @@ const initialPayload = JSON.stringify({
               state.home = data.home;
               state.portfolios = data.portfolios;
               state.blog = data.blog;
+              persistLocalCmsCache();
             }
           }
         } catch {
           state.mode = 'cloud';
+          try {
+            const cachedRaw = localStorage.getItem(CMS_CACHE_KEY);
+            if (cachedRaw) {
+              const cached = JSON.parse(cachedRaw);
+              if (cached.home) state.home = cached.home;
+              if (cached.portfolios) state.portfolios = cached.portfolios;
+              if (cached.blog) state.blog = cached.blog;
+            }
+          } catch {}
         }
 
         const modeText = document.getElementById('storage-mode-text')!;
@@ -1075,6 +1145,11 @@ const initialPayload = JSON.stringify({
         renderHomeTab();
         renderPortfoliosTab();
         renderBlogListTab();
+
+        if (window.location.hash === '#blog') {
+          const blogTabBtn = document.querySelector('[data-tab="blog"]') as HTMLElement | null;
+          blogTabBtn?.click();
+        }
       }
 
       function updateNavCounters() {
@@ -2009,10 +2084,50 @@ const initialPayload = JSON.stringify({
         });
       });
 
+      function toCleanSlug(text: string): string {
+        return text
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .trim()
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-');
+      }
+
+      function extractFirstParagraphPlain(md: string): string {
+        const lines = (md || '').replace(/\r\n/g, '\n').split('\n');
+        for (const l of lines) {
+          const t = l.trim();
+          if (!t || t.startsWith('#') || t.startsWith('>') || t.startsWith('-') || t.startsWith('*') || t.startsWith('![')) continue;
+          return t
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+            .replace(/[*_`]/g, '')
+            .slice(0, 155);
+        }
+        return '';
+      }
+
+      // Auto-populate slug, SEO Title, and Cover Alt when typing Title in New Article mode
+      document.getElementById('blog-title')?.addEventListener('input', () => {
+        const titleVal = (document.getElementById('blog-title') as HTMLInputElement).value.trim();
+        const slugInput = document.getElementById('blog-slug') as HTMLInputElement;
+        const seoTitleInput = document.getElementById('blog-seo-title') as HTMLInputElement;
+        const coverAltInput = document.getElementById('blog-cover-alt') as HTMLInputElement;
+
+        if (state.editingBlogIndex === -1 && titleVal) {
+          slugInput.value = toCleanSlug(titleVal);
+          if (!seoTitleInput.value || seoTitleInput.value.endsWith(' — TDG')) {
+            seoTitleInput.value = `${titleVal.slice(0, 50)} — TDG`;
+          }
+          if (!coverAltInput.value) {
+            coverAltInput.value = `Ilustrasi ${titleVal} — The Digital Grounds`;
+          }
+        }
+        updateLiveSeoPanel();
+      });
+
       [
         'blog-focus-keyword',
         'blog-slug',
-        'blog-title',
         'blog-seo-title',
         'blog-cover-alt',
         'blog-seo-desc',
@@ -2026,18 +2141,143 @@ const initialPayload = JSON.stringify({
       document.getElementById('btn-auto-slug')?.addEventListener('click', () => {
         const titleVal = (document.getElementById('blog-title') as HTMLInputElement).value.trim();
         if (!titleVal) return;
-        const generatedSlug = titleVal
-          .toLowerCase()
-          .replace(/[^a-z0-9\s-]/g, '')
-          .trim()
-          .replace(/\s+/g, '-')
-          .replace(/-+/g, '-');
-        (document.getElementById('blog-slug') as HTMLInputElement).value = generatedSlug;
+        (document.getElementById('blog-slug') as HTMLInputElement).value = toCleanSlug(titleVal);
         const seoTitleInput = document.getElementById('blog-seo-title') as HTMLInputElement;
-        if (!seoTitleInput.value) {
-          seoTitleInput.value = `${titleVal.slice(0, 50)} — TDG`;
+        seoTitleInput.value = `${titleVal.slice(0, 50)} — TDG`;
+        const coverAltInput = document.getElementById('blog-cover-alt') as HTMLInputElement;
+        if (!coverAltInput.value) {
+          coverAltInput.value = `Ilustrasi ${titleVal} — The Digital Grounds`;
         }
+        const contentVal = (document.getElementById('blog-content') as HTMLTextAreaElement).value;
+        const autoExcerpt = extractFirstParagraphPlain(contentVal);
+        const seoDescInput = document.getElementById('blog-seo-desc') as HTMLTextAreaElement;
+        const excerptInput = document.getElementById('blog-excerpt') as HTMLTextAreaElement;
+        if (!seoDescInput.value && autoExcerpt) seoDescInput.value = autoExcerpt;
+        if (!excerptInput.value && autoExcerpt) excerptInput.value = autoExcerpt;
         updateLiveSeoPanel();
+      });
+
+      // Live Preview Modal Renderer
+      function renderPreviewMarkdown(md: string) {
+        const lines = (md || '').replace(/\r\n/g, '\n').split('\n');
+        const toc: { id: string; text: string; level: number }[] = [];
+        const blocks: string[] = [];
+        let listItems: string[] = [];
+        let paraLines: string[] = [];
+
+        const fmt = (txt: string) =>
+          txt
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<figure class="my-6 overflow-hidden rounded-2xl border border-black/10"><img src="$2" alt="$1" class="w-full h-auto object-cover" /><figcaption class="px-4 py-2 text-xs text-black/60 text-center">$1</figcaption></figure>')
+            .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="text-brand-orange font-bold underline">$1</a>')
+            .replace(/\*\*([^*]+)\*\*/g, '<strong class="font-extrabold text-[#1C1C1C]">$1</strong>')
+            .replace(/\*([^*]+)\*/g, '<em class="italic">$1</em>');
+
+        const flushList = () => {
+          if (listItems.length > 0) {
+            blocks.push(`<ul class="my-4 space-y-2 pl-5 list-disc marker:text-brand-orange">${listItems.map((li) => `<li class="text-[#1C1C1C]/80 leading-relaxed">${fmt(li)}</li>`).join('')}</ul>`);
+            listItems = [];
+          }
+        };
+        const flushPara = () => {
+          if (paraLines.length > 0) {
+            blocks.push(`<p class="my-4 text-[#1C1C1C]/80 leading-relaxed text-base">${fmt(paraLines.join(' '))}</p>`);
+            paraLines = [];
+          }
+        };
+
+        for (const raw of lines) {
+          const line = raw.trim();
+          if (!line) {
+            flushList();
+            flushPara();
+            continue;
+          }
+          if (line.startsWith('### ')) {
+            flushList();
+            flushPara();
+            const text = line.slice(4).trim();
+            const id = toCleanSlug(text);
+            toc.push({ id, text, level: 3 });
+            blocks.push(`<h3 id="${id}" class="text-xl font-black uppercase tracking-tight text-[#1C1C1C] mt-6 mb-2">${fmt(text)}</h3>`);
+            continue;
+          }
+          if (line.startsWith('## ')) {
+            flushList();
+            flushPara();
+            const text = line.slice(3).trim();
+            const id = toCleanSlug(text);
+            toc.push({ id, text, level: 2 });
+            blocks.push(`<h2 id="${id}" class="text-2xl font-black uppercase tracking-tight text-[#1C1C1C] mt-8 mb-3 pt-4 border-t border-black/10">${fmt(text)}</h2>`);
+            continue;
+          }
+          if (line.startsWith('> ')) {
+            flushList();
+            flushPara();
+            blocks.push(`<blockquote class="my-5 pl-4 border-l-4 border-brand-orange italic bg-brand-orange/5 py-3 pr-4 rounded-r-xl">${fmt(line.slice(2).trim())}</blockquote>`);
+            continue;
+          }
+          if (line.startsWith('- ') || line.startsWith('* ')) {
+            flushPara();
+            listItems.push(line.slice(2).trim());
+            continue;
+          }
+          flushList();
+          paraLines.push(line);
+        }
+        flushList();
+        flushPara();
+        return { html: blocks.join('\n'), toc };
+      }
+
+      const blogPreviewModal = document.getElementById('blog-preview-modal')!;
+      document.getElementById('btn-preview-blog-article')?.addEventListener('click', () => {
+        readBlogEditorIntoWorking();
+        if (!workingArticle) return;
+        const langKey = state.blogLang === 'id' ? 'id_lang' : 'en_lang';
+        const post = workingArticle[langKey];
+        const { html, toc } = renderPreviewMarkdown(post.content || '');
+        const words = (post.content || '').trim().split(/\s+/).filter(Boolean).length;
+        const rt = Math.max(1, Math.ceil(words / 200));
+
+        document.getElementById('blog-preview-modal-title')!.textContent =
+          post.title || 'Pratinjau Artikel Blog';
+
+        document.getElementById('blog-preview-modal-body')!.innerHTML = `
+          <div class="max-w-4xl mx-auto space-y-6">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span class="bg-brand-orange text-white text-xs font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full">${workingArticle.category}</span>
+              <span class="text-xs font-bold text-black/55">${rt} menit baca • ${workingArticle.publishedAt}</span>
+            </div>
+            <h1 class="text-2xl sm:text-4xl font-black uppercase tracking-tight text-[#1C1C1C] leading-tight">${post.title || '(Judul Artikel Belum Diisi)'}</h1>
+            <p class="text-sm sm:text-base text-black/70 leading-relaxed">${post.excerpt || extractFirstParagraphPlain(post.content || '')}</p>
+            <div class="rounded-3xl overflow-hidden border border-black/10 aspect-[16/9] bg-black">
+              <img src="${workingArticle.coverImage || '/images/portfolio/fame.jpg'}" alt="${post.coverAlt || post.title}" class="w-full h-full object-cover" />
+            </div>
+            ${
+              toc.length > 0
+                ? `<div class="bg-white rounded-2xl p-5 border border-black/10">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-brand-orange block mb-2">Table of Contents</span>
+                    <ul class="space-y-1.5 text-xs font-bold text-black/75">
+                      ${toc.map((t) => `<li class="${t.level === 3 ? 'pl-4' : ''}">• ${t.text}</li>`).join('')}
+                    </ul>
+                  </div>`
+                : ''
+            }
+            <div class="bg-white rounded-3xl p-6 sm:p-10 border border-black/10 shadow-sm">
+              ${html}
+            </div>
+          </div>
+        `;
+        blogPreviewModal.classList.remove('hidden');
+        blogPreviewModal.classList.add('flex');
+      });
+
+      document.getElementById('btn-close-blog-preview')?.addEventListener('click', () => {
+        blogPreviewModal.classList.add('hidden');
+        blogPreviewModal.classList.remove('flex');
       });
 
       // Markdown Toolbar Helpers
@@ -2107,16 +2347,43 @@ const initialPayload = JSON.stringify({
 
       document.getElementById('btn-save-blog-article')?.addEventListener('click', async () => {
         readBlogEditorIntoWorking();
-        if (!workingArticle.id_lang.title || !workingArticle.id_lang.slug) {
-          showToast('Judul dan URL Slug Bahasa Indonesia wajib diisi!', true);
+
+        // If user filled EN first and left ID title empty, copy from EN
+        if (!workingArticle.id_lang.title && workingArticle.en_lang.title) {
+          workingArticle.id_lang.title = workingArticle.en_lang.title;
+        }
+        if (!workingArticle.id_lang.title) {
+          showToast('Judul Utama Artikel (H1) wajib diisi!', true);
           return;
         }
+
+        // Auto-generate ID slug & SEO meta if left blank
+        if (!workingArticle.id_lang.slug) {
+          workingArticle.id_lang.slug = toCleanSlug(workingArticle.id_lang.title) || `artikel-tdg-${Date.now()}`;
+        }
+        const idAutoExcerpt = extractFirstParagraphPlain(workingArticle.id_lang.content || '');
+        if (!workingArticle.id_lang.excerpt) {
+          workingArticle.id_lang.excerpt = idAutoExcerpt || workingArticle.id_lang.title;
+        }
+        if (!workingArticle.id_lang.seoTitle) {
+          workingArticle.id_lang.seoTitle = `${workingArticle.id_lang.title.slice(0, 50)} — TDG`;
+        }
+        if (!workingArticle.id_lang.seoDescription) {
+          workingArticle.id_lang.seoDescription = workingArticle.id_lang.excerpt;
+        }
+        if (!workingArticle.id_lang.coverAlt) {
+          workingArticle.id_lang.coverAlt = `Ilustrasi ${workingArticle.id_lang.title} — The Digital Grounds`;
+        }
+
         // Fallback English fields if user only filled Indonesian first
         if (!workingArticle.en_lang.title) {
           workingArticle.en_lang.title = workingArticle.id_lang.title;
         }
         if (!workingArticle.en_lang.slug) {
-          workingArticle.en_lang.slug = `${workingArticle.id_lang.slug}-en`;
+          workingArticle.en_lang.slug =
+            workingArticle.en_lang.title !== workingArticle.id_lang.title
+              ? toCleanSlug(workingArticle.en_lang.title)
+              : `${workingArticle.id_lang.slug}-en`;
         }
         if (!workingArticle.en_lang.seoTitle) {
           workingArticle.en_lang.seoTitle = workingArticle.id_lang.seoTitle || workingArticle.en_lang.title;
