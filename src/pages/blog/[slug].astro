@@ -3,22 +3,28 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import SimpleCTA from '../../components/SimpleCTA.astro';
 import { getLangFromUrl, useTranslations } from '../../i18n/utils';
 import { loadBlogData } from '../../utils/data-loader';
+import { fetchSupabaseBlogArticles } from '../../utils/supabase';
 import { renderMarkdownWithToc, estimateReadingTime } from '../../utils/blog-renderer';
 
-export function getStaticPaths() {
+export async function getStaticPaths() {
+  const supaArticles = await fetchSupabaseBlogArticles();
   const latestBlog = loadBlogData();
-  return latestBlog.articles
+  const articles = (supaArticles && supaArticles.length > 0) ? supaArticles : latestBlog.articles;
+
+  return articles
     .filter((a) => a.status === 'published' && a.id_lang?.slug)
     .map((article) => ({
       params: { slug: article.id_lang.slug },
-      props: { article }
+      props: { article, allArticles: articles }
     }));
 }
 
+const supaArticles = await fetchSupabaseBlogArticles();
 const blogData = loadBlogData();
+const allArticles = (supaArticles && supaArticles.length > 0) ? supaArticles : (Astro.props.allArticles || blogData.articles);
 const currentSlug = Astro.params.slug;
 const article =
-  blogData.articles.find((a) => a.id_lang?.slug === currentSlug) || Astro.props.article;
+  allArticles.find((a: any) => a.id_lang?.slug === currentSlug) || Astro.props.article;
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -27,10 +33,10 @@ const post = article.id_lang;
 const enPost = article.en_lang;
 const { html, toc, readingTime } = renderMarkdownWithToc(post.content);
 
-const relatedArticles = blogData.articles
-  .filter((a) => a.status === 'published' && a.id !== article.id)
+const relatedArticles = allArticles
+  .filter((a: any) => a.status === 'published' && a.id !== article.id)
   .slice(0, 2)
-  .map((a) => ({
+  .map((a: any) => ({
     ...a.id_lang,
     category: a.category,
     coverImage: a.coverImage,
@@ -79,7 +85,7 @@ const formatDate = (dateStr: string) => {
       </nav>
 
       <div class="flex flex-wrap items-center gap-2.5 mb-4">
-        <span class="bg-brand-orange text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full">
+        <span id="article-category" class="bg-brand-orange text-white text-[10px] sm:text-xs font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full">
           {article.category}
         </span>
         <span class="text-xs font-bold text-brand-dark/55">
@@ -87,11 +93,11 @@ const formatDate = (dateStr: string) => {
         </span>
       </div>
 
-      <h1 class="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-brand-dark leading-tight mb-5">
+      <h1 id="article-title" class="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-brand-dark leading-tight mb-5">
         {post.title}
       </h1>
 
-      <p class="text-sm sm:text-base md:text-lg text-brand-dark/70 leading-relaxed mb-6">
+      <p id="article-excerpt" class="text-sm sm:text-base md:text-lg text-brand-dark/70 leading-relaxed mb-6">
         {post.excerpt}
       </p>
 
@@ -124,6 +130,7 @@ const formatDate = (dateStr: string) => {
     <div class="max-w-5xl mx-auto px-4 sm:px-6 mb-10 sm:mb-14">
       <div class="rounded-3xl overflow-hidden border border-brand-dark/10 shadow-xl bg-brand-dark aspect-[16/9]">
         <img
+          id="article-cover"
           src={article.coverImage}
           alt={post.coverAlt}
           width="1200"
@@ -181,7 +188,7 @@ const formatDate = (dateStr: string) => {
       <!-- Article Body -->
       <div class={`${toc.length > 0 ? 'lg:col-span-8' : 'lg:col-span-10 lg:col-start-2'} order-2 lg:order-1`}>
         <div class="bg-white rounded-3xl p-6 sm:p-8 md:p-12 border border-brand-dark/10 shadow-sm">
-          <div class="prose-tdg" set:html={html} />
+          <div id="article-body" class="prose-tdg" set:html={html} />
 
           <!-- Tags Footer -->
           <div class="mt-10 pt-6 border-t border-brand-dark/10 flex flex-wrap items-center justify-between gap-4">
@@ -258,3 +265,33 @@ const formatDate = (dateStr: string) => {
 
   <SimpleCTA />
 </BaseLayout>
+
+<script>
+  import { fetchSupabaseBlogArticles } from '../../utils/supabase';
+  import { renderMarkdownWithToc } from '../../utils/blog-renderer';
+
+  (async () => {
+    try {
+      const slug = window.location.pathname.replace(/\/$/, '').split('/').pop() || '';
+      const articles = await fetchSupabaseBlogArticles();
+      if (!articles || !slug) return;
+      const found = articles.find((a) => a.id_lang?.slug === slug || a.en_lang?.slug === slug);
+      if (!found || !found.id_lang) return;
+      const post = found.id_lang;
+
+      const titleEl = document.getElementById('article-title');
+      if (titleEl && post.title) titleEl.textContent = post.title;
+      const excEl = document.getElementById('article-excerpt');
+      if (excEl && post.excerpt) excEl.textContent = post.excerpt;
+      const catEl = document.getElementById('article-category');
+      if (catEl && found.category) catEl.textContent = found.category;
+      const covEl = document.getElementById('article-cover') as HTMLImageElement | null;
+      if (covEl && found.coverImage) covEl.src = found.coverImage;
+      const bodyEl = document.getElementById('article-body');
+      if (bodyEl && post.content) {
+        const rendered = renderMarkdownWithToc(post.content);
+        bodyEl.innerHTML = rendered.html;
+      }
+    } catch {}
+  })();
+</script>

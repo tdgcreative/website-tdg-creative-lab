@@ -1,5 +1,6 @@
 ---
 import { getLangFromUrl } from '../i18n/utils';
+import { loadSettingsData } from '../utils/data-loader';
 
 export interface ArticleMeta {
   publishedAt: string;
@@ -33,6 +34,11 @@ const {
   articleMeta
 } = Astro.props;
 
+const settings = loadSettingsData();
+const gtmId = (settings.tracking?.gtmId || '').trim();
+const metaPixelId = (settings.tracking?.metaPixelId || '').trim();
+const customHeadScript = (settings.tracking?.customHeadScript || '').trim();
+
 const lang = getLangFromUrl(Astro.url);
 const siteUrl = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://www.thedigitalgrounds.com';
 
@@ -58,7 +64,7 @@ const structuredData = {
   "name": "The Digital Grounds",
   "image": `${siteUrl}/TDG LOGO TRANSPARENT.png`,
   "url": siteUrl,
-  "telephone": "+62-813-8238-837",
+  "telephone": settings.whatsapp?.display || "+62-813-8238-837",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Surabaya",
@@ -83,7 +89,7 @@ const structuredData = {
     "closes": "18:00"
   },
   "sameAs": [
-    "https://instagram.com/tdg.creative.lab"
+    settings.contact?.instagramUrl || "https://instagram.com/tdg.creative.lab"
   ]
 };
 
@@ -130,7 +136,7 @@ const breadcrumbStructuredData = articleMeta ? {
     {
       "@type": "ListItem",
       "position": 2,
-      "name": "Insights & Blog",
+      "name": "Blog",
       "item": new URL(lang === 'en' ? '/en/blog' : '/blog', siteUrl).toString()
     },
     {
@@ -205,3 +211,34 @@ const breadcrumbStructuredData = articleMeta ? {
 {!noindex && breadcrumbStructuredData && (
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbStructuredData)} />
 )}
+
+<!-- Google Tag Manager (Server-Rendered if configured) -->
+{gtmId && (
+  <script is:inline define:vars={{ gtmId }}>
+    window.__TDG_GTM_LOADED = gtmId;
+    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer',gtmId);
+  </script>
+)}
+
+<!-- Meta Pixel Code (Server-Rendered if configured) -->
+{metaPixelId && (
+  <script is:inline define:vars={{ metaPixelId }}>
+    window.__TDG_PIXEL_LOADED = metaPixelId;
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', metaPixelId);
+    fbq('track', 'PageView');
+  </script>
+)}
+
+{customHeadScript && <Fragment set:html={customHeadScript} />}

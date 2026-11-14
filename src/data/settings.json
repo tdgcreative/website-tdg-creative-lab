@@ -1,0 +1,93 @@
+{
+  "whatsapp": {
+    "number": "628138238837",
+    "display": "+62 813-8238-837",
+    "defaultMessage": {
+      "id": "Halo The Digital Grounds, saya ingin konsultasi mengenai growth brand dan bisnis saya.",
+      "en": "Hello The Digital Grounds, I would like to consult regarding growing my brand and business."
+    }
+  },
+  "contact": {
+    "email": "tdg.creative.lab@gmail.com",
+    "instagramHandle": "@tdg.creative.lab",
+    "instagramUrl": "https://instagram.com/tdg.creative.lab",
+    "location": {
+      "id": "Surabaya, Indonesia",
+      "en": "Surabaya, Indonesia"
+    },
+    "seo": {
+      "id": {
+        "title": "Hubungi Kami — The Digital Grounds",
+        "description": "Siap mengembangkan brand Anda? Sampaikan kebutuhan bisnis Anda dan tim kami siapkan kerangka eksekusinya."
+      },
+      "en": {
+        "title": "Contact Us — The Digital Grounds",
+        "description": "Ready to grow your brand? Share your business goals and our team will prepare the execution framework."
+      }
+    },
+    "tag": {
+      "id": "Get in Touch",
+      "en": "Get in Touch"
+    },
+    "title": {
+      "id": "Ready to Grow Your Brand?",
+      "en": "Ready to Grow Your Brand?"
+    },
+    "subtitle": {
+      "id": "Sampaikan target bisnismu, dan kami akan menyiapkan kerangka eksekusinya.",
+      "en": "Share your business goals, and we will prepare the execution framework."
+    },
+    "budgetRanges": {
+      "id": [
+        "< Rp 10 Juta / bulan",
+        "Rp 10 Juta - Rp 25 Juta / bulan",
+        "Rp 25 Juta - Rp 50 Juta / bulan",
+        "Rp 50 Juta - Rp 100 Juta / bulan",
+        "> Rp 100 Juta / bulan"
+      ],
+      "en": [
+        "< IDR 10M / month",
+        "IDR 10M - IDR 25M / month",
+        "IDR 25M - IDR 50M / month",
+        "IDR 50M - IDR 100M / month",
+        "> IDR 100M / month"
+      ]
+    },
+    "thanks": {
+      "id": {
+        "title": "Terima Kasih!",
+        "subtitle": "Pesan Anda telah berhasil dikirim. Tim kami akan segera menghubungi Anda melalui WhatsApp atau Email.",
+        "cta": "Kembali ke Beranda"
+      },
+      "en": {
+        "title": "Thank You!",
+        "subtitle": "Your message has been sent successfully. Our team will contact you shortly via WhatsApp or Email.",
+        "cta": "Back to Home"
+      }
+    }
+  },
+  "ctaBanner": {
+    "tag": {
+      "id": "Konsultasi Eksklusif",
+      "en": "Exclusive Consultation"
+    },
+    "title": {
+      "id": "Siap Mengembangkan Brand & Bisnis Anda?",
+      "en": "Ready to Scale Your Brand & Business?"
+    },
+    "description": {
+      "id": "Konsultasikan strategi, tantangan, dan arah pertumbuhan ekosistem brand Anda langsung bersama tim ahli kami via WhatsApp.",
+      "en": "Consult your strategy, challenges, and brand ecosystem growth direction directly with our expert team via WhatsApp."
+    },
+    "buttonText": {
+      "id": "Konsultasi via WhatsApp",
+      "en": "Consult via WhatsApp"
+    }
+  },
+  "tracking": {
+    "gtmId": "",
+    "metaPixelId": "",
+    "customHeadScript": "",
+    "customBodyScript": ""
+  }
+}

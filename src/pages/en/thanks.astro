@@ -1,13 +1,19 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
+import { loadSettingsData } from '../../utils/data-loader';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
+const settings = loadSettingsData();
 
-const title = "Thank You — The Digital Grounds";
-const description = "Thank you for your message. We will get back to you shortly.";
+const title = 'Thank You — The Digital Grounds';
+const description = 'Thank you for your message. We will contact you shortly.';
+
+const thanksTitle = settings.contact?.thanks?.en?.title || t('thanks.title');
+const thanksSub = settings.contact?.thanks?.en?.subtitle || t('thanks.subtitle');
+const thanksCta = settings.contact?.thanks?.en?.cta || t('thanks.cta');
 ---
 
 <BaseLayout title={title} description={description} noindex={true}>
@@ -19,20 +25,46 @@ const description = "Thank you for your message. We will get back to you shortly
         </svg>
       </div>
       
-      <h1 class="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-brand-dark">
-        {t('thanks.title')}
+      <h1 id="thanks-title" class="text-3xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight text-brand-dark">
+        {thanksTitle}
       </h1>
       
-      <p class="text-sm md:text-base text-brand-dark/70 leading-relaxed max-w-lg">
-        {t('thanks.subtitle')}
+      <p id="thanks-subtitle" class="text-sm md:text-base text-brand-dark/70 leading-relaxed max-w-lg">
+        {thanksSub}
       </p>
 
       <a 
+        id="thanks-cta"
         href={translatePath('/')} 
         class="bg-brand-orange hover:bg-brand-orange-light text-white font-extrabold px-8 py-4 rounded-full transition-colors text-sm uppercase tracking-wider mt-4 shadow-sm hover:shadow-md"
       >
-        {t('thanks.cta')}
+        {thanksCta}
       </a>
     </div>
   </section>
 </BaseLayout>
+
+<script>
+  import { getSupabaseClient } from '../../utils/supabase';
+
+  function applyThanks(settings: any) {
+    const th = settings?.contact?.thanks?.en;
+    if (!th) return;
+    if (th.title) document.getElementById('thanks-title')!.textContent = th.title;
+    if (th.subtitle) document.getElementById('thanks-subtitle')!.textContent = th.subtitle;
+    if (th.cta) document.getElementById('thanks-cta')!.textContent = th.cta;
+  }
+
+  try {
+    const raw = localStorage.getItem('tdg_cms_state_v1');
+    if (raw) applyThanks(JSON.parse(raw)?.settings);
+  } catch {}
+
+  (async () => {
+    try {
+      const supabase = getSupabaseClient();
+      const { data } = await supabase.from('site_settings').select('data').eq('key', 'settings').maybeSingle();
+      if (data?.data) applyThanks(data.data);
+    } catch {}
+  })();
+</script>

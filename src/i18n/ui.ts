@@ -10,17 +10,17 @@ export const ui = {
     // Navigation
     'nav.home': 'Beranda',
     'nav.works': 'Portofolio',
-    'nav.blog': 'Insights & Blog',
+    'nav.blog': 'Blog',
     'nav.contact': 'Hubungi Kami',
 
     // Blog
-    'blog.tag': 'Insights & Strategi Digital',
+    'blog.tag': 'Artikel & Strategi Digital',
     'blog.title': 'Wawasan & Studi Kasus Ekosistem Brand',
     'blog.subtitle': 'Panduan taktis, analisis strategi digital marketing, brand development, dan produksi kreatif dari tim The Digital Grounds.',
     'blog.readMore': 'Baca Artikel',
     'blog.readingTime': 'menit baca',
     'blog.toc': 'Daftar Isi Artikel',
-    'blog.related': 'Artikel & Wawasan Terkait',
+    'blog.related': 'Artikel Terkait',
     'blog.backToBlog': 'Kembali ke Semua Artikel',
     'blog.updated': 'Diperbarui',
     'blog.published': 'Diterbitkan',
@@ -101,17 +101,17 @@ export const ui = {
     // Navigation
     'nav.home': 'Home',
     'nav.works': 'Portfolio',
-    'nav.blog': 'Insights & Blog',
+    'nav.blog': 'Blog',
     'nav.contact': 'Contact Us',
 
     // Blog
-    'blog.tag': 'Digital Strategy Insights',
-    'blog.title': 'Brand Ecosystem Insights & Case Studies',
-    'blog.subtitle': 'Tactical guides, digital marketing strategy analysis, brand development, and creative production insights by The Digital Grounds.',
+    'blog.tag': 'Digital Strategy & Articles',
+    'blog.title': 'Brand Ecosystem Articles & Case Studies',
+    'blog.subtitle': 'Tactical guides, digital marketing strategy analysis, brand development, and creative production by The Digital Grounds.',
     'blog.readMore': 'Read Article',
     'blog.readingTime': 'min read',
     'blog.toc': 'Table of Contents',
-    'blog.related': 'Related Articles & Insights',
+    'blog.related': 'Related Articles',
     'blog.backToBlog': 'Back to All Articles',
     'blog.updated': 'Updated',
     'blog.published': 'Published',

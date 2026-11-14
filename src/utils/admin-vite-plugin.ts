@@ -110,10 +110,11 @@ export function tdgAdminVitePlugin() {
 
         try {
           if (req.method === 'GET' && url === '/state') {
-            const [homeRaw, portfoliosRaw, blogRaw] = await Promise.all([
+            const [homeRaw, portfoliosRaw, blogRaw, settingsRaw] = await Promise.all([
               fs.readFile(path.join(rootDir, 'src/data/home.json'), 'utf-8'),
               fs.readFile(path.join(rootDir, 'src/data/portfolios.json'), 'utf-8'),
               fs.readFile(path.join(rootDir, 'src/data/blog.json'), 'utf-8'),
+              fs.readFile(path.join(rootDir, 'src/data/settings.json'), 'utf-8').catch(() => '{}'),
             ]);
             return sendJson(res, 200, {
               ok: true,
@@ -121,6 +122,7 @@ export function tdgAdminVitePlugin() {
               home: JSON.parse(homeRaw),
               portfolios: JSON.parse(portfoliosRaw),
               blog: JSON.parse(blogRaw),
+              settings: JSON.parse(settingsRaw || '{}'),
             });
           }
 
@@ -129,7 +131,7 @@ export function tdgAdminVitePlugin() {
             const targetPath = path.join(rootDir, 'src/data/home.json');
             await fs.writeFile(targetPath, JSON.stringify(body, null, 2) + '\n', 'utf-8');
             invalidateViteFile(server, targetPath);
-            return sendJson(res, 200, { ok: true, message: 'Data Home berhasil disimpan ke src/data/home.json' });
+            return sendJson(res, 200, { ok: true, message: 'Data Home berhasil disimpan' });
           }
 
           if (req.method === 'POST' && url === '/portfolios') {
@@ -137,7 +139,7 @@ export function tdgAdminVitePlugin() {
             const targetPath = path.join(rootDir, 'src/data/portfolios.json');
             await fs.writeFile(targetPath, JSON.stringify(body, null, 2) + '\n', 'utf-8');
             invalidateViteFile(server, targetPath);
-            return sendJson(res, 200, { ok: true, message: 'Data Portofolio berhasil disimpan ke src/data/portfolios.json' });
+            return sendJson(res, 200, { ok: true, message: 'Data Portofolio berhasil disimpan' });
           }
 
           if (req.method === 'POST' && url === '/blog') {
@@ -146,7 +148,15 @@ export function tdgAdminVitePlugin() {
             await fs.writeFile(targetPath, JSON.stringify(body, null, 2) + '\n', 'utf-8');
             await syncMarkdownFiles(rootDir, body);
             invalidateViteFile(server, targetPath);
-            return sendJson(res, 200, { ok: true, message: 'Artikel Blog berhasil disimpan & disinkronkan ke Markdown' });
+            return sendJson(res, 200, { ok: true, message: 'Artikel Blog berhasil disimpan' });
+          }
+
+          if (req.method === 'POST' && url === '/settings') {
+            const body = await parseJsonBody(req);
+            const targetPath = path.join(rootDir, 'src/data/settings.json');
+            await fs.writeFile(targetPath, JSON.stringify(body, null, 2) + '\n', 'utf-8');
+            invalidateViteFile(server, targetPath);
+            return sendJson(res, 200, { ok: true, message: 'Pengaturan Global berhasil disimpan' });
           }
 
           if (req.method === 'POST' && url === '/upload') {

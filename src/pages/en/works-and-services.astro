@@ -2,8 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PortfolioCard from '../../components/PortfolioCard.astro';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
-import portfoliosData from '../../data/portfolios.json';
+import { loadPortfoliosData } from '../../utils/data-loader';
 
+const portfoliosData = loadPortfoliosData();
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);

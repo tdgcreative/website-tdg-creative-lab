@@ -3,6 +3,7 @@ import path from 'node:path';
 import bundledHome from '../data/home.json';
 import bundledPortfolios from '../data/portfolios.json';
 import bundledBlog from '../data/blog.json';
+import bundledSettings from '../data/settings.json';
 
 export function loadHomeData(): typeof bundledHome {
   try {
@@ -31,3 +32,11 @@ export function loadBlogData(): typeof bundledBlog {
   }
 }
 
+export function loadSettingsData(): typeof bundledSettings {
+  try {
+    const raw = fs.readFileSync(path.join(process.cwd(), 'src/data/settings.json'), 'utf-8');
+    return JSON.parse(raw);
+  } catch {
+    return bundledSettings;
+  }
+}

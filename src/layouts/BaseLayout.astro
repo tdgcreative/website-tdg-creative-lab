@@ -3,6 +3,7 @@ import BaseHead, { type ArticleMeta } from '../components/BaseHead.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import { getLangFromUrl } from '../i18n/utils';
+import { loadSettingsData } from '../utils/data-loader';
 import '../styles/global.css';
 
 interface Props {
@@ -29,6 +30,10 @@ const {
   articleMeta
 } = Astro.props;
 const lang = getLangFromUrl(Astro.url);
+const settings = loadSettingsData();
+const gtmId = (settings.tracking?.gtmId || '').trim();
+const metaPixelId = (settings.tracking?.metaPixelId || '').trim();
+const customBodyScript = (settings.tracking?.customBodyScript || '').trim();
 ---
 
 <!doctype html>
@@ -47,6 +52,28 @@ const lang = getLangFromUrl(Astro.url);
     />
   </head>
   <body class="flex flex-col min-h-screen bg-brand-bg text-brand-dark selection:bg-brand-orange selection:text-white font-sans antialiased overflow-x-hidden">
+    {gtmId && (
+      <noscript>
+        <iframe
+          src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+          height="0"
+          width="0"
+          style="display:none;visibility:hidden"
+        ></iframe>
+      </noscript>
+    )}
+    {metaPixelId && (
+      <noscript>
+        <img
+          height="1"
+          width="1"
+          style="display:none"
+          src={`https://www.facebook.com/tr?id=${metaPixelId}&ev=PageView&noscript=1`}
+          alt=""
+        />
+      </noscript>
+    )}
+
     <Navbar alternateIdPath={alternateIdPath} alternateEnPath={alternateEnPath} />
     
     <main class="flex-grow pt-20 md:pt-24">
@@ -54,5 +81,155 @@ const lang = getLangFromUrl(Astro.url);
     </main>
 
     <Footer />
+
+    {customBodyScript && <Fragment set:html={customBodyScript} />}
+
+    <!-- Global Runtime Sync for WhatsApp, Contact, CTA & Tracking Pixels (Supabase + LocalStorage) -->
+    <script>
+      import { getSupabaseClient } from '../utils/supabase';
+
+      function applyGlobalSettings(settings: any) {
+        if (!settings) return;
+        const isEn = document.documentElement.lang === 'en' || window.location.pathname.startsWith('/en');
+        const langKey = isEn ? 'en' : 'id';
+
+        // 1. Update Global WhatsApp Number & Links across the entire website
+        const rawWaNum = (settings.whatsapp?.number || '').replace(/[^0-9]/g, '');
+        const waDisplay = settings.whatsapp?.display || '';
+        const defaultWaMsg = settings.whatsapp?.defaultMessage?.[langKey] || settings.whatsapp?.defaultMessage?.id || '';
+
+        if (rawWaNum) {
+          // Update all links pointing to wa.me or marked with [data-wa-link]
+          document.querySelectorAll<HTMLAnchorElement>('a[href*="wa.me/"], a[data-wa-link]').forEach((a) => {
+            try {
+              const currentHref = a.getAttribute('href') || '';
+              let queryPart = '';
+              if (currentHref.includes('?')) {
+                queryPart = '?' + currentHref.split('?')[1];
+              } else if (a.hasAttribute('data-wa-use-default-msg') && defaultWaMsg) {
+                queryPart = '?text=' + encodeURIComponent(defaultWaMsg);
+              }
+              if (a.hasAttribute('data-wa-use-default-msg') && defaultWaMsg) {
+                queryPart = '?text=' + encodeURIComponent(defaultWaMsg);
+              }
+              a.setAttribute('href', `https://wa.me/${rawWaNum}${queryPart}`);
+            } catch {}
+          });
+        }
+
+        if (waDisplay) {
+          document.querySelectorAll('[data-wa-display]').forEach((el) => {
+            el.textContent = waDisplay;
+          });
+        }
+
+        // 2. Update Global Contact Details (Email, Instagram, Location)
+        if (settings.contact?.email) {
+          document.querySelectorAll<HTMLAnchorElement>('a[data-contact-email]').forEach((a) => {
+            a.setAttribute('href', `mailto:${settings.contact.email}`);
+            a.textContent = settings.contact.email;
+          });
+        }
+        if (settings.contact?.instagramUrl) {
+          document.querySelectorAll<HTMLAnchorElement>('a[data-contact-ig-url]').forEach((a) => {
+            a.setAttribute('href', settings.contact.instagramUrl);
+          });
+        }
+        if (settings.contact?.instagramHandle) {
+          document.querySelectorAll('[data-contact-ig-handle]').forEach((el) => {
+            el.textContent = settings.contact.instagramHandle;
+          });
+        }
+        const locText = settings.contact?.location?.[langKey] || settings.contact?.location?.id;
+        if (locText) {
+          document.querySelectorAll('[data-contact-location]').forEach((el) => {
+            el.textContent = locText;
+          });
+        }
+
+        // 3. Update Global CTA Banner Texts if customized
+        if (settings.ctaBanner) {
+          const ctaTitle = settings.ctaBanner.title?.[langKey];
+          const ctaDesc = settings.ctaBanner.description?.[langKey];
+          const ctaBtn = settings.ctaBanner.buttonText?.[langKey];
+          if (ctaTitle) {
+            document.querySelectorAll('[data-cta-title]').forEach((el) => (el.textContent = ctaTitle));
+          }
+          if (ctaDesc) {
+            document.querySelectorAll('[data-cta-desc]').forEach((el) => (el.textContent = ctaDesc));
+          }
+          if (ctaBtn) {
+            document.querySelectorAll('[data-cta-btn]').forEach((el) => (el.textContent = ctaBtn));
+          }
+        }
+
+        // 4. Inject Google Tag Manager (GTM) dynamically if configured & not yet loaded
+        const gtmId = (settings.tracking?.gtmId || '').trim();
+        if (gtmId && (window as any).__TDG_GTM_LOADED !== gtmId) {
+          (window as any).__TDG_GTM_LOADED = gtmId;
+          (window as any).dataLayer = (window as any).dataLayer || [];
+          (window as any).dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          const j = document.createElement('script');
+          j.async = true;
+          j.src = `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(gtmId)}`;
+          document.head.appendChild(j);
+        }
+
+        // 5. Inject Meta Ads Pixel dynamically if configured & not yet loaded
+        const metaPixelId = (settings.tracking?.metaPixelId || '').trim();
+        if (metaPixelId && (window as any).__TDG_PIXEL_LOADED !== metaPixelId) {
+          (window as any).__TDG_PIXEL_LOADED = metaPixelId;
+          const w = window as any;
+          if (!w.fbq) {
+            const n: any = (w.fbq = function () {
+              n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+            });
+            if (!w._fbq) w._fbq = n;
+            n.push = n;
+            n.loaded = true;
+            n.version = '2.0';
+            n.queue = [];
+            const t = document.createElement('script');
+            t.async = true;
+            t.src = 'https://connect.facebook.net/en_US/fbevents.js';
+            document.head.appendChild(t);
+          }
+          w.fbq('init', metaPixelId);
+          w.fbq('track', 'PageView');
+        }
+      }
+
+      // Apply cached settings immediately
+      try {
+        const rawLocal = localStorage.getItem('tdg_cms_state_v1');
+        if (rawLocal) {
+          const parsed = JSON.parse(rawLocal);
+          if (parsed?.settings) applyGlobalSettings(parsed.settings);
+        }
+      } catch {}
+
+      // Fetch latest settings from Supabase in background
+      (async () => {
+        try {
+          const supabase = getSupabaseClient();
+          const { data, error } = await supabase
+            .from('site_settings')
+            .select('data')
+            .eq('key', 'settings')
+            .maybeSingle();
+
+          if (!error && data?.data) {
+            applyGlobalSettings(data.data);
+            // Update local cache
+            try {
+              const rawLocal = localStorage.getItem('tdg_cms_state_v1');
+              const existing = rawLocal ? JSON.parse(rawLocal) : {};
+              existing.settings = data.data;
+              localStorage.setItem('tdg_cms_state_v1', JSON.stringify(existing));
+            } catch {}
+          }
+        } catch {}
+      })();
+    </script>
   </body>
 </html>

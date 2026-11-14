@@ -1,9 +1,17 @@
 ---
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
+import { loadSettingsData } from '../utils/data-loader';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
+const settings = loadSettingsData();
+
+const waNum = (settings.whatsapp?.number || '628138238837').replace(/[^0-9]/g, '');
+const waDisplay = settings.whatsapp?.display || '+62 813-8238-837';
+const email = settings.contact?.email || 'tdg.creative.lab@gmail.com';
+const igUrl = settings.contact?.instagramUrl || 'https://instagram.com/tdg.creative.lab';
+const igHandle = settings.contact?.instagramHandle || '@tdg.creative.lab';
 
 const currentYear = new Date().getFullYear();
 
@@ -31,7 +39,8 @@ const footerLinks = [
       </p>
       <div class="flex gap-4 mt-2">
         <a 
-          href="https://instagram.com/tdg.creative.lab" 
+          href={igUrl}
+          data-contact-ig-url
           target="_blank" 
           rel="noopener noreferrer" 
           class="text-brand-bg/60 hover:text-brand-orange transition-colors p-1"
@@ -66,32 +75,37 @@ const footerLinks = [
         <div>
           <span class="block font-semibold text-white">Instagram</span>
           <a 
-            href="https://instagram.com/tdg.creative.lab" 
+            href={igUrl}
+            data-contact-ig-url
+            data-contact-ig-handle
             target="_blank" 
             rel="noopener noreferrer" 
             class="hover:text-brand-orange transition-colors block mt-0.5"
           >
-            @tdg.creative.lab
+            {igHandle}
           </a>
         </div>
         <div>
           <span class="block font-semibold text-white">Email</span>
           <a 
-            href="mailto:tdg.creative.lab@gmail.com" 
+            href={`mailto:${email}`}
+            data-contact-email
             class="hover:text-brand-orange transition-colors block mt-0.5"
           >
-            tdg.creative.lab@gmail.com
+            {email}
           </a>
         </div>
         <div>
           <span class="block font-semibold text-white">WhatsApp</span>
           <a 
-            href="https://wa.me/628138238837" 
+            href={`https://wa.me/${waNum}`}
+            data-wa-link
+            data-wa-display
             target="_blank" 
             rel="noopener noreferrer" 
             class="hover:text-brand-orange transition-colors block mt-0.5"
           >
-            +62 813-8238-837
+            {waDisplay}
           </a>
         </div>
       </div>
@@ -103,8 +117,7 @@ const footerLinks = [
     <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-bg/40 font-medium text-center sm:text-left">
       <span>&copy; {currentYear} The Digital Grounds. All rights reserved.</span>
       <div class="flex items-center gap-6">
-        <a href={translatePath('/blog')} class="hover:text-brand-orange transition-colors">Blog & Insights</a>
-        <a href="/admin" class="hover:text-brand-orange transition-colors">CMS Admin</a>
+        <a href={translatePath('/blog')} class="hover:text-brand-orange transition-colors">Blog</a>
       </div>
     </div>
   </div>

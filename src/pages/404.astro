@@ -47,6 +47,8 @@ const description = 'Halaman yang Anda tuju tidak dapat ditemukan.';
 </BaseLayout>
 
 <script>
+  import { fetchSupabaseBlogArticles } from '../utils/supabase';
+
   function slugifyHeading(text: string): string {
     return text
       .toLowerCase()
@@ -153,14 +155,23 @@ const description = 'Halaman yang Anda tuju tidak dapat ditemukan.';
 
     let articles: any[] = [];
     try {
-      const rawCms = localStorage.getItem('tdg_cms_state_v1');
-      if (rawCms) {
-        const parsed = JSON.parse(rawCms);
-        if (parsed?.blog?.articles) {
-          articles = parsed.blog.articles;
-        }
+      const supaArticles = await fetchSupabaseBlogArticles();
+      if (supaArticles && supaArticles.length > 0) {
+        articles = supaArticles;
       }
     } catch {}
+
+    if (articles.length === 0) {
+      try {
+        const rawCms = localStorage.getItem('tdg_cms_state_v1');
+        if (rawCms) {
+          const parsed = JSON.parse(rawCms);
+          if (parsed?.blog?.articles) {
+            articles = parsed.blog.articles;
+          }
+        }
+      } catch {}
+    }
 
     if (articles.length === 0) {
       try {

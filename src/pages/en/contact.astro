@@ -1,15 +1,25 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getLangFromUrl, useTranslations, useTranslatedPath } from '../../i18n/utils';
+import { loadSettingsData } from '../../utils/data-loader';
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
+const settings = loadSettingsData();
 
-const title = "Contact Us — The Digital Grounds";
-const description = "Ready to grow your brand? Tell us your business needs and our team will prepare the execution framework.";
+const title = settings.contact?.seo?.en?.title || "Contact Us — The Digital Grounds";
+const description = settings.contact?.seo?.en?.description || "Ready to grow your brand? Tell us your business needs and our team will prepare the execution framework.";
 
-const budgetRanges = [
+const contactTag = settings.contact?.tag?.en || "Get in Touch";
+const contactTitle = settings.contact?.title?.en || t('contact.title');
+const contactSubtitle = settings.contact?.subtitle?.en || t('contact.subtitle');
+const contactEmail = settings.contact?.email || "tdg.creative.lab@gmail.com";
+const waNum = (settings.whatsapp?.number || "628138238837").replace(/[^0-9]/g, '');
+const waDisplay = settings.whatsapp?.display || "+62 813-8238-837";
+const contactLocation = settings.contact?.location?.en || t('contact.info.address');
+
+const budgetRanges = settings.contact?.budgetRanges?.en || [
   "< IDR 10 Million / month",
   "IDR 10 Million - IDR 25 Million / month",
   "IDR 25 Million - IDR 50 Million / month",
@@ -28,12 +38,12 @@ const budgetRanges = [
       <!-- Left Column: Contact info & NAP details -->
       <div class="lg:col-span-5 flex flex-col justify-between gap-8 sm:gap-12">
         <div class="flex flex-col gap-3 sm:gap-6">
-          <span class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">Get in Touch</span>
-          <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-brand-dark leading-tight">
-            {t('contact.title')}
+          <span id="contact-page-tag" class="text-brand-orange font-bold tracking-widest text-[10px] sm:text-xs uppercase">{contactTag}</span>
+          <h1 id="contact-page-title" class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-brand-dark leading-tight">
+            {contactTitle}
           </h1>
-          <p class="text-sm sm:text-base md:text-lg text-brand-dark/70 leading-relaxed">
-            {t('contact.subtitle')}
+          <p id="contact-page-subtitle" class="text-sm sm:text-base md:text-lg text-brand-dark/70 leading-relaxed">
+            {contactSubtitle}
           </p>
         </div>
 
@@ -47,8 +57,8 @@ const budgetRanges = [
             </div>
             <div>
               <span class="block text-[10px] sm:text-xs font-bold text-brand-dark/50 uppercase tracking-widest">{t('contact.info.email')}</span>
-              <a href="mailto:tdg.creative.lab@gmail.com" class="text-sm sm:text-base md:text-lg font-extrabold hover:text-brand-orange transition-colors break-all">
-                tdg.creative.lab@gmail.com
+              <a href={`mailto:${contactEmail}`} data-contact-email class="text-sm sm:text-base md:text-lg font-extrabold hover:text-brand-orange transition-colors break-all">
+                {contactEmail}
               </a>
             </div>
           </div>
@@ -62,8 +72,8 @@ const budgetRanges = [
             </div>
             <div>
               <span class="block text-[10px] sm:text-xs font-bold text-brand-dark/50 uppercase tracking-widest">{t('contact.info.wa')}</span>
-              <a href="https://wa.me/628138238837" target="_blank" rel="noopener noreferrer" class="text-sm sm:text-base md:text-lg font-extrabold hover:text-brand-orange transition-colors">
-                +62 813-8238-837
+              <a href={`https://wa.me/${waNum}`} data-wa-link data-wa-display target="_blank" rel="noopener noreferrer" class="text-sm sm:text-base md:text-lg font-extrabold hover:text-brand-orange transition-colors">
+                {waDisplay}
               </a>
             </div>
           </div>
@@ -73,13 +83,13 @@ const budgetRanges = [
             <div class="p-2.5 sm:p-3 bg-brand-dark text-white rounded-xl sm:rounded-2xl shrink-0">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25s-7.5-4.108-7.5-11.25g-3 3 0 1118 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25s-7.5-4.108-7.5-11.25a7.5 7.5 0 1115 0z" />
               </svg>
             </div>
             <div>
               <span class="block text-[10px] sm:text-xs font-bold text-brand-dark/50 uppercase tracking-widest">{t('contact.info.loc')}</span>
-              <span class="text-sm sm:text-base md:text-lg font-extrabold text-brand-dark leading-relaxed block">
-                {t('contact.info.address')}
+              <span data-contact-location class="text-sm sm:text-base md:text-lg font-extrabold text-brand-dark leading-relaxed block">
+                {contactLocation}
               </span>
             </div>
           </div>
@@ -198,7 +208,7 @@ const budgetRanges = [
                 name="message" 
                 required 
                 rows="4" 
-                placeholder="Tell us about your business goals and the scope of work you need..." 
+                placeholder="Tell us your business goals and the scope of services you need..." 
                 class="w-full px-3.5 sm:px-4 py-3 rounded-xl border border-brand-dark/15 focus:border-brand-orange focus:outline-none transition-colors text-base md:text-sm resize-none"
               />
             </div>
@@ -219,29 +229,56 @@ const budgetRanges = [
 </BaseLayout>
 
 <script>
+  import { getSupabaseClient } from '../../utils/supabase';
+
   const form = document.getElementById('contact-form') as HTMLFormElement;
   const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
 
   form?.addEventListener('submit', (e) => {
     e.preventDefault();
-    
-    // Simple verification check
-    if (!form.checkValidity()) {
-      return;
-    }
+    if (!form.checkValidity()) return;
 
-    // Change button state
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.innerText = form.getAttribute('data-thanks-url')?.includes('/en') 
-        ? 'Sending...' 
-        : 'Mengirim...';
+      submitBtn.innerText = 'Sending...';
     }
 
-    // Simulate form submission delay
     setTimeout(() => {
-      const thanksUrl = form.getAttribute('data-thanks-url') || '/thanks';
+      const thanksUrl = form.getAttribute('data-thanks-url') || '/en/thanks';
       window.location.href = thanksUrl;
     }, 1200);
   });
+
+  function syncContactPage(settings: any) {
+    if (!settings?.contact) return;
+    const c = settings.contact;
+    const tagEl = document.getElementById('contact-page-tag');
+    const titleEl = document.getElementById('contact-page-title');
+    const subEl = document.getElementById('contact-page-subtitle');
+    const budgetEl = document.getElementById('budget') as HTMLSelectElement | null;
+
+    if (tagEl && c.tag?.en) tagEl.textContent = c.tag.en;
+    if (titleEl && c.title?.en) titleEl.textContent = c.title.en;
+    if (subEl && c.subtitle?.en) subEl.textContent = c.subtitle.en;
+    if (budgetEl && Array.isArray(c.budgetRanges?.en) && c.budgetRanges.en.length > 0) {
+      const firstOpt = budgetEl.options[0]?.outerHTML || '<option value="" disabled selected>Select budget range</option>';
+      budgetEl.innerHTML = firstOpt + c.budgetRanges.en.map((r: string) => `<option value="${r}">${r}</option>`).join('');
+    }
+  }
+
+  try {
+    const raw = localStorage.getItem('tdg_cms_state_v1');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed?.settings) syncContactPage(parsed.settings);
+    }
+  } catch {}
+
+  (async () => {
+    try {
+      const supabase = getSupabaseClient();
+      const { data } = await supabase.from('site_settings').select('data').eq('key', 'settings').maybeSingle();
+      if (data?.data) syncContactPage(data.data);
+    } catch {}
+  })();
 </script>

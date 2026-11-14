@@ -54,11 +54,6 @@ const navItems = [
             }`}
           >
             <span>{item.label}</span>
-            {item.isBlog && (
-              <span class="px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-full bg-brand-orange/15 text-brand-orange leading-none">
-                Insights
-              </span>
-            )}
             {isCurrent && (
               <span class="absolute bottom-0 left-0 w-full h-[2px] bg-brand-orange rounded-full" />
             )}
@@ -129,11 +124,6 @@ const navItems = [
           class="mobile-nav-link text-brand-dark hover:text-brand-orange transition-colors py-2 inline-flex items-center gap-3"
         >
           <span>{item.label}</span>
-          {item.isBlog && (
-            <span class="px-2.5 py-1 text-xs font-extrabold uppercase tracking-wider rounded-full bg-brand-orange text-white">
-              Insights
-            </span>
-          )}
         </a>
       ))}
     </nav>

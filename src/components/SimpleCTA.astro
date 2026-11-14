@@ -1,12 +1,20 @@
 ---
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import { loadSettingsData } from "../utils/data-loader";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const settings = loadSettingsData();
+const langKey = lang === 'en' ? 'en' : 'id';
 
-const whatsappNumber = "628138238837";
-const whatsappMsg = encodeURIComponent(t("cta.banner.wa_msg"));
+const whatsappNumber = (settings.whatsapp?.number || "628138238837").replace(/[^0-9]/g, '');
+const rawMsg = settings.whatsapp?.defaultMessage?.[langKey] || t("cta.banner.wa_msg");
+const whatsappMsg = encodeURIComponent(rawMsg);
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
+
+const ctaTitle = settings.ctaBanner?.title?.[langKey] || t("cta.banner.title");
+const ctaDesc = settings.ctaBanner?.description?.[langKey] || t("cta.banner.desc");
+const ctaBtn = settings.ctaBanner?.buttonText?.[langKey] || t("cta.banner.button");
 ---
 
 <section class="py-12 sm:py-16 md:py-20 px-4 sm:px-6 relative overflow-hidden">
@@ -30,15 +38,17 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
       <!-- TOP LAYOUT: Title & Subtitle (Max 2 Lines for Headline) -->
       <div class="relative z-10 flex flex-col items-center gap-3 sm:gap-4 max-w-4xl">
         <h2
+          data-cta-title
           class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black uppercase tracking-tight leading-tight text-white max-w-3xl"
         >
-          {t("cta.banner.title")}
+          {ctaTitle}
         </h2>
 
         <p
+          data-cta-desc
           class="text-white/70 text-xs sm:text-sm md:text-base lg:text-lg font-medium leading-relaxed max-w-2xl px-2"
         >
-          {t("cta.banner.desc")}
+          {ctaDesc}
         </p>
       </div>
 
@@ -46,6 +56,8 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
       <div class="relative z-10 flex flex-col items-center w-full sm:w-auto">
         <a
           href={whatsappUrl}
+          data-wa-link
+          data-wa-use-default-msg
           target="_blank"
           rel="noopener noreferrer"
           class="group inline-flex items-center justify-center gap-2.5 sm:gap-3 bg-brand-orange hover:bg-brand-orange-light text-white font-bold text-sm sm:text-base md:text-lg px-6 py-3.5 sm:px-8 sm:py-4 md:px-10 md:py-4.5 rounded-full transition-all duration-300 shadow-xl hover:shadow-brand-orange/30 hover:-translate-y-0.5 active:translate-y-0 text-center w-full sm:w-auto"
@@ -61,7 +73,7 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
               d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.77.814 2.797.815 3.178 0 5.767-2.587 5.768-5.766 0-3.18-2.587-5.766-5.769-5.766zm9.969 5.766c0 5.518-4.482 10-10 10-1.745 0-3.385-.45-4.821-1.238l-7.179 1.882 1.916-7.001c-.86-1.488-1.354-3.218-1.354-5.061 0-5.518 4.482-10 10-10s10 4.482 10 10z"
             ></path>
           </svg>
-          <span class="truncate">{t("cta.banner.button")}</span>
+          <span class="truncate" data-cta-btn>{ctaBtn}</span>
         </a>
       </div>
     </div>
